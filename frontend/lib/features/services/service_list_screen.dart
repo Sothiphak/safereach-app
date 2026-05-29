@@ -10,6 +10,8 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/loading_shimmer.dart';
 import '../../widgets/service_card.dart';
+import '../../widgets/neumorphic_button.dart';
+import '../../utils/translations.dart';
 
 class ServiceListScreen extends StatefulWidget {
   const ServiceListScreen({super.key, required this.type});
@@ -28,7 +30,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${serviceType.label} nearby'),
+        title: Text('${serviceType.label} nearby'.tr(context)),
       ),
       body: FutureBuilder<List<EmergencyService>>(
         future: repository.getServicesByType(serviceType),
@@ -38,8 +40,8 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
           }
           if (snapshot.hasError) {
             return ErrorState(
-              title: 'Unable to load services',
-              message: 'Please try again later.',
+              title: 'Unable to load services'.tr(context),
+              message: 'Please try again later.'.tr(context),
               onRetry: () => setState(() {}),
             );
           }
@@ -48,8 +50,8 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
           final nearest = services.take(5).toList();
           if (nearest.isEmpty) {
             return EmptyState(
-              title: 'No ${serviceType.label} services',
-              message: 'Try another category or check back soon.',
+              title: 'No ${serviceType.label} services'.tr(context),
+              message: 'Try another category or check back soon.'.tr(context),
             );
           }
           return ListView.separated(
@@ -62,19 +64,27 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                 service: service,
                 onTap: () => context.go('/home/service/${service.id}'),
                 trailing: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      tooltip: 'Call',
-                      icon: const Icon(Icons.call),
-                      onPressed: () => launchPhone(context, service.phone),
+                    NeumorphicButton(
+                      borderRadius: 12,
+                      onTap: () => launchPhone(context, service.phone),
+                      child: const Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(Icons.call, size: 20),
+                      ),
                     ),
-                    IconButton(
-                      tooltip: 'Directions',
-                      icon: const Icon(Icons.directions),
-                      onPressed: () => launchDirections(
+                    const SizedBox(height: 8),
+                    NeumorphicButton(
+                      borderRadius: 12,
+                      onTap: () => launchDirections(
                         context,
                         latitude: service.latitude,
                         longitude: service.longitude,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(Icons.directions, size: 20),
                       ),
                     ),
                   ],

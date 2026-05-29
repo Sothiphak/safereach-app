@@ -9,6 +9,7 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/loading_shimmer.dart';
 import '../../widgets/service_card.dart';
+import '../../utils/translations.dart';
 
 class NearbyScreen extends StatefulWidget {
   const NearbyScreen({super.key});
@@ -28,7 +29,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nearby services'),
+        title: Text('Nearby services'.tr(context)),
       ),
       body: FutureBuilder<List<EmergencyService>>(
         future: repository.getServices(),
@@ -38,8 +39,8 @@ class _NearbyScreenState extends State<NearbyScreen> {
           }
           if (snapshot.hasError) {
             return ErrorState(
-              title: 'Unable to load nearby',
-              message: 'Please try again later.',
+              title: 'Unable to load nearby'.tr(context),
+              message: 'Please try again later.'.tr(context),
               onRetry: () => setState(() {}),
             );
           }
@@ -56,9 +57,9 @@ class _NearbyScreenState extends State<NearbyScreen> {
           }
 
           if (services.isEmpty) {
-            return const EmptyState(
-              title: 'No nearby services',
-              message: 'Adjust filters to see more results.',
+            return EmptyState(
+              title: 'No nearby services'.tr(context),
+              message: 'Adjust filters to see more results.'.tr(context),
               icon: Icons.near_me_outlined,
             );
           }
@@ -71,21 +72,21 @@ class _NearbyScreenState extends State<NearbyScreen> {
                 child: Row(
                   children: [
                     AppFilterChip(
-                      label: 'Open now',
+                      label: 'Open now'.tr(context),
                       selected: _openNow,
                       onSelected: (value) => setState(() => _openNow = value),
                       icon: Icons.schedule,
                     ),
                     const SizedBox(width: 8),
                     AppFilterChip(
-                      label: '≤ 3 km',
+                      label: '≤ 3 km'.tr(context),
                       selected: _shortDistance,
                       onSelected: (value) => setState(() => _shortDistance = value),
                       icon: Icons.pin_drop,
                     ),
                     const SizedBox(width: 8),
                     AppFilterChip(
-                      label: '4.5+ rating',
+                      label: '4.5+ rating'.tr(context),
                       selected: _highRating,
                       onSelected: (value) => setState(() => _highRating = value),
                       icon: Icons.star,

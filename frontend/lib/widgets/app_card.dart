@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'neumorphic_container.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -12,11 +13,10 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: padding,
-        child: child,
-      ),
+    return NeumorphicContainer(
+      borderRadius: 20,
+      padding: padding,
+      child: child,
     );
   }
 }

@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFFD32F2F);
-  static const Color primaryDark = Color(0xFFB71C1C);
-  static const Color secondary = Color(0xFF1976D2);
-  static const Color accent = Color(0xFFFF7043);
-  static const Color background = Color(0xFFFDFBFB);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color border = Color(0xFFE0E0E0);
-  static const Color textPrimary = Color(0xFF1B1B1B);
-  static const Color textSecondary = Color(0xFF5F5F5F);
-  static const Color success = Color(0xFF2E7D32);
-  static const Color warning = Color(0xFFFF6F00);
+  // Neumorphic Soft Light Palette
+  static const Color background = Color(0xFFE0E8F6); // Soft Slate Silver-Blue
+  static const Color surface = Color(0xFFE0E8F6); // Must match background for Neumorphic blends
+  static const Color primary = Color(0xFF4F46E5); // Royal Indigo (Interactive Accent)
+  static const Color secondary = Color(0xFF0EA5E9); // Sky Blue
+  static const Color accent = Color(0xFF06B6D4);
+  static const Color border = Color(0xFFCBD5E1);
 
-  static const Color darkBackground = Color(0xFF121212);
-  static const Color darkSurface = Color(0xFF1E1E1E);
-  static const Color darkBorder = Color(0xFF2A2A2A);
-  static const Color darkTextPrimary = Color(0xFFEDEDED);
-  static const Color darkTextSecondary = Color(0xFFBDBDBD);
+  static const Color lightShadow = Color(0xFFFFFFFF);
+  static const Color darkShadow = Color(0xFFB8C4DA);
+
+  // Neumorphic Soft Dark Palette
+  static const Color darkBackground = Color(0xFF1A1F2C); // Soft Dark Charcoal Navy
+  static const Color darkSurface = Color(0xFF1A1F2C); // Must match dark background
+  static const Color darkLightShadow = Color(0xFF242B3D); // Soft Top-Left Glow
+  static const Color darkDarkShadow = Color(0xFF10131B); // Soft Bottom-Right Shadow
+  static const Color darkBorder = Color(0xFF334155);
+
+  // Status Colors
+  static const Color success = Color(0xFF10B981);
+  static const Color warning = Color(0xFFF59E0B);
+  static const Color error = Color(0xFFEF4444);
+
+  // Typography Colors
+  static const Color textPrimary = Color(0xFF1E293B);
+  static const Color textSecondary = Color(0xFF64748B);
+  static const Color darkTextPrimary = Color(0xFFF8FAFC);
+  static const Color darkTextSecondary = Color(0xFF94A3B8);
 }

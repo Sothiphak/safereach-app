@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class SosButton extends StatefulWidget {
@@ -30,6 +31,9 @@ class _SosButtonState extends State<SosButton> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+
     return Semantics(
       label: 'Emergency SOS Button',
       hint: 'Double tap to activate emergency assistance',
@@ -40,7 +44,7 @@ class _SosButtonState extends State<SosButton> with SingleTickerProviderStateMix
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Ripple Ring 3
+            // Ripple Ring 3 (Outer Pulsing Ring)
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
@@ -51,15 +55,15 @@ class _SosButtonState extends State<SosButton> with SingleTickerProviderStateMix
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFFD32F2F).withValues(alpha: 0.15 * (1.0 - progress)),
+                      color: primaryColor.withValues(alpha: 0.15 * (1.0 - progress)),
                       width: 4,
                     ),
-                    color: const Color(0xFFD32F2F).withValues(alpha: 0.08 * (1.0 - progress)),
+                    color: primaryColor.withValues(alpha: 0.08 * (1.0 - progress)),
                   ),
                 );
               },
             ),
-            // Ripple Ring 2
+            // Ripple Ring 2 (Middle Pulsing Ring)
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
@@ -70,15 +74,15 @@ class _SosButtonState extends State<SosButton> with SingleTickerProviderStateMix
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFFD32F2F).withValues(alpha: 0.25 * (1.0 - progress)),
+                      color: primaryColor.withValues(alpha: 0.25 * (1.0 - progress)),
                       width: 4,
                     ),
-                    color: const Color(0xFFD32F2F).withValues(alpha: 0.12 * (1.0 - progress)),
+                    color: primaryColor.withValues(alpha: 0.12 * (1.0 - progress)),
                   ),
                 );
               },
             ),
-            // Ripple Ring 1
+            // Ripple Ring 1 (Inner Pulsing Ring)
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
@@ -89,66 +93,81 @@ class _SosButtonState extends State<SosButton> with SingleTickerProviderStateMix
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFFD32F2F).withValues(alpha: 0.35 * (1.0 - progress)),
+                      color: primaryColor.withValues(alpha: 0.35 * (1.0 - progress)),
                       width: 4,
                     ),
-                    color: const Color(0xFFD32F2F).withValues(alpha: 0.18 * (1.0 - progress)),
+                    color: primaryColor.withValues(alpha: 0.18 * (1.0 - progress)),
                   ),
                 );
               },
             ),
-            // Inner Core Button Shadow/Glow
-            Container(
-              width: widget.size,
-              height: widget.size,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFD32F2F).withValues(alpha: 0.4),
-                    blurRadius: 20,
-                    spreadRadius: 4,
+            // Inner Core Button Shadow/Glow (Pulsing Glow Size)
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                final glowIntensity = 0.3 + 0.2 * math.sin(_controller.value * 2 * math.pi);
+                return Container(
+                  width: widget.size,
+                  height: widget.size,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: primaryColor.withValues(alpha: glowIntensity),
+                        blurRadius: 20 + 8 * math.sin(_controller.value * 2 * math.pi),
+                        spreadRadius: 2 + 3 * math.sin(_controller.value * 2 * math.pi),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
-            // Main Red Button Core
-            Container(
-              width: widget.size,
-              height: widget.size,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    Color(0xFFFF5252),
-                    Color(0xFFD32F2F),
-                    Color(0xFFB71C1C),
-                  ],
-                  stops: [0.0, 0.7, 1.0],
-                ),
-              ),
-              child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.emergency,
-                      color: Colors.white,
-                      size: 40,
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      'SOS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2,
+            // Main Electric Indigo/Cyan Button Core with Breathing Scale
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                final scale = 1.0 + 0.04 * math.sin(_controller.value * 2 * math.pi);
+                return Transform.scale(
+                  scale: scale,
+                  child: Container(
+                    width: widget.size,
+                    height: widget.size,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          theme.colorScheme.secondary.withValues(alpha: 0.9),
+                          primaryColor,
+                          theme.colorScheme.primaryContainer,
+                        ],
+                        stops: const [0.0, 0.6, 1.0],
                       ),
                     ),
-                  ],
-                ),
-              ),
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.emergency,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            'SOS',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

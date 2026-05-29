@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Dependencies } from '@nestjs/common';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './auth.dto';
 
 @Controller('auth')
+@Dependencies(AuthService)
 export class AuthController {
   constructor(authService) {
     this.authService = authService;
