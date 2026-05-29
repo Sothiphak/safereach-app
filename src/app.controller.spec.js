@@ -1,6 +1,5 @@
 import { Test } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 describe('AppController', () => {
   let appController;
@@ -8,15 +7,17 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
     }).compile();
 
     appController = app.get(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('getHealth', () => {
+    it('should return health status ok', () => {
+      const response = appController.getHealth();
+      expect(response.status).toBe('ok');
+      expect(response.name).toBe('SafeReach API');
+      expect(response.timestamp).toBeDefined();
     });
   });
 });
