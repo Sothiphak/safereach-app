@@ -78,6 +78,11 @@ class MockRepository {
     return reviews.where((review) => review.serviceId == serviceId).toList();
   }
 
+  Future<void> addReview(Review review) async {
+    final list = await getReviews();
+    list.insert(0, review);
+  }
+
   Future<List<FirstAidTip>> getTips() async {
     if (_tips != null) {
       return _tips!;
