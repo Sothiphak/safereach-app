@@ -1,0 +1,110 @@
+[
+  {
+    "id": "branch_001",
+    "name": "Calmette Hospital",
+    "type": "hospital",
+    "phone": "+85523218878",
+    "address": "Monivong Blvd, Phnom Penh",
+    "latitude": 11.5625,
+    "longitude": 104.916
+  },
+  {
+    "id": "branch_002",
+    "name": "Royal Phnom Penh Hospital",
+    "type": "hospital",
+    "phone": "+85523999988",
+    "address": "Russian Federation Blvd, Phnom Penh",
+    "latitude": 11.5471,
+    "longitude": 104.8652
+  },
+  {
+    "id": "branch_003",
+    "name": "Phnom Penh Municipal Police",
+    "type": "police",
+    "phone": "+85523227084",
+    "address": "Street 132, Phnom Penh",
+    "latitude": 11.5751,
+    "longitude": 104.9178
+  },
+  {
+    "id": "branch_004",
+    "name": "BKK1 Police Post",
+    "type": "police",
+    "phone": "+85523227085",
+    "address": "Street 360, BKK1",
+    "latitude": 11.5512,
+    "longitude": 104.9289
+  },
+  {
+    "id": "branch_005",
+    "name": "Phnom Penh Fire Department HQ",
+    "type": "fire",
+    "phone": "+85523229890",
+    "address": "Street 134, Phnom Penh",
+    "latitude": 11.5674,
+    "longitude": 104.9194
+  },
+  {
+    "id": "branch_006",
+    "name": "Toul Kork Fire Station",
+    "type": "fire",
+    "phone": "+85523229891",
+    "address": "Street 315, Toul Kork",
+    "latitude": 11.5792,
+    "longitude": 104.9041
+  },
+  {
+    "id": "branch_007",
+    "name": "National Emergency Ambulance",
+    "type": "ambulance",
+    "phone": "+85523219911",
+    "address": "Street 118, Phnom Penh",
+    "latitude": 11.5658,
+    "longitude": 104.9169
+  },
+  {
+    "id": "branch_008",
+    "name": "City Ambulance Response",
+    "type": "ambulance",
+    "phone": "+85523219912",
+    "address": "Street 271, Phnom Penh",
+    "latitude": 11.5288,
+    "longitude": 104.9032
+  },
+  {
+    "id": "branch_009",
+    "name": "Women's Helpline Cambodia",
+    "type": "women",
+    "phone": "+85512800034",
+    "address": "Street 68, Phnom Penh",
+    "latitude": 11.5722,
+    "longitude": 104.9158
+  },
+  {
+    "id": "branch_010",
+    "name": "Safe Shelter Hotline",
+    "type": "women",
+    "phone": "+85512800035",
+    "address": "Street 95, Phnom Penh",
+    "latitude": 11.5608,
+    "longitude": 104.9222
+  },
+  {
+    "id": "branch_011",
+    "name": "National Disaster Relief Center",
+    "type": "disaster",
+    "phone": "+85523811111",
+    "address": "Street 386, Phnom Penh",
+    "latitude": 11.5418,
+    "longitude": 104.9058
+  },
+  {
+    "id": "branch_012",
+    "name": "Rapid Relief Team",
+    "type": "disaster",
+    "phone": "+85523811114",
+    "address": "Street 502, Phnom Penh",
+    "latitude": 11.5568,
+    "longitude": 104.9392
+  }
+]

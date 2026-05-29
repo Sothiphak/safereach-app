@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="#E8F5E9"/>
+  <path d="M80 80L220 60L420 100L560 80V300L420 320L220 280L80 300Z" fill="#C8E6C9"/>
+  <circle cx="220" cy="160" r="16" fill="#1976D2"/>
+  <circle cx="360" cy="200" r="16" fill="#D32F2F"/>
+  <circle cx="480" cy="140" r="16" fill="#FF6F00"/>
+  <text x="40" y="40" font-size="24" fill="#2E7D32" font-family="Arial, sans-serif">Emergency Map</text>
+</svg>

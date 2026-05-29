@@ -1,0 +1,62 @@
+[
+  {
+    "id": "tip_cpr",
+    "title": "CPR",
+    "summary": "Keep blood flowing until help arrives.",
+    "imageAsset": "assets/images/first_aid_cpr.svg",
+    "steps": [
+      "Check responsiveness and call emergency services.",
+      "Place hands at the center of the chest.",
+      "Push hard and fast at 100-120 compressions per minute.",
+      "Continue until help arrives or the person recovers."
+    ]
+  },
+  {
+    "id": "tip_burns",
+    "title": "Burns",
+    "summary": "Cool the burn and protect the skin.",
+    "imageAsset": "assets/images/first_aid_burns.svg",
+    "steps": [
+      "Remove the source of heat.",
+      "Cool the burn under running water for 10 minutes.",
+      "Cover with a clean, non-stick cloth.",
+      "Seek medical care for severe burns."
+    ]
+  },
+  {
+    "id": "tip_bleeding",
+    "title": "Bleeding",
+    "summary": "Stop the bleeding and prevent shock.",
+    "imageAsset": "assets/images/first_aid_bleeding.svg",
+    "steps": [
+      "Apply direct pressure with a clean cloth.",
+      "Keep the injured area elevated if possible.",
+      "Maintain pressure until bleeding stops.",
+      "Call for emergency help if bleeding is severe."
+    ]
+  },
+  {
+    "id": "tip_snake",
+    "title": "Snake Bite",
+    "summary": "Stay calm and reduce movement.",
+    "imageAsset": "assets/images/first_aid_snake.svg",
+    "steps": [
+      "Keep the person calm and still.",
+      "Position the bite below heart level.",
+      "Remove tight items like rings or watches.",
+      "Seek emergency medical help immediately."
+    ]
+  },
+  {
+    "id": "tip_choking",
+    "title": "Choking",
+    "summary": "Clear the airway quickly.",
+    "imageAsset": "assets/images/first_aid_choking.svg",
+    "steps": [
+      "Encourage coughing if the person can breathe.",
+      "Give 5 back blows between the shoulder blades.",
+      "Perform abdominal thrusts if needed.",
+      "Call emergency services if obstruction remains."
+    ]
+  }
+]

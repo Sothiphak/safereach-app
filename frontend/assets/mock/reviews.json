@@ -1,0 +1,98 @@
+[
+  {
+    "id": "r1",
+    "serviceId": "hospital_001",
+    "author": "Sokha",
+    "rating": 4.8,
+    "date": "2026-05-10",
+    "comment": "Quick triage and friendly staff. Very organized."
+  },
+  {
+    "id": "r2",
+    "serviceId": "hospital_001",
+    "author": "Lina",
+    "rating": 4.5,
+    "date": "2026-05-02",
+    "comment": "Emergency care was fast and professional."
+  },
+  {
+    "id": "r3",
+    "serviceId": "hospital_004",
+    "author": "Dara",
+    "rating": 4.7,
+    "date": "2026-04-18",
+    "comment": "Clean facilities and clear communication."
+  },
+  {
+    "id": "r4",
+    "serviceId": "police_002",
+    "author": "Nita",
+    "rating": 4.1,
+    "date": "2026-04-12",
+    "comment": "Responded quickly to the incident."
+  },
+  {
+    "id": "r5",
+    "serviceId": "fire_001",
+    "author": "Vannak",
+    "rating": 4.6,
+    "date": "2026-03-30",
+    "comment": "Professional team and fast arrival."
+  },
+  {
+    "id": "r6",
+    "serviceId": "ambulance_001",
+    "author": "Sreyneang",
+    "rating": 4.4,
+    "date": "2026-03-21",
+    "comment": "Paramedics were attentive and reassuring."
+  },
+  {
+    "id": "r7",
+    "serviceId": "ambulance_002",
+    "author": "Rithy",
+    "rating": 4.2,
+    "date": "2026-03-10",
+    "comment": "Arrived within 15 minutes and helped immediately."
+  },
+  {
+    "id": "r8",
+    "serviceId": "women_001",
+    "author": "Chenda",
+    "rating": 4.9,
+    "date": "2026-02-28",
+    "comment": "Supportive hotline and helpful guidance."
+  },
+  {
+    "id": "r9",
+    "serviceId": "women_002",
+    "author": "Malika",
+    "rating": 4.6,
+    "date": "2026-02-20",
+    "comment": "Staff listened carefully and offered options."
+  },
+  {
+    "id": "r10",
+    "serviceId": "disaster_001",
+    "author": "Sina",
+    "rating": 4.3,
+    "date": "2026-02-05",
+    "comment": "Well-coordinated relief with clear updates."
+  },
+  {
+    "id": "r11",
+    "serviceId": "hospital_006",
+    "author": "Bora",
+    "rating": 4.1,
+    "date": "2026-01-22",
+    "comment": "Short wait time and good follow-up."
+  },
+  {
+    "id": "r12",
+    "serviceId": "fire_002",
+    "author": "Sothea",
+    "rating": 4.4,
+    "date": "2026-01-10",
+    "comment": "Arrived quickly and handled the situation safely."
+  }
+]
