@@ -5,7 +5,47 @@ import 'app_colors.dart';
 import 'app_text_styles.dart';
 
 class AppTheme {
-  static ThemeData light() {
+  static TextStyle _fontStyle(String language, {
+    required double fontSize,
+    required FontWeight fontWeight,
+    Color? color,
+  }) {
+    if (language == 'KH') {
+      return TextStyle(
+        fontFamily: 'GoogleSans',
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+      );
+    }
+    return GoogleFonts.plusJakartaSans(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
+
+  static TextStyle _headingStyle(String language, {
+    required double fontSize,
+    required FontWeight fontWeight,
+    Color? color,
+  }) {
+    if (language == 'KH') {
+      return TextStyle(
+        fontFamily: 'GoogleSans',
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+      );
+    }
+    return GoogleFonts.sora(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
+
+  static ThemeData light(String language) {
     final colorScheme = const ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.primary,
@@ -24,7 +64,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
-      textTheme: _textTheme(AppColors.textPrimary, AppColors.textSecondary),
+      textTheme: _textTheme(AppColors.textPrimary, AppColors.textSecondary, language),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -41,7 +81,6 @@ class AppTheme {
           borderRadius: BorderRadius.circular(24),
         ),
       ),
-      // Elevated Button styled as an extruded Neumorphic element
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.background,
@@ -51,7 +90,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: _headingStyle(language, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
@@ -63,7 +102,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: _headingStyle(language, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -74,7 +113,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: _headingStyle(language, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       chipTheme: ChipThemeData(
@@ -82,7 +121,7 @@ class AppTheme {
         disabledColor: Colors.grey.shade200,
         selectedColor: AppColors.primary.withValues(alpha: 0.1),
         secondarySelectedColor: AppColors.secondary.withValues(alpha: 0.1),
-        labelStyle: GoogleFonts.plusJakartaSans(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 12),
+        labelStyle: _fontStyle(language, color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 12),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -95,12 +134,16 @@ class AppTheme {
         indicatorColor: AppColors.primary.withValues(alpha: 0.08),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return GoogleFonts.plusJakartaSans(
-              textStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary),
+            return _fontStyle(language,
+              fontSize: AppTextStyles.caption.fontSize ?? 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
             );
           }
-          return GoogleFonts.plusJakartaSans(
-            textStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w500, color: AppColors.textSecondary),
+          return _fontStyle(language,
+            fontSize: AppTextStyles.caption.fontSize ?? 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textSecondary,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
@@ -110,7 +153,6 @@ class AppTheme {
           return const IconThemeData(color: AppColors.textSecondary, size: 24);
         }),
       ),
-      // Input decoration with a clean recessed inset border look
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.background,
@@ -131,12 +173,12 @@ class AppTheme {
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
-        hintStyle: GoogleFonts.plusJakartaSans(color: AppColors.textSecondary, fontWeight: FontWeight.normal),
+        hintStyle: _fontStyle(language, color: AppColors.textSecondary, fontWeight: FontWeight.normal, fontSize: 16),
       ),
     );
   }
 
-  static ThemeData dark() {
+  static ThemeData dark(String language) {
     final colorScheme = const ColorScheme(
       brightness: Brightness.dark,
       primary: AppColors.primary,
@@ -155,7 +197,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.darkBackground,
-      textTheme: _textTheme(AppColors.darkTextPrimary, AppColors.darkTextSecondary),
+      textTheme: _textTheme(AppColors.darkTextPrimary, AppColors.darkTextSecondary, language),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -181,7 +223,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: _headingStyle(language, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
@@ -193,7 +235,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: _headingStyle(language, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -204,7 +246,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold, fontSize: 16),
+          textStyle: _headingStyle(language, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       chipTheme: ChipThemeData(
@@ -212,7 +254,7 @@ class AppTheme {
         disabledColor: Colors.black26,
         selectedColor: AppColors.primary.withValues(alpha: 0.2),
         secondarySelectedColor: AppColors.secondary.withValues(alpha: 0.2),
-        labelStyle: GoogleFonts.plusJakartaSans(color: AppColors.darkTextPrimary, fontWeight: FontWeight.w600, fontSize: 12),
+        labelStyle: _fontStyle(language, color: AppColors.darkTextPrimary, fontWeight: FontWeight.w600, fontSize: 12),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -225,12 +267,16 @@ class AppTheme {
         indicatorColor: AppColors.primary.withValues(alpha: 0.15),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return GoogleFonts.plusJakartaSans(
-              textStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary),
+            return _fontStyle(language,
+              fontSize: AppTextStyles.caption.fontSize ?? 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
             );
           }
-          return GoogleFonts.plusJakartaSans(
-            textStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w500, color: AppColors.darkTextSecondary),
+          return _fontStyle(language,
+            fontSize: AppTextStyles.caption.fontSize ?? 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.darkTextSecondary,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
@@ -260,12 +306,23 @@ class AppTheme {
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
-        hintStyle: GoogleFonts.plusJakartaSans(color: AppColors.darkTextSecondary, fontWeight: FontWeight.normal),
+        hintStyle: _fontStyle(language, color: AppColors.darkTextSecondary, fontWeight: FontWeight.normal, fontSize: 16),
       ),
     );
   }
 
-  static TextTheme _textTheme(Color primary, Color secondary) {
+  static TextTheme _textTheme(Color primary, Color secondary, String language) {
+    if (language == 'KH') {
+      return TextTheme(
+        displayLarge: TextStyle(fontFamily: 'GoogleSans', fontSize: 36, fontWeight: FontWeight.bold, color: primary),
+        displayMedium: TextStyle(fontFamily: 'GoogleSans', fontSize: AppTextStyles.display.fontSize, fontWeight: FontWeight.bold, color: primary),
+        titleLarge: TextStyle(fontFamily: 'GoogleSans', fontSize: AppTextStyles.title.fontSize, fontWeight: FontWeight.bold, color: primary),
+        titleMedium: TextStyle(fontFamily: 'GoogleSans', fontSize: AppTextStyles.subtitle.fontSize, fontWeight: FontWeight.w500, color: primary),
+        bodyLarge: TextStyle(fontFamily: 'GoogleSans', fontSize: AppTextStyles.body.fontSize, fontWeight: FontWeight.normal, color: primary),
+        bodyMedium: TextStyle(fontFamily: 'GoogleSans', fontSize: AppTextStyles.bodySmall.fontSize, fontWeight: FontWeight.normal, color: primary),
+        bodySmall: TextStyle(fontFamily: 'GoogleSans', fontSize: AppTextStyles.caption.fontSize, fontWeight: FontWeight.normal, color: secondary),
+      );
+    }
     return TextTheme(
       displayLarge: GoogleFonts.sora(textStyle: AppTextStyles.display.copyWith(color: primary, fontSize: 36)),
       displayMedium: GoogleFonts.sora(textStyle: AppTextStyles.display.copyWith(color: primary)),
