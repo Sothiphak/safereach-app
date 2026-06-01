@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   'Emergency Response Hub',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: isDark ? Colors.red[300] : const Color(0xFFB71C1C),
+                        color: isDark ? Colors.blue[300] : const Color(0xFFB71C1C),
                         fontWeight: FontWeight.bold,
                       ),
                 ),
