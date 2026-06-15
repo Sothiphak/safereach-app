@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../utils/translations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -57,10 +58,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFD32F2F),
+      backgroundColor: isDark ? theme.colorScheme.surface : theme.colorScheme.primary,
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -113,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'EMERGENCY SERVICES',
+                          'EMERGENCY SERVICES'.tr(context),
                           style: TextStyle(
                             color: isDark ? Colors.red[300] : Colors.white70,
                             fontSize: 14,

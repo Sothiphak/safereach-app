@@ -5,6 +5,10 @@ import '../../models/personal_contact.dart';
 import '../../state/contacts_state.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/empty_state.dart';
+import '../../widgets/neumorphic_container.dart';
+import '../../widgets/neumorphic_button.dart';
+import '../../widgets/app_button.dart';
+import '../../utils/translations.dart';
 
 class ContactsScreen extends StatelessWidget {
   const ContactsScreen({super.key});
@@ -12,25 +16,36 @@ class ContactsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final contactsState = context.watch<ContactsState>();
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personal contacts'),
+        title: Text('Personal Contacts'.tr(context)),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _openContactForm(context),
-        child: const Icon(Icons.add),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16, right: 8),
+        child: SizedBox(
+          width: 58,
+          height: 58,
+          child: NeumorphicButton(
+            borderRadius: 29,
+            color: theme.colorScheme.primary,
+            onTap: () => _openContactForm(context),
+            child: const Center(
+              child: Icon(Icons.add, color: Colors.white, size: 28),
+            ),
+          ),
+        ),
       ),
       body: contactsState.contacts.isEmpty
-          ? const EmptyState(
-              title: 'No emergency contacts',
-              message: 'Add family or friends for quick access.',
+          ? EmptyState(
+              title: 'No emergency contacts'.tr(context),
+              message: 'Add family or friends for quick access.'.tr(context),
               icon: Icons.people_outline,
             )
-          : ListView.separated(
+          : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: contactsState.contacts.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final contact = contactsState.contacts[index];
                 return Dismissible(
@@ -38,30 +53,65 @@ class ContactsScreen extends StatelessWidget {
                   background: Container(
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.symmetric(horizontal: 24),
+                    margin: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.error,
+                      color: theme.colorScheme.error,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   onDismissed: (_) => contactsState.removeContact(contact.id),
-                  child: Card(
-                    child: ListTile(
-                      title: Text(contact.name),
-                      subtitle: Text('${contact.relationship} • ${contact.phone}'),
-                      leading: const CircleAvatar(child: Icon(Icons.person)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
+                  child: NeumorphicContainer(
+                    borderRadius: 20,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
                         children: [
-                          IconButton(
-                            tooltip: 'Edit',
-                            icon: const Icon(Icons.edit_outlined),
-                            onPressed: () => _openContactForm(context, contact: contact),
+                          CircleAvatar(
+                            backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                            child: Icon(Icons.person, color: theme.colorScheme.primary),
                           ),
-                          IconButton(
-                            tooltip: 'Call',
-                            icon: const Icon(Icons.call),
-                            onPressed: () => launchPhone(context, contact.phone),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  contact.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${contact.relationship.tr(context)} • ${contact.phone}',
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                          NeumorphicButton(
+                            borderRadius: 12,
+                            onTap: () => _openContactForm(context, contact: contact),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(Icons.edit_outlined, size: 20),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          NeumorphicButton(
+                            borderRadius: 12,
+                            onTap: () => launchPhone(context, contact.phone),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Icon(
+                                Icons.call,
+                                color: theme.colorScheme.primary,
+                                size: 20,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -118,72 +168,111 @@ class _ContactFormState extends State<_ContactForm> {
   Widget build(BuildContext context) {
     final contactsState = context.read<ContactsState>();
     final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+    final theme = Theme.of(context);
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, bottomPadding + 16),
+      padding: EdgeInsets.fromLTRB(20, 8, 20, bottomPadding + 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.contact == null ? 'Add contact' : 'Edit contact',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(labelText: 'Name'),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _relationshipController,
-            decoration: const InputDecoration(labelText: 'Relationship'),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _phoneController,
-            keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(labelText: 'Phone number'),
+          Center(
+            child: Text(
+              (widget.contact == null ? 'Add Contact' : 'Edit Contact').tr(context),
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: () async {
-                final name = _nameController.text.trim();
-                final relationship = _relationshipController.text.trim();
-                final phone = _phoneController.text.trim();
-                if (name.isEmpty || phone.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Name and phone are required.')),
-                  );
-                  return;
-                }
-                if (widget.contact == null) {
-                  await contactsState.addContact(
-                    PersonalContact(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: name,
-                      relationship: relationship.isEmpty ? 'Contact' : relationship,
-                      phone: phone,
-                    ),
-                  );
-                } else {
-                  await contactsState.updateContact(
-                    widget.contact!.copyWith(
-                      name: name,
-                      relationship: relationship.isEmpty ? 'Contact' : relationship,
-                      phone: phone,
-                    ),
-                  );
-                }
-                if (!context.mounted) {
-                  return;
-                }
-                Navigator.pop(context);
-              },
-              child: Text(widget.contact == null ? 'Save contact' : 'Update contact'),
+          NeumorphicContainer(
+            borderRadius: 16,
+            isPressed: true,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Name'.tr(context),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                fillColor: Colors.transparent,
+                filled: false,
+              ),
             ),
+          ),
+          const SizedBox(height: 16),
+          NeumorphicContainer(
+            borderRadius: 16,
+            isPressed: true,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: TextField(
+              controller: _relationshipController,
+              decoration: InputDecoration(
+                labelText: 'Relationship (e.g. Family, Doctor)'.tr(context),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                fillColor: Colors.transparent,
+                filled: false,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          NeumorphicContainer(
+            borderRadius: 16,
+            isPressed: true,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: TextField(
+              controller: _phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: 'Phone Number'.tr(context),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                fillColor: Colors.transparent,
+                filled: false,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          AppButton.primary(
+            label: (widget.contact == null ? 'SAVE CONTACT' : 'UPDATE CONTACT').tr(context),
+            isFullWidth: true,
+            onPressed: () async {
+              final name = _nameController.text.trim();
+              final relationship = _relationshipController.text.trim();
+              final phone = _phoneController.text.trim();
+              if (name.isEmpty || phone.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Name and phone are required.'.tr(context))),
+                );
+                return;
+              }
+              if (widget.contact == null) {
+                await contactsState.addContact(
+                  PersonalContact(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    name: name,
+                    relationship: relationship.isEmpty ? 'Contact' : relationship,
+                    phone: phone,
+                  ),
+                );
+              } else {
+                await contactsState.updateContact(
+                  widget.contact!.copyWith(
+                    name: name,
+                    relationship: relationship.isEmpty ? 'Contact' : relationship,
+                    phone: phone,
+                  ),
+                );
+              }
+              if (!context.mounted) {
+                return;
+              }
+              Navigator.pop(context);
+            },
           ),
         ],
       ),

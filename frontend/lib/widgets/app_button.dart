@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'neumorphic_button.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton.primary({
@@ -25,32 +26,44 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final button = _isPrimary
-        ? ElevatedButton.icon(
-            onPressed: onPressed,
-            icon: icon != null ? Icon(icon) : const SizedBox.shrink(),
-            label: Text(label),
-          )
-        : OutlinedButton.icon(
-            onPressed: onPressed,
-            icon: icon != null ? Icon(icon) : const SizedBox.shrink(),
-            label: Text(label),
-          );
+    final theme = Theme.of(context);
+    
+    // For primary, we can use a soft tint of the primary color, but styled as a Neumorphic slab
+    final buttonColor = _isPrimary ? theme.colorScheme.primary : null;
+    final textColor = _isPrimary ? Colors.white : theme.colorScheme.primary;
+
+    final childWidget = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, color: textColor, size: 20),
+            const SizedBox(width: 8),
+          ],
+          Text(
+            label,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
 
     return SizedBox(
       width: isFullWidth ? double.infinity : null,
-      height: 48,
-      child: icon == null
-          ? (_isPrimary
-              ? ElevatedButton(
-                  onPressed: onPressed,
-                  child: Text(label),
-                )
-              : OutlinedButton(
-                  onPressed: onPressed,
-                  child: Text(label),
-                ))
-          : button,
+      height: 52,
+      child: NeumorphicButton(
+        borderRadius: 16,
+        onTap: onPressed,
+        color: buttonColor,
+        child: Center(child: childWidget),
+      ),
     );
   }
 }

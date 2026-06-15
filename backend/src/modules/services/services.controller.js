@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Dependencies } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { buildValidationPipe } from '../../common/pipes/dto-validation.pipe';
@@ -6,6 +6,7 @@ import { CreateServiceDto, ServiceQueryDto, UpdateServiceDto } from './services.
 import { ServicesService } from './services.service';
 
 @Controller('services')
+@Dependencies(ServicesService)
 export class ServicesController {
   constructor(servicesService) {
     this.servicesService = servicesService;

@@ -33,8 +33,8 @@ class _EmergencyAppState extends State<EmergencyApp> {
     return MaterialApp.router(
       title: 'SafeReach Emergency',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
+      theme: AppTheme.light(settings.language),
+      darkTheme: AppTheme.dark(settings.language),
       themeMode: settings.darkMode ? ThemeMode.dark : ThemeMode.light,
       routerConfig: _router,
     );

@@ -12,6 +12,9 @@ import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/rating_stars.dart';
+import '../../widgets/neumorphic_container.dart';
+import '../../widgets/neumorphic_button.dart';
+import '../../utils/translations.dart';
 
 class ServiceDetailScreen extends StatefulWidget {
   const ServiceDetailScreen({super.key, required this.serviceId});
@@ -55,7 +58,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Service Details'),
+        title: Text('Service Details'.tr(context)),
       ),
       body: FutureBuilder<EmergencyService?>(
         future: repository.getServiceById(widget.serviceId),
@@ -65,16 +68,16 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
           }
           if (snapshot.hasError) {
             return ErrorState(
-              title: 'Unable to load details',
-              message: 'Please try again.',
+              title: 'Unable to load details'.tr(context),
+              message: 'Please try again.'.tr(context),
               onRetry: () => setState(() {}),
             );
           }
           final service = snapshot.data;
           if (service == null) {
-            return const EmptyState(
-              title: 'Service not found',
-              message: 'This emergency service is unavailable.',
+            return EmptyState(
+              title: 'Service not found'.tr(context),
+              message: 'This emergency service is unavailable.'.tr(context),
             );
           }
 
@@ -148,7 +151,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
 
               // Title and Core Details
               Text(
-                service.name,
+                service.name.tr(context),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                       fontSize: 24,
@@ -160,7 +163,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                   RatingStars(rating: service.rating, size: 18),
                   const SizedBox(width: 8),
                   Text(
-                    '${service.rating.toStringAsFixed(1)} (${service.reviewCount} reviews)',
+                    '${service.rating.toStringAsFixed(1)} (${service.reviewCount} ${(service.reviewCount == 1 ? "review" : "reviews").tr(context)})',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -170,33 +173,32 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               const SizedBox(height: 16),
 
               // Description Card
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'About Service',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        service.description,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              height: 1.4,
-                            ),
-                      ),
-                    ],
-                  ),
+              NeumorphicContainer(
+                borderRadius: 20,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'About Service'.tr(context),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      service.description.tr(context),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            height: 1.4,
+                          ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 12),
 
               // Info rows
-              _InfoRow(icon: Icons.location_on, label: service.address),
+              _InfoRow(icon: Icons.location_on, label: service.address.tr(context)),
               _InfoRow(icon: Icons.schedule, label: service.hours),
               _InfoRow(icon: Icons.call, label: service.phone),
               const SizedBox(height: 16),
@@ -206,13 +208,17 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                 spacing: 8,
                 runSpacing: 8,
                 children: service.services
-                    .map((serviceName) => Chip(
-                          label: Text(
-                            serviceName,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                    .map((serviceName) => NeumorphicContainer(
+                          borderRadius: 12,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          child: Text(
+                            serviceName.tr(context),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: isDark ? Colors.white70 : Colors.black87,
+                            ),
                           ),
-                          backgroundColor: isDark ? const Color(0xFF2A2A2A) : Colors.grey[100],
-                          side: BorderSide.none,
                         ))
                     .toList(),
               ),
@@ -228,7 +234,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                         child: SizedBox(
                           height: 54,
                           child: AppButton.primary(
-                            label: 'CALL NOW',
+                            label: 'CALL NOW'.tr(context),
                             icon: Icons.call,
                             isFullWidth: true,
                             onPressed: () => launchPhone(context, service.phone),
@@ -236,30 +242,29 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Container(
-                        height: 54,
-                        width: 54,
-                        decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: isFavorite ? const Color(0xFFD32F2F) : Colors.transparent,
-                          ),
-                        ),
-                        child: IconButton(
-                          tooltip: isFavorite ? 'Remove Favorite' : 'Save Favorite',
-                          onPressed: () {
-                            favorites.toggleFavorite(service.id);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  isFavorite ? 'Removed from favorites' : 'Saved to favorites',
-                                ),
-                                duration: const Duration(seconds: 1),
+                      NeumorphicButton(
+                        borderRadius: 16,
+                        onTap: () {
+                          favorites.toggleFavorite(service.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                (isFavorite ? 'Removed from favorites' : 'Saved to favorites').tr(context),
                               ),
-                            );
-                          },
-                          icon: Icon(
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        border: isFavorite
+                            ? Border.all(
+                                color: const Color(0xFFD32F2F),
+                                width: 1.5,
+                              )
+                            : null,
+                        child: SizedBox(
+                          height: 54,
+                          width: 54,
+                          child: Icon(
                             isFavorite ? Icons.favorite : Icons.favorite_border,
                             color: const Color(0xFFD32F2F),
                           ),
@@ -312,7 +317,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Reviews & Ratings',
+                            'Reviews & Ratings'.tr(context),
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -320,9 +325,9 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                           TextButton.icon(
                             onPressed: () => _openWriteReviewModal(context, repository),
                             icon: const Icon(Icons.rate_review_outlined, size: 18),
-                            label: const Text(
-                              'Write a review',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            label: Text(
+                              'Write a review'.tr(context),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -330,78 +335,77 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                       const SizedBox(height: 12),
 
                       // Ratings Summary & Distribution Card
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            children: [
-                              // Left: Average Stars Column
-                              Column(
-                                children: [
-                                  Text(
-                                    averageRating.toStringAsFixed(1),
-                                    style: const TextStyle(
-                                      fontSize: 48,
-                                      fontWeight: FontWeight.w900,
-                                      color: Color(0xFFD32F2F),
-                                      letterSpacing: -1.5,
-                                    ),
+                      NeumorphicContainer(
+                        borderRadius: 20,
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            // Left: Average Stars Column
+                            Column(
+                              children: [
+                                Text(
+                                  averageRating.toStringAsFixed(1),
+                                  style: const TextStyle(
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFFD32F2F),
+                                    letterSpacing: -1.5,
                                   ),
-                                  RatingStars(rating: averageRating, size: 14),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    '$totalReviews review${totalReviews == 1 ? "" : "s"}',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey[600],
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                ),
+                                RatingStars(rating: averageRating, size: 14),
+                                const SizedBox(height: 6),
+                                Text(
+                                  '$totalReviews ${(totalReviews == 1 ? "review" : "reviews").tr(context)}',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 24),
+                            // Right: Distribution Bars
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  _DistributionRow(
+                                    star: 5,
+                                    percentage: totalReviews == 0 ? 0.7 : r5 / totalReviews,
+                                  ),
+                                  _DistributionRow(
+                                    star: 4,
+                                    percentage: totalReviews == 0 ? 0.2 : r4 / totalReviews,
+                                  ),
+                                  _DistributionRow(
+                                    star: 3,
+                                    percentage: totalReviews == 0 ? 0.1 : r3 / totalReviews,
+                                  ),
+                                  _DistributionRow(
+                                    star: 2,
+                                    percentage: totalReviews == 0 ? 0.0 : r2 / totalReviews,
+                                  ),
+                                  _DistributionRow(
+                                    star: 1,
+                                    percentage: totalReviews == 0 ? 0.0 : r1 / totalReviews,
                                   ),
                                 ],
                               ),
-                              const SizedBox(width: 24),
-                              // Right: Distribution Bars
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    _DistributionRow(
-                                      star: 5,
-                                      percentage: totalReviews == 0 ? 0.7 : r5 / totalReviews,
-                                    ),
-                                    _DistributionRow(
-                                      star: 4,
-                                      percentage: totalReviews == 0 ? 0.2 : r4 / totalReviews,
-                                    ),
-                                    _DistributionRow(
-                                      star: 3,
-                                      percentage: totalReviews == 0 ? 0.1 : r3 / totalReviews,
-                                    ),
-                                    _DistributionRow(
-                                      star: 2,
-                                      percentage: totalReviews == 0 ? 0.0 : r2 / totalReviews,
-                                    ),
-                                    _DistributionRow(
-                                      star: 1,
-                                      percentage: totalReviews == 0 ? 0.0 : r1 / totalReviews,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 16),
 
                       // Individual Review Cards
                       if (reviews.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 24),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Center(
                             child: Text(
-                              'No reviews posted yet. Be the first to share your experience!',
+                              'No reviews posted yet. Be the first to share your experience!'.tr(context),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontStyle: FontStyle.italic),
+                              style: const TextStyle(fontStyle: FontStyle.italic),
                             ),
                           ),
                         )
@@ -412,11 +416,11 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                           itemCount: reviews.length,
                           itemBuilder: (context, index) {
                             final review = reviews[index];
-                            return Card(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              color: isDark ? const Color(0xFF232323) : const Color(0xFFFAFAFA),
-                              elevation: 0,
-                              child: Padding(
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: NeumorphicContainer(
+                                borderRadius: 16,
+                                isPressed: true,
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -580,7 +584,7 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
           children: [
             Center(
               child: Text(
-                'Submit Emergency Review',
+                'Submit Emergency Review'.tr(context),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -589,9 +593,9 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
             const SizedBox(height: 18),
 
             // Star selector
-            const Text(
-              'Rate your experience',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            Text(
+              'Rate your experience'.tr(context),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             const SizedBox(height: 6),
             Row(
@@ -611,83 +615,90 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
             const SizedBox(height: 16),
 
             // Author Name Field
-            TextFormField(
-              controller: _authorController,
-              decoration: const InputDecoration(
-                labelText: 'Your Name',
-                prefixIcon: Icon(Icons.person_outline),
+            NeumorphicContainer(
+              borderRadius: 16,
+              isPressed: true,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: TextFormField(
+                controller: _authorController,
+                decoration: InputDecoration(
+                  labelText: 'Your Name'.tr(context),
+                  prefixIcon: const Icon(Icons.person_outline),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  fillColor: Colors.transparent,
+                  filled: false,
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please input your name'.tr(context);
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please input your name';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
 
             // Comment Field
-            TextFormField(
-              controller: _commentController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: 'Describe your emergency experience',
-                prefixIcon: Icon(Icons.notes),
-                alignLabelWithHint: true,
+            NeumorphicContainer(
+              borderRadius: 16,
+              isPressed: true,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: TextFormField(
+                controller: _commentController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  labelText: 'Describe your emergency experience'.tr(context),
+                  prefixIcon: const Icon(Icons.notes),
+                  alignLabelWithHint: true,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  fillColor: Colors.transparent,
+                  filled: false,
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please add a comment description'.tr(context);
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please add a comment description';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 24),
 
             // Submit Button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD32F2F),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final name = _authorController.text.trim();
-                    final comment = _commentController.text.trim();
+            AppButton.primary(
+              label: 'SUBMIT REVIEW'.tr(context),
+              isFullWidth: true,
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  final name = _authorController.text.trim();
+                  final comment = _commentController.text.trim();
 
-                    final review = Review(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      serviceId: widget.serviceId,
-                      author: name,
-                      rating: _rating.toDouble(),
-                      date: DateTime.now().toString().split(' ')[0], // YYYY-MM-DD
-                      comment: comment,
-                    );
+                  final review = Review(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    serviceId: widget.serviceId,
+                    author: name,
+                    rating: _rating.toDouble(),
+                    date: DateTime.now().toString().split(' ')[0], // YYYY-MM-DD
+                    comment: comment,
+                  );
 
-                    await widget.repository.addReview(review);
-                    widget.onSubmitted();
+                  await widget.repository.addReview(review);
+                  widget.onSubmitted();
 
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Review submitted successfully! Thank you.'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
-                },
-                child: const Text(
-                  'SUBMIT REVIEW',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                ),
-              ),
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Review submitted successfully! Thank you.'.tr(context)),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

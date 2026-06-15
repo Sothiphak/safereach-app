@@ -8,6 +8,7 @@ import '../../state/favorites_state.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/service_card.dart';
+import '../../utils/translations.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -24,7 +25,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorites'),
+        title: Text('Favorites'.tr(context)),
       ),
       body: FutureBuilder<List<EmergencyService>>(
         future: repository.getServices(),
@@ -34,8 +35,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           }
           if (snapshot.hasError) {
             return ErrorState(
-              title: 'Unable to load favorites',
-              message: 'Please try again.',
+              title: 'Unable to load favorites'.tr(context),
+              message: 'Please try again.'.tr(context),
               onRetry: () => setState(() {}),
             );
           }
@@ -45,9 +46,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               .toList();
 
           if (favorites.isEmpty) {
-            return const EmptyState(
-              title: 'No favorites saved',
-              message: 'Tap the heart icon to save emergency services.',
+            return EmptyState(
+              title: 'No favorites saved'.tr(context),
+              message: 'Tap the heart icon to save emergency services.'.tr(context),
               icon: Icons.favorite_border,
             );
           }

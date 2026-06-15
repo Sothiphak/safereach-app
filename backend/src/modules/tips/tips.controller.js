@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Dependencies } from '@nestjs/common';
 
 import { buildValidationPipe } from '../../common/pipes/dto-validation.pipe';
 import { CreateTipDto } from './tips.dto';
 import { TipsService } from './tips.service';
 
 @Controller('tips')
+@Dependencies(TipsService)
 export class TipsController {
   constructor(tipsService) {
     this.tipsService = tipsService;

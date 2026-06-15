@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../state/app_state.dart';
 import '../../widgets/app_button.dart';
+import '../../widgets/neumorphic_container.dart';
+import '../../utils/translations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -62,30 +64,43 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPageChanged: (value) => setState(() => _index = value),
                   itemBuilder: (context, index) {
                     final slide = _slides[index];
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Semantics(
-                          label: slide.title,
-                          child: Icon(
-                            slide.icon,
-                            size: 120,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                    return Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Semantics(
+                              label: slide.title.tr(context),
+                              child: NeumorphicContainer(
+                                borderRadius: 60,
+                                padding: const EdgeInsets.all(24),
+                                child: Icon(
+                                  slide.icon,
+                                  size: 60,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Text(
+                              slide.title.tr(context),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              slide.description.tr(context),
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 24),
-                        Text(
-                          slide.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          slide.description,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                      ),
                     );
                   },
                 ),
@@ -110,7 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
               const SizedBox(height: 24),
               AppButton.primary(
-                label: _index == _slides.length - 1 ? 'Get started' : 'Next',
+                label: (_index == _slides.length - 1 ? 'Get started' : 'Next').tr(context),
                 onPressed: () async {
                   if (_index == _slides.length - 1) {
                     await _finish();
@@ -126,7 +141,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 8),
               TextButton(
                 onPressed: _finish,
-                child: const Text('Skip'),
+                child: Text('Skip'.tr(context)),
               ),
             ],
           ),

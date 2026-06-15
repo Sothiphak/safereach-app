@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Dependencies } from '@nestjs/common';
 
 import { buildValidationPipe } from '../../common/pipes/dto-validation.pipe';
 import { CreateReviewDto } from './reviews.dto';
 import { ReviewsService } from './reviews.service';
 
 @Controller('reviews')
+@Dependencies(ReviewsService)
 export class ReviewsController {
   constructor(reviewsService) {
     this.reviewsService = reviewsService;

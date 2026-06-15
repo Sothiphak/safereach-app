@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/settings_state.dart';
+import '../../widgets/neumorphic_container.dart';
+import '../../utils/translations.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -40,74 +42,97 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text('Settings'.tr(context)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Card(
+          NeumorphicContainer(
+            borderRadius: 20,
             child: Column(
               children: [
                 SwitchListTile(
-                  title: const Text('Dark mode'),
+                  title: Text('Dark mode'.tr(context)),
                   value: settings.darkMode,
                   onChanged: settings.setDarkMode,
                 ),
-                const Divider(height: 1),
+                const Divider(height: 1, indent: 16, endIndent: 16),
                 ListTile(
-                  title: const Text('Language'),
-                  trailing: DropdownButton<String>(
-                    value: settings.language,
-                    items: const [
-                      DropdownMenuItem(value: 'EN', child: Text('English')),
-                      DropdownMenuItem(value: 'KH', child: Text('Khmer')),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        settings.setLanguage(value);
-                      }
-                    },
+                  title: Text('Language'.tr(context)),
+                  trailing: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: settings.language,
+                      items: [
+                        DropdownMenuItem(value: 'EN', child: Text('English'.tr(context))),
+                        DropdownMenuItem(value: 'KH', child: Text('Khmer'.tr(context))),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          settings.setLanguage(value);
+                        }
+                      },
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Medical info', style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 12),
-                  TextField(
+          const SizedBox(height: 24),
+          NeumorphicContainer(
+            borderRadius: 20,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Medical info'.tr(context), style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 16),
+                NeumorphicContainer(
+                  borderRadius: 16,
+                  isPressed: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: TextField(
                     controller: _bloodGroupController,
                     onChanged: settings.setBloodGroup,
-                    decoration: const InputDecoration(
-                      labelText: 'Blood group',
-                      hintText: 'e.g. A+, O-',
+                    decoration: InputDecoration(
+                      labelText: 'Blood group'.tr(context),
+                      hintText: 'e.g. A+, O-'.tr(context),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      fillColor: Colors.transparent,
+                      filled: false,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  TextField(
+                ),
+                const SizedBox(height: 16),
+                NeumorphicContainer(
+                  borderRadius: 16,
+                  isPressed: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: TextField(
                     controller: _allergiesController,
                     onChanged: settings.setAllergies,
-                    decoration: const InputDecoration(
-                      labelText: 'Allergies',
-                      hintText: 'List any allergies',
+                    decoration: InputDecoration(
+                      labelText: 'Allergies'.tr(context),
+                      hintText: 'List any allergies'.tr(context),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      fillColor: Colors.transparent,
+                      filled: false,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          Card(
+          const SizedBox(height: 24),
+          NeumorphicContainer(
+            borderRadius: 20,
             child: ListTile(
               leading: const Icon(Icons.info_outline),
-              title: const Text('About SafeReach'),
-              subtitle: const Text('Emergency response, locations, and tips.'),
+              title: Text('About SafeReach'.tr(context)),
+              subtitle: Text('Emergency response, locations, and tips.'.tr(context)),
             ),
           ),
         ],
