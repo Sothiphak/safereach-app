@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../data/mock_repository.dart';
 import '../../models/emergency_service.dart';
 import '../../models/review.dart';
+import '../../models/service_type.dart';
 import '../../state/favorites_state.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/app_button.dart';
@@ -201,6 +202,38 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               _InfoRow(icon: Icons.location_on, label: service.address.tr(context)),
               _InfoRow(icon: Icons.schedule, label: service.hours),
               _InfoRow(icon: Icons.call, label: service.phone),
+              const SizedBox(height: 16),
+
+              // Emergency capability / equipment tags
+              NeumorphicContainer(
+                borderRadius: 20,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Emergency capabilities',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _capabilityTagsFor(service)
+                          .map(
+                            (tag) => _CapabilityTag(
+                              icon: tag.icon,
+                              label: tag.label,
+                              color: tag.color,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 16),
 
               // Service Tags / Chips
@@ -492,6 +525,211 @@ class _InfoRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+List<_CapabilityTagData> _capabilityTagsFor(EmergencyService service) {
+  final tags = <_CapabilityTagData>[];
+  final services = service.services.map((item) => item.toLowerCase()).toSet();
+  final isAlwaysOpen = service.openNow || service.hours.toLowerCase() == '24/7';
+
+  void add({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    if (tags.any((tag) => tag.label == label)) {
+      return;
+    }
+    tags.add(_CapabilityTagData(icon: icon, label: label, color: color));
+  }
+
+  if (isAlwaysOpen) {
+    add(
+      icon: Icons.schedule,
+      label: '24/7 open',
+      color: const Color(0xFF0F766E),
+    );
+  }
+
+  switch (service.type) {
+    case ServiceType.hospital:
+      add(
+        icon: Icons.local_hospital,
+        label: 'Ambulance available',
+        color: service.type.color,
+      );
+      if (services.contains('icu')) {
+        add(
+          icon: Icons.monitor_heart_outlined,
+          label: 'ICU',
+          color: const Color(0xFFDC2626),
+        );
+      }
+      if (services.contains('trauma')) {
+        add(
+          icon: Icons.emergency_outlined,
+          label: 'Trauma care',
+          color: const Color(0xFFB91C1C),
+        );
+      }
+      if (services.contains('surgery')) {
+        add(
+          icon: Icons.medical_services_outlined,
+          label: 'Surgery team',
+          color: const Color(0xFFBE123C),
+        );
+      }
+      break;
+    case ServiceType.police:
+      add(
+        icon: Icons.local_police,
+        label: 'Police response',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.directions_car_outlined,
+        label: 'Patrol unit',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.report_outlined,
+        label: 'Incident reporting',
+        color: service.type.color,
+      );
+      break;
+    case ServiceType.fire:
+      add(
+        icon: Icons.local_shipping_outlined,
+        label: 'Fire rescue truck',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.health_and_safety_outlined,
+        label: 'Rescue team',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.local_fire_department_outlined,
+        label: 'Fire response',
+        color: service.type.color,
+      );
+      break;
+    case ServiceType.ambulance:
+      add(
+        icon: Icons.airport_shuttle,
+        label: 'Ambulance available',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.medical_information_outlined,
+        label: 'Paramedics',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.route_outlined,
+        label: 'Emergency transport',
+        color: service.type.color,
+      );
+      break;
+    case ServiceType.women:
+      add(
+        icon: Icons.support_agent,
+        label: 'Women support hotline',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.volunteer_activism_outlined,
+        label: 'Counseling',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.home_work_outlined,
+        label: 'Shelter referral',
+        color: service.type.color,
+      );
+      break;
+    case ServiceType.disaster:
+      add(
+        icon: Icons.crisis_alert,
+        label: 'Disaster relief',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.inventory_2_outlined,
+        label: 'Relief supplies',
+        color: service.type.color,
+      );
+      add(
+        icon: Icons.groups_outlined,
+        label: 'Evacuation support',
+        color: service.type.color,
+      );
+      break;
+  }
+
+  add(
+    icon: Icons.phone_in_talk_outlined,
+    label: 'Direct hotline',
+    color: service.type.color,
+  );
+
+  return tags;
+}
+
+class _CapabilityTagData {
+  const _CapabilityTagData({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+}
+
+class _CapabilityTag extends StatelessWidget {
+  const _CapabilityTag({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Semantics(
+      label: 'Emergency capability $label',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: isDark ? 0.20 : 0.10),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: color.withValues(alpha: 0.35)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 18, color: color),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isDark ? Colors.white : Colors.black87,
+                fontSize: 12,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../data/mock_repository.dart';
 import '../../models/emergency_branch.dart';
+import '../../models/service_type.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/neumorphic_container.dart';
@@ -103,6 +104,12 @@ class _MapScreenState extends State<MapScreen> {
                         .toList(),
                   ),
                 ],
+              ),
+              const Positioned(
+                top: 16,
+                left: 16,
+                right: 16,
+                child: _MapLegend(),
               ),
               Positioned(
                 bottom: 24,
@@ -286,6 +293,61 @@ class _MapScreenState extends State<MapScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class _MapLegend extends StatelessWidget {
+  const _MapLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      (label: 'Hospital', color: ServiceType.hospital.color),
+      (label: 'Police', color: ServiceType.police.color),
+      (label: 'Fire', color: ServiceType.fire.color),
+      (label: 'Ambulance', color: ServiceType.ambulance.color),
+    ];
+
+    return Semantics(
+      label:
+          'Map legend. Red hospital, blue police, orange fire, purple ambulance.',
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: NeumorphicContainer(
+          borderRadius: 16,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            children: items
+                .map(
+                  (item) => Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: item.color,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        item.label,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w900,
+                            ),
+                      ),
+                    ],
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ),
     );
   }
 }

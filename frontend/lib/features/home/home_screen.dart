@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/mock_repository.dart';
 import '../../models/emergency_service.dart';
+import '../../models/personal_contact.dart';
 import '../../models/service_type.dart';
+import '../../state/contacts_state.dart';
 import '../../state/favorites_state.dart';
+import '../../state/settings_state.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -155,6 +159,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                   .toList();
               final featured = filtered.take(6).toList();
+              final nearestService = services.reduce(
+                (current, next) =>
+                    current.distanceKm <= next.distanceKm ? current : next,
+              );
               final favoritesState = context.watch<FavoritesState>();
               final favoriteServices = services
                   .where((service) => favoritesState.isFavorite(service.id))
@@ -214,6 +222,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  const _EntranceAnimation(
+                    delayMs: 100,
+                    child: _OfflineDataBadge(),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _EntranceAnimation(
+                    delayMs: 150,
+                    child: _NearestHelpCard(service: nearestService),
                   ),
                   const SizedBox(height: 16),
 
@@ -390,10 +410,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Promotion/Safety tips strip
+                  // Emergency profile card
                   const _EntranceAnimation(
                     delayMs: 500,
-                    child: _PromotionStrip(),
+                    child: _EmergencyProfileCard(),
                   ),
                   const SizedBox(height: 24),
 
@@ -807,31 +827,407 @@ class _SecondaryQuickActionsRow extends StatelessWidget {
   }
 }
 
-class _PromotionStrip extends StatelessWidget {
-  const _PromotionStrip();
+class _OfflineDataBadge extends StatelessWidget {
+  const _OfflineDataBadge();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Semantics(
+        label: 'Offline emergency data available',
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: theme.colorScheme.primary.withValues(alpha: 0.18),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.offline_bolt_outlined,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Offline emergency data available.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NearestHelpCard extends StatelessWidget {
+  const _NearestHelpCard({required this.service});
+
+  final EmergencyService service;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Semantics(
+      label:
+          'Nearest help ${service.name}, ${service.distanceKm.toStringAsFixed(1)} kilometers away',
+      child: NeumorphicContainer(
+        borderRadius: 20,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: service.type.color.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(service.type.icon, color: service.type.color),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nearest help',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        '${service.name}, ${service.distanceKm.toStringAsFixed(1)} km',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: FilledButton.icon(
+                      onPressed: () => launchPhone(context, service.phone),
+                      icon: const Icon(Icons.call),
+                      label: const Text(
+                        'CALL',
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: OutlinedButton.icon(
+                      onPressed: () => launchDirections(
+                        context,
+                        latitude: service.latitude,
+                        longitude: service.longitude,
+                      ),
+                      icon: const Icon(Icons.directions),
+                      label: const Text(
+                        'DIRECTIONS',
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmergencyProfileCard extends StatelessWidget {
+  const _EmergencyProfileCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final settings = context.watch<SettingsState>();
+    final contacts = context.watch<ContactsState>().contacts;
+    final primaryContact = contacts.isNotEmpty ? contacts.first : null;
+    final bloodGroup = settings.bloodGroup.trim().isEmpty
+        ? 'Not set'
+        : settings.bloodGroup.trim();
+    final allergies = settings.allergies.trim().isEmpty
+        ? 'Not set'
+        : settings.allergies.trim();
+
     return NeumorphicContainer(
-      borderRadius: 18,
-      isPressed: true,
-      padding: const EdgeInsets.all(16),
+      borderRadius: 20,
+      padding: const EdgeInsets.all(18),
+      child: Semantics(
+        label: 'Emergency profile card with medical details and contact',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.badge_outlined,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Emergency Profile',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Critical info ready for responders',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => context.go('/settings'),
+                  child: const Text('Edit'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                _ProfileInfoTile(
+                  icon: Icons.bloodtype_outlined,
+                  label: 'Blood group',
+                  value: bloodGroup,
+                ),
+                _ProfileInfoTile(
+                  icon: Icons.warning_amber_outlined,
+                  label: 'Allergies',
+                  value: allergies,
+                ),
+                _ProfileInfoTile(
+                  icon: Icons.location_on_outlined,
+                  label: 'Location',
+                  value: 'Phnom Penh, BKK1',
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _ProfileContactRow(primaryContact: primaryContact),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: FilledButton.icon(
+                onPressed: () =>
+                    _copyEmergencyProfile(context, settings, primaryContact),
+                icon: const Icon(Icons.ios_share),
+                label: const Text(
+                  'SHARE EMERGENCY INFO',
+                  style: TextStyle(fontWeight: FontWeight.w900),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _copyEmergencyProfile(
+    BuildContext context,
+    SettingsState settings,
+    PersonalContact? primaryContact,
+  ) async {
+    final bloodGroup = settings.bloodGroup.trim().isEmpty
+        ? 'Not set'
+        : settings.bloodGroup.trim();
+    final allergies = settings.allergies.trim().isEmpty
+        ? 'Not set'
+        : settings.allergies.trim();
+    final contactLine = primaryContact != null
+        ? '${primaryContact.name} (${primaryContact.relationship}) - ${primaryContact.phone}'
+        : 'Not set';
+
+    await Clipboard.setData(
+      ClipboardData(
+        text:
+            'SafeReach Emergency Profile\n'
+            'Location: Phnom Penh, BKK1\n'
+            'Blood group: $bloodGroup\n'
+            'Allergies: $allergies\n'
+            'Emergency contact: $contactLine',
+      ),
+    );
+
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Emergency info copied to clipboard')),
+    );
+  }
+}
+
+class _ProfileInfoTile extends StatelessWidget {
+  const _ProfileInfoTile({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      constraints: const BoxConstraints(minWidth: 150),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.12),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 20, color: theme.colorScheme.primary),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileContactRow extends StatelessWidget {
+  const _ProfileContactRow({required this.primaryContact});
+
+  final PersonalContact? primaryContact;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final contact = primaryContact;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.colorScheme.outline),
+      ),
       child: Row(
         children: [
           Icon(
-            Icons.health_and_safety,
-            color: Theme.of(context).colorScheme.primary,
+            Icons.contact_phone_outlined,
+            color: theme.colorScheme.primary,
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              'Safety Tip: Update your personal contacts and input critical medical information like your blood group and allergies in Settings.'
-                  .tr(context),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Emergency contact',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  contact == null
+                      ? 'No personal contact added'
+                      : '${contact.name} - ${contact.phone}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
             ),
           ),
+          if (contact != null)
+            IconButton(
+              tooltip: 'Call emergency contact',
+              onPressed: () => launchPhone(context, contact.phone),
+              icon: Icon(Icons.call, color: theme.colorScheme.primary),
+            )
+          else
+            TextButton(
+              onPressed: () => context.go('/contacts'),
+              child: const Text('Add'),
+            ),
         ],
       ),
     );

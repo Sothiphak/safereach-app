@@ -49,32 +49,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           NeumorphicContainer(
             borderRadius: 20,
-            child: Column(
-              children: [
-                SwitchListTile(
-                  title: Text('Dark mode'.tr(context)),
-                  value: settings.darkMode,
-                  onChanged: settings.setDarkMode,
-                ),
-                const Divider(height: 1, indent: 16, endIndent: 16),
-                ListTile(
-                  title: Text('Language'.tr(context)),
-                  trailing: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: settings.language,
-                      items: [
-                        DropdownMenuItem(value: 'EN', child: Text('English'.tr(context))),
-                        DropdownMenuItem(value: 'KH', child: Text('Khmer'.tr(context))),
-                      ],
-                      onChanged: (value) {
-                        if (value != null) {
-                          settings.setLanguage(value);
-                        }
-                      },
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(20),
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: Text('Dark mode'.tr(context)),
+                    value: settings.darkMode,
+                    onChanged: settings.setDarkMode,
+                  ),
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  ListTile(
+                    title: Text('Language'.tr(context)),
+                    trailing: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: settings.language,
+                        items: [
+                          DropdownMenuItem(
+                            value: 'EN',
+                            child: Text('English'.tr(context)),
+                          ),
+                          DropdownMenuItem(
+                            value: 'KH',
+                            child: Text('Khmer'.tr(context)),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            settings.setLanguage(value);
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 24),
@@ -129,10 +139,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 24),
           NeumorphicContainer(
             borderRadius: 20,
-            child: ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: Text('About SafeReach'.tr(context)),
-              subtitle: Text('Emergency response, locations, and tips.'.tr(context)),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(20),
+              child: ListTile(
+                leading: const Icon(Icons.info_outline),
+                title: Text('About SafeReach'.tr(context)),
+                subtitle: Text(
+                  'Emergency response, locations, and tips.'.tr(context),
+                ),
+              ),
             ),
           ),
         ],
