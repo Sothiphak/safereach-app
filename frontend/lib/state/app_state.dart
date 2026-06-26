@@ -14,6 +14,7 @@ class AppState extends ChangeNotifier {
   Future<void> load() async {
     _prefs = await SharedPreferences.getInstance();
     _onboardingComplete = _prefs.getBool(_onboardingKey) ?? false;
+    await Future<void>.delayed(const Duration(milliseconds: 1600));
     _initialized = true;
     notifyListeners();
   }
