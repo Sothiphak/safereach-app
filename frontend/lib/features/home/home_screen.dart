@@ -685,7 +685,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           isDarkOverlay: true,
                         ),
                       ],
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 24),
+                      Text(
+                        _selectedSosService == null
+                            ? 'Calling dispatch in $_countdownSeconds seconds'
+                            : 'Calling ${_selectedSosService!.type.label.tr(context)} in $_countdownSeconds seconds',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
                       // Huge Countdown Number
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
@@ -814,9 +826,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Text(
                           _selectedSosService == null
-                              ? 'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
+                              ? 'Dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
                                     .tr(context)
-                              : 'Mock dispatch status: ${_responseUnitLabel(_selectedSosService!.type)} en-route (ETA: 4 mins). Stay where you are.',
+                              : 'Dispatch status: ${_responseUnitLabel(_selectedSosService!.type)} en-route (ETA: 4 mins). Stay where you are.',
                           style: const TextStyle(
                             color: Colors.greenAccent,
                             fontSize: 14,
