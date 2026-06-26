@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _countdownSeconds = 3;
   Timer? _countdownTimer;
   bool _sosTriggered = false;
+  EmergencyService? _selectedSosService;
 
   @override
   void dispose() {
@@ -46,15 +47,152 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _startSosCountdown() {
+  Future<void> _chooseSosService(List<EmergencyService> services) async {
+    final selectedService = await showModalBottomSheet<EmergencyService>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final theme = Theme.of(context);
+        final options = _nearestServicesByType(services);
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Choose emergency type'.tr(context),
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'SafeReach will call the nearest matching service after the countdown.'
+                      .tr(context),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final service = options[index];
+                      final type = service.type;
+
+                      return NeumorphicButton(
+                        borderRadius: 18,
+                        onTap: () => Navigator.of(context).pop(service),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: type.color.withValues(alpha: 0.12),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(type.icon, color: type.color),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      type.label.tr(context),
+                                      style: theme.textTheme.titleSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      '${service.name.tr(context)} • ${service.distanceKm.toStringAsFixed(1)} km',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Icon(
+                                Icons.chevron_right,
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (!mounted || selectedService == null) {
+      return;
+    }
+
+    _startSosCountdown(selectedService);
+  }
+
+  List<EmergencyService> _nearestServicesByType(
+    List<EmergencyService> services,
+  ) {
+    final options = <EmergencyService>[];
+    for (final type in ServiceType.values) {
+      final matches = services.where((service) => service.type == type).toList()
+        ..sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+      if (matches.isNotEmpty) {
+        options.add(matches.first);
+      }
+    }
+    return options;
+  }
+
+  String _responseUnitLabel(ServiceType type) {
+    return switch (type) {
+      ServiceType.police => 'Police unit',
+      ServiceType.hospital => 'Medical team',
+      ServiceType.fire => 'Fire response team',
+      ServiceType.ambulance => 'Ambulance',
+      ServiceType.women => 'Support team',
+      ServiceType.disaster => 'Relief team',
+    };
+  }
+
+  void _startSosCountdown(EmergencyService service) {
     setState(() {
       _showSosCountdown = true;
       _countdownSeconds = 3;
       _sosTriggered = false;
+      _selectedSosService = service;
     });
 
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
       if (_countdownSeconds > 1) {
         setState(() {
           _countdownSeconds--;
@@ -64,8 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _sosTriggered = true;
         });
-        // Automatically launch emergency call to primary number
-        launchPhone(context, '+85523219911');
+        launchPhone(context, service.phone);
       }
     });
   }
@@ -75,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _showSosCountdown = false;
       _sosTriggered = false;
+      _selectedSosService = null;
     });
   }
 
@@ -287,7 +425,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(height: 36),
                             // Pulsing SOS Button
-                            SosButton(size: 160, onPressed: _startSosCountdown),
+                            SosButton(
+                              size: 160,
+                              onPressed: () => _chooseSosService(services),
+                            ),
                             const SizedBox(height: 36),
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -537,6 +678,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(color: Colors.grey[400], fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
+                      if (_selectedSosService != null) ...[
+                        const SizedBox(height: 20),
+                        _SosSelectedServiceCard(
+                          service: _selectedSosService!,
+                          isDarkOverlay: true,
+                        ),
+                      ],
                       const SizedBox(height: 48),
                       // Huge Countdown Number
                       AnimatedSwitcher(
@@ -644,8 +792,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Dialing dispatch at Calmette Emergency Care (+855 23 218 878) and routing response vehicle.'
-                            .tr(context),
+                        _selectedSosService == null
+                            ? 'Dialing dispatch and routing emergency response.'
+                                  .tr(context)
+                            : 'Dialing ${_selectedSosService!.name.tr(context)} (${_selectedSosService!.phone}) and routing emergency response.',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 15,
@@ -663,8 +813,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         child: Text(
-                          'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
-                              .tr(context),
+                          _selectedSosService == null
+                              ? 'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
+                                    .tr(context)
+                              : 'Mock dispatch status: ${_responseUnitLabel(_selectedSosService!.type)} en-route (ETA: 4 mins). Stay where you are.',
                           style: const TextStyle(
                             color: Colors.greenAccent,
                             fontSize: 14,
@@ -686,7 +838,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed: () => launchPhone(context, '+85523219911'),
+                          onPressed: _selectedSosService == null
+                              ? null
+                              : () => launchPhone(
+                                  context,
+                                  _selectedSosService!.phone,
+                                ),
                           icon: const Icon(Icons.phone),
                           label: Text(
                             'DIAL DISPATCH'.tr(context),
@@ -721,6 +878,73 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _SosSelectedServiceCard extends StatelessWidget {
+  const _SosSelectedServiceCard({
+    required this.service,
+    this.isDarkOverlay = false,
+  });
+
+  final EmergencyService service;
+  final bool isDarkOverlay;
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = isDarkOverlay ? Colors.white : null;
+    final secondaryTextColor = isDarkOverlay ? Colors.white70 : null;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDarkOverlay
+            ? Colors.white.withValues(alpha: 0.08)
+            : service.type.color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDarkOverlay
+              ? Colors.white.withValues(alpha: 0.16)
+              : service.type.color.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: service.type.color.withValues(alpha: 0.16),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(service.type.icon, color: service.type.color),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  service.type.label.tr(context),
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  '${service.name.tr(context)} • ${service.phone}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: secondaryTextColor, fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1188,10 +1412,7 @@ class _ProfileContactRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.contact_phone_outlined,
-            color: theme.colorScheme.primary,
-          ),
+          Icon(Icons.contact_phone_outlined, color: theme.colorScheme.primary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

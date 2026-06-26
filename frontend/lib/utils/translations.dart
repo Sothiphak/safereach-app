@@ -11,21 +11,29 @@ extension TranslationExtension on String {
 
 class Translations {
   static const Map<String, Map<String, String>> _localizedValues = {
-    'SafeReach': {
-      'EN': 'SafeReach',
-      'KH': 'SafeReach',
-    },
+    'SafeReach': {'EN': 'SafeReach', 'KH': 'SafeReach'},
     'Emergency Response Hub': {
       'EN': 'Emergency Response Hub',
       'KH': 'មជ្ឈមណ្ឌលសង្គ្រោះបន្ទាន់',
     },
-    'IN AN EMERGENCY': {
-      'EN': 'IN AN EMERGENCY',
-      'KH': 'ក្នុងស្ថានភាពអាសន្ន',
-    },
+    'IN AN EMERGENCY': {'EN': 'IN AN EMERGENCY', 'KH': 'ក្នុងស្ថានភាពអាសន្ន'},
     'Press the SOS button below to call for help': {
       'EN': 'Press the SOS button below to call for help',
       'KH': 'ចុចប៊ូតុង SOS ខាងក្រោមដើម្បីហៅរកជំនួយ',
+    },
+    'Choose emergency type': {
+      'EN': 'Choose emergency type',
+      'KH': 'ជ្រើសរើសប្រភេទអាសន្ន',
+    },
+    'SafeReach will call the nearest matching service after the countdown.': {
+      'EN':
+          'SafeReach will call the nearest matching service after the countdown.',
+      'KH':
+          'SafeReach នឹងហៅទៅសេវាដែលត្រូវប្រភេទ និងនៅជិតបំផុត បន្ទាប់ពីរាប់ថយក្រោយ។',
+    },
+    'Dialing dispatch and routing emergency response.': {
+      'EN': 'Dialing dispatch and routing emergency response.',
+      'KH': 'កំពុងហៅផ្នែកបញ្ជូន និងរៀបចំការឆ្លើយតបបន្ទាន់។',
     },
     'Activates 3s confirmation window before calling': {
       'EN': 'Activates 3s confirmation window before calling',
@@ -44,8 +52,10 @@ class Translations {
       'KH': 'ខ្សែទូរស័ព្ទជំនួយបន្ថែម',
     },
     'Safety Tip: Update your personal contacts and input critical medical information like your blood group and allergies in Settings.': {
-      'EN': 'Safety Tip: Update your personal contacts and input critical medical information like your blood group and allergies in Settings.',
-      'KH': 'គន្លឹះសុវត្ថិភាព៖ ធ្វើបច្ចុប្បន្នភាពទំនាក់ទំនងផ្ទាល់ខ្លួន និងបញ្ចូលព័ត៌មានវេជ្ជសាស្ត្រសំខាន់ៗដូចជាក្រុមឈាម និងប្រតិកម្មអាឡែស៊ីនៅក្នុងការកំណត់។',
+      'EN':
+          'Safety Tip: Update your personal contacts and input critical medical information like your blood group and allergies in Settings.',
+      'KH':
+          'គន្លឹះសុវត្ថិភាព៖ ធ្វើបច្ចុប្បន្នភាពទំនាក់ទំនងផ្ទាល់ខ្លួន និងបញ្ចូលព័ត៌មានវេជ្ជសាស្ត្រសំខាន់ៗដូចជាក្រុមឈាម និងប្រតិកម្មអាឡែស៊ីនៅក្នុងការកំណត់។',
     },
     'Nearest Help Points': {
       'EN': 'Nearest Help Points',
@@ -71,18 +81,9 @@ class Translations {
       'EN': 'Please check your connection and try again.',
       'KH': 'សូមពិនិត្យមើលការតភ្ជាប់របស់អ្នក រួចព្យាយាមម្តងទៀត។',
     },
-    'Dark mode': {
-      'EN': 'Dark mode',
-      'KH': 'របៀបងងឹត',
-    },
-    'Language': {
-      'EN': 'Language',
-      'KH': 'ភាសា',
-    },
-    'Medical info': {
-      'EN': 'Medical info',
-      'KH': 'ព័ត៌មានវេជ្ជសាស្ត្រ',
-    },
+    'Dark mode': {'EN': 'Dark mode', 'KH': 'របៀបងងឹត'},
+    'Language': {'EN': 'Language', 'KH': 'ភាសា'},
+    'Medical info': {'EN': 'Medical info', 'KH': 'ព័ត៌មានវេជ្ជសាស្ត្រ'},
     'Save medical info': {
       'EN': 'Save medical info',
       'KH': 'រក្សាទុកព័ត៌មានវេជ្ជសាស្ត្រ',
@@ -95,26 +96,14 @@ class Translations {
       'EN': 'Use a valid blood group like A+, O-, or AB+',
       'KH': 'សូមប្រើក្រុមឈាមត្រឹមត្រូវដូចជា A+, O-, ឬ AB+',
     },
-    'Blood group': {
-      'EN': 'Blood group',
-      'KH': 'ក្រុមឈាម',
-    },
-    'Allergies': {
-      'EN': 'Allergies',
-      'KH': 'អាឡែស៊ី',
-    },
-    'About SafeReach': {
-      'EN': 'About SafeReach',
-      'KH': 'អំពី SafeReach',
-    },
+    'Blood group': {'EN': 'Blood group', 'KH': 'ក្រុមឈាម'},
+    'Allergies': {'EN': 'Allergies', 'KH': 'អាឡែស៊ី'},
+    'About SafeReach': {'EN': 'About SafeReach', 'KH': 'អំពី SafeReach'},
     'Emergency response, locations, and tips.': {
       'EN': 'Emergency response, locations, and tips.',
       'KH': 'ការឆ្លើយតបបន្ទាន់ ទីតាំង និងគន្លឹះផ្សេងៗ។',
     },
-    'Save contact': {
-      'EN': 'Save contact',
-      'KH': 'រក្សាទុកទំនាក់ទំនង',
-    },
+    'Save contact': {'EN': 'Save contact', 'KH': 'រក្សាទុកទំនាក់ទំនង'},
     'Update contact': {
       'EN': 'Update contact',
       'KH': 'ធ្វើបច្ចុប្បន្នភាពទំនាក់ទំនង',
@@ -135,78 +124,30 @@ class Translations {
       'EN': 'Add family or friends for quick access.',
       'KH': 'បន្ថែមក្រុមគ្រួសារ ឬមិត្តភក្តិដើម្បីទំនាក់ទំនងរហ័ស។',
     },
-    'Name': {
-      'EN': 'Name',
-      'KH': 'ឈ្មោះ',
-    },
-    'Relationship': {
-      'EN': 'Relationship',
-      'KH': 'ទំនាក់ទំនង',
-    },
-    'Phone number': {
-      'EN': 'Phone number',
-      'KH': 'លេខទូរស័ព្ទ',
-    },
+    'Name': {'EN': 'Name', 'KH': 'ឈ្មោះ'},
+    'Relationship': {'EN': 'Relationship', 'KH': 'ទំនាក់ទំនង'},
+    'Phone number': {'EN': 'Phone number', 'KH': 'លេខទូរស័ព្ទ'},
     'Relationship (e.g. Family, Doctor)': {
       'EN': 'Relationship (e.g. Family, Doctor)',
       'KH': 'ទំនាក់ទំនង (ឧ. គ្រួសារ, គ្រូពេទ្យ)',
     },
-    'Add Contact': {
-      'EN': 'Add Contact',
-      'KH': 'បន្ថែមទំនាក់ទំនង',
-    },
-    'Edit Contact': {
-      'EN': 'Edit Contact',
-      'KH': 'កែសម្រួលទំនាក់ទំនង',
-    },
-    'Map': {
-      'EN': 'Map',
-      'KH': 'ផែនទី',
-    },
-    'Nearby': {
-      'EN': 'Nearby',
-      'KH': 'នៅជិតៗ',
-    },
-    'Favorites': {
-      'EN': 'Favorites',
-      'KH': 'សំណព្វ',
-    },
-    'Contacts': {
-      'EN': 'Contacts',
-      'KH': 'ទំនាក់ទំនង',
-    },
-    'Settings': {
-      'EN': 'Settings',
-      'KH': 'ការកំណត់',
-    },
-    'Home': {
-      'EN': 'Home',
-      'KH': 'ទំព័រដើម',
-    },
-    'First-aid tips': {
-      'EN': 'First-aid tips',
-      'KH': 'គន្លឹះសង្គ្រោះបឋម',
-    },
-    'Service Details': {
-      'EN': 'Service Details',
-      'KH': 'ព័ត៌មានលម្អិតសេវាកម្ម',
-    },
-    'About Service': {
-      'EN': 'About Service',
-      'KH': 'អំពីសេវាកម្ម',
-    },
-    'CALL NOW': {
-      'EN': 'CALL NOW',
-      'KH': 'ហៅទូរស័ព្ទឥឡូវនេះ',
-    },
+    'Add Contact': {'EN': 'Add Contact', 'KH': 'បន្ថែមទំនាក់ទំនង'},
+    'Edit Contact': {'EN': 'Edit Contact', 'KH': 'កែសម្រួលទំនាក់ទំនង'},
+    'Map': {'EN': 'Map', 'KH': 'ផែនទី'},
+    'Nearby': {'EN': 'Nearby', 'KH': 'នៅជិតៗ'},
+    'Favorites': {'EN': 'Favorites', 'KH': 'សំណព្វ'},
+    'Contacts': {'EN': 'Contacts', 'KH': 'ទំនាក់ទំនង'},
+    'Settings': {'EN': 'Settings', 'KH': 'ការកំណត់'},
+    'Home': {'EN': 'Home', 'KH': 'ទំព័រដើម'},
+    'First-aid tips': {'EN': 'First-aid tips', 'KH': 'គន្លឹះសង្គ្រោះបឋម'},
+    'Service Details': {'EN': 'Service Details', 'KH': 'ព័ត៌មានលម្អិតសេវាកម្ម'},
+    'About Service': {'EN': 'About Service', 'KH': 'អំពីសេវាកម្ម'},
+    'CALL NOW': {'EN': 'CALL NOW', 'KH': 'ហៅទូរស័ព្ទឥឡូវនេះ'},
     'Reviews & Ratings': {
       'EN': 'Reviews & Ratings',
       'KH': 'ការវាយតម្លៃ និងចំណាត់ថ្នាក់',
     },
-    'Write a review': {
-      'EN': 'Write a review',
-      'KH': 'សរសេរការវាយតម្លៃ',
-    },
+    'Write a review': {'EN': 'Write a review', 'KH': 'សរសេរការវាយតម្លៃ'},
     'Submit Emergency Review': {
       'EN': 'Submit Emergency Review',
       'KH': 'បញ្ជូនមតិវាយតម្លៃអាសន្ន',
@@ -215,21 +156,16 @@ class Translations {
       'EN': 'Rate your experience',
       'KH': 'វាយតម្លៃបទពិសោធន៍របស់អ្នក',
     },
-    'Your Name': {
-      'EN': 'Your Name',
-      'KH': 'ឈ្មោះរបស់អ្នក',
-    },
+    'Your Name': {'EN': 'Your Name', 'KH': 'ឈ្មោះរបស់អ្នក'},
     'Describe your emergency experience': {
       'EN': 'Describe your emergency experience',
       'KH': 'រៀបរាប់ពីបទពិសោធន៍សង្គ្រោះបន្ទាន់របស់អ្នក',
     },
-    'SUBMIT REVIEW': {
-      'EN': 'SUBMIT REVIEW',
-      'KH': 'បញ្ជូនមតិវាយតម្លៃ',
-    },
+    'SUBMIT REVIEW': {'EN': 'SUBMIT REVIEW', 'KH': 'បញ្ជូនមតិវាយតម្លៃ'},
     'No reviews posted yet. Be the first to share your experience!': {
       'EN': 'No reviews posted yet. Be the first to share your experience!',
-      'KH': 'មិនទាន់មានការវាយតម្លៃនៅឡើយទេ។ ក្លាយជាអ្នកដំបូងគេដែលចែករំលែកបទពិសោធន៍របស់អ្នក!',
+      'KH':
+          'មិនទាន់មានការវាយតម្លៃនៅឡើយទេ។ ក្លាយជាអ្នកដំបូងគេដែលចែករំលែកបទពិសោធន៍របស់អ្នក!',
     },
     'TRIGGERING SOS ALARM': {
       'EN': 'TRIGGERING SOS ALARM',
@@ -247,54 +183,39 @@ class Translations {
       'EN': 'EMERGENCY SERVICES',
       'KH': 'សេវាសង្គ្រោះបន្ទាន់',
     },
-    'CANCEL SOS': {
-      'EN': 'CANCEL SOS',
-      'KH': 'បោះបង់ SOS',
-    },
+    'CANCEL SOS': {'EN': 'CANCEL SOS', 'KH': 'បោះបង់ SOS'},
     'SOS ALARM SENT': {
       'EN': 'SOS ALARM SENT',
       'KH': 'សំឡេងអាសន្ន SOS ត្រូវបានផ្ញើ',
     },
     'Dialing dispatch at Calmette Emergency Care (+855 23 218 878) and routing response vehicle.': {
-      'EN': 'Dialing dispatch at Calmette Emergency Care (+855 23 218 878) and routing response vehicle.',
-      'KH': 'កំពុងហៅទូរស័ព្ទទៅផ្នែកសង្គ្រោះបន្ទាន់កាល់ម៉ែត (+៨៥៥ ២៣ ២១៨ ៨៧៨) និងបញ្ជូនឡានសង្គ្រោះ។',
+      'EN':
+          'Dialing dispatch at Calmette Emergency Care (+855 23 218 878) and routing response vehicle.',
+      'KH':
+          'កំពុងហៅទូរស័ព្ទទៅផ្នែកសង្គ្រោះបន្ទាន់កាល់ម៉ែត (+៨៥៥ ២៣ ២១៨ ៨៧៨) និងបញ្ជូនឡានសង្គ្រោះ។',
     },
     'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.': {
-      'EN': 'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.',
-      'KH': 'ស្ថានភាពសង្គ្រោះសាកល្បង៖ ឡានពេទ្យកំពុងធ្វើដំណើរ (រង់ចាំ ៤ នាទី)។ សូមស្នាក់នៅកន្លែងដដែល។',
+      'EN':
+          'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.',
+      'KH':
+          'ស្ថានភាពសង្គ្រោះសាកល្បង៖ ឡានពេទ្យកំពុងធ្វើដំណើរ (រង់ចាំ ៤ នាទី)។ សូមស្នាក់នៅកន្លែងដដែល។',
     },
-    'DIAL DISPATCH': {
-      'EN': 'DIAL DISPATCH',
-      'KH': 'ហៅទៅផ្នែកសង្គ្រោះ',
-    },
-    'DISMISS OVERLAY': {
-      'EN': 'DISMISS OVERLAY',
-      'KH': 'បិទផ្ទាំងនេះ',
-    },
-    'Get started': {
-      'EN': 'Get started',
-      'KH': 'ចាប់ផ្តើម',
-    },
-    'Next': {
-      'EN': 'Next',
-      'KH': 'បន្ទាប់',
-    },
-    'Skip': {
-      'EN': 'Skip',
-      'KH': 'រំលង',
-    },
+    'DIAL DISPATCH': {'EN': 'DIAL DISPATCH', 'KH': 'ហៅទៅផ្នែកសង្គ្រោះ'},
+    'DISMISS OVERLAY': {'EN': 'DISMISS OVERLAY', 'KH': 'បិទផ្ទាំងនេះ'},
+    'Get started': {'EN': 'Get started', 'KH': 'ចាប់ផ្តើម'},
+    'Next': {'EN': 'Next', 'KH': 'បន្ទាប់'},
+    'Skip': {'EN': 'Skip', 'KH': 'រំលង'},
     'Instant Emergency Help': {
       'EN': 'Instant Emergency Help',
       'KH': 'ជំនួយសង្គ្រោះបន្ទាន់ភ្លាមៗ',
     },
     'Find the nearest police, hospital, fire station, or ambulance in seconds.': {
-      'EN': 'Find the nearest police, hospital, fire station, or ambulance in seconds.',
-      'KH': 'ស្វែងរកប៉ូលីស មន្ទីរពេទ្យ ស្ថានីយពន្លត់អគ្គីភ័យ ឬឡានពេទ្យដែលនៅជិតបំផុតក្នុងរយៈពេលប៉ុន្មានវិនាទី។',
+      'EN':
+          'Find the nearest police, hospital, fire station, or ambulance in seconds.',
+      'KH':
+          'ស្វែងរកប៉ូលីស មន្ទីរពេទ្យ ស្ថានីយពន្លត់អគ្គីភ័យ ឬឡានពេទ្យដែលនៅជិតបំផុតក្នុងរយៈពេលប៉ុន្មានវិនាទី។',
     },
-    'One-Tap SOS': {
-      'EN': 'One-Tap SOS',
-      'KH': 'ចុច SOS តែម្តងគត់',
-    },
+    'One-Tap SOS': {'EN': 'One-Tap SOS', 'KH': 'ចុច SOS តែម្តងគត់'},
     'Hit the big SOS button to quickly access critical contacts.': {
       'EN': 'Hit the big SOS button to quickly access critical contacts.',
       'KH': 'ចុចប៊ុង SOS ធំ ដើម្បីចូលទៅកាន់ទំនាក់ទំនងសំខាន់ៗបានយ៉ាងរហ័ស។',
@@ -305,24 +226,13 @@ class Translations {
     },
     'Learn first-aid steps and store personal emergency contacts.': {
       'EN': 'Learn first-aid steps and store personal emergency contacts.',
-      'KH': 'ស្វែងយល់ពីជំហានសង្គ្រោះបឋម និងរក្សាទុកទំនាក់ទំនងអាសន្នផ្ទាល់ខ្លួន។',
+      'KH':
+          'ស្វែងយល់ពីជំហានសង្គ្រោះបឋម និងរក្សាទុកទំនាក់ទំនងអាសន្នផ្ទាល់ខ្លួន។',
     },
-    'Open now': {
-      'EN': 'Open now',
-      'KH': 'បើកទ្វារឥឡូវនេះ',
-    },
-    '≤ 3 km': {
-      'EN': '≤ 3 km',
-      'KH': '≤ ៣ គីឡូម៉ែត្រ',
-    },
-    '4.5+ rating': {
-      'EN': '4.5+ rating',
-      'KH': 'ការវាយតម្លៃ ៤.៥ឡើង',
-    },
-    'Nearby services': {
-      'EN': 'Nearby Services',
-      'KH': 'សេវាកម្មនៅជិតៗ',
-    },
+    'Open now': {'EN': 'Open now', 'KH': 'បើកទ្វារឥឡូវនេះ'},
+    '≤ 3 km': {'EN': '≤ 3 km', 'KH': '≤ ៣ គីឡូម៉ែត្រ'},
+    '4.5+ rating': {'EN': '4.5+ rating', 'KH': 'ការវាយតម្លៃ ៤.៥ឡើង'},
+    'Nearby services': {'EN': 'Nearby Services', 'KH': 'សេវាកម្មនៅជិតៗ'},
     'No nearby services': {
       'EN': 'No nearby services',
       'KH': 'មិនមានសេវាកម្មនៅជិតៗទេ',
@@ -331,102 +241,33 @@ class Translations {
       'EN': 'Adjust filters to see more results.',
       'KH': 'កែតម្រូវតម្រងដើម្បីមើលលទ្ធផលបន្ថែម។',
     },
-    'Save Contact': {
-      'EN': 'Save Contact',
-      'KH': 'រក្សាទុកទំនាក់ទំនង',
-    },
+    'Save Contact': {'EN': 'Save Contact', 'KH': 'រក្សាទុកទំនាក់ទំនង'},
     'Update Contact': {
       'EN': 'Update Contact',
       'KH': 'ធ្វើបច្ចុប្បន្នភាពទំនាក់ទំនង',
     },
-    'Phone Number': {
-      'EN': 'Phone Number',
-      'KH': 'លេខទូរស័ព្ទ',
-    },
-    'Hospital': {
-      'EN': 'Hospital',
-      'KH': 'មន្ទីរពេទ្យ',
-    },
-    'Police': {
-      'EN': 'Police',
-      'KH': 'ប៉ូលីស',
-    },
-    'Fire Station': {
-      'EN': 'Fire Station',
-      'KH': 'ពន្លត់អគ្គីភ័យ',
-    },
-    'Ambulance': {
-      'EN': 'Ambulance',
-      'KH': 'ឡានសង្គ្រោះបន្ទាន់',
-    },
-    'Women Support': {
-      'EN': 'Women Support',
-      'KH': 'ជំនួយស្ត្រី',
-    },
-    'Disaster Relief': {
-      'EN': 'Disaster Relief',
-      'KH': 'សង្គ្រោះគ្រោះមហន្តរាយ',
-    },
-    'hospital': {
-      'EN': 'Hospital',
-      'KH': 'មន្ទីរពេទ្យ',
-    },
-    'police': {
-      'EN': 'Police',
-      'KH': 'ប៉ូលីស',
-    },
-    'fire': {
-      'EN': 'Fire Station',
-      'KH': 'ពន្លត់អគ្គីភ័យ',
-    },
-    'ambulance': {
-      'EN': 'Ambulance',
-      'KH': 'ឡានសង្គ្រោះបន្ទាន់',
-    },
-    'women': {
-      'EN': 'Women Support',
-      'KH': 'ជំនួយស្ត្រី',
-    },
-    'disaster': {
-      'EN': 'Disaster Relief',
-      'KH': 'សង្គ្រោះគ្រោះមហន្តរាយ',
-    },
-    'Hospitals': {
-      'EN': 'Hospitals',
-      'KH': 'មន្ទីរពេទ្យ',
-    },
-    'Police Stations': {
-      'EN': 'Police Stations',
-      'KH': 'ប៉ូលីស',
-    },
-    'Fire Stations': {
-      'EN': 'Fire Stations',
-      'KH': 'ពន្លត់អគ្គីភ័យ',
-    },
-    'Ambulances': {
-      'EN': 'Ambulances',
-      'KH': 'ឡានសង្គ្រោះបន្ទាន់',
-    },
-    'Women Help': {
-      'EN': 'Women Help',
-      'KH': 'ជំនួយស្ត្រី',
-    },
-    'Disaster': {
-      'EN': 'Disaster',
-      'KH': 'គ្រោះមហន្តរាយ',
-    },
-    'English': {
-      'EN': 'English',
-      'KH': 'អង់គ្លេស',
-    },
-    'Khmer': {
-      'EN': 'Khmer',
-      'KH': 'ខ្មែរ',
-    },
-    'e.g. A+, O-': {
-      'EN': 'e.g. A+, O-',
-      'KH': 'ឧ. A+, O-',
-    },
+    'Phone Number': {'EN': 'Phone Number', 'KH': 'លេខទូរស័ព្ទ'},
+    'Hospital': {'EN': 'Hospital', 'KH': 'មន្ទីរពេទ្យ'},
+    'Police': {'EN': 'Police', 'KH': 'ប៉ូលីស'},
+    'Fire Station': {'EN': 'Fire Station', 'KH': 'ពន្លត់អគ្គីភ័យ'},
+    'Ambulance': {'EN': 'Ambulance', 'KH': 'ឡានសង្គ្រោះបន្ទាន់'},
+    'Women Support': {'EN': 'Women Support', 'KH': 'ជំនួយស្ត្រី'},
+    'Disaster Relief': {'EN': 'Disaster Relief', 'KH': 'សង្គ្រោះគ្រោះមហន្តរាយ'},
+    'hospital': {'EN': 'Hospital', 'KH': 'មន្ទីរពេទ្យ'},
+    'police': {'EN': 'Police', 'KH': 'ប៉ូលីស'},
+    'fire': {'EN': 'Fire Station', 'KH': 'ពន្លត់អគ្គីភ័យ'},
+    'ambulance': {'EN': 'Ambulance', 'KH': 'ឡានសង្គ្រោះបន្ទាន់'},
+    'women': {'EN': 'Women Support', 'KH': 'ជំនួយស្ត្រី'},
+    'disaster': {'EN': 'Disaster Relief', 'KH': 'សង្គ្រោះគ្រោះមហន្តរាយ'},
+    'Hospitals': {'EN': 'Hospitals', 'KH': 'មន្ទីរពេទ្យ'},
+    'Police Stations': {'EN': 'Police Stations', 'KH': 'ប៉ូលីស'},
+    'Fire Stations': {'EN': 'Fire Stations', 'KH': 'ពន្លត់អគ្គីភ័យ'},
+    'Ambulances': {'EN': 'Ambulances', 'KH': 'ឡានសង្គ្រោះបន្ទាន់'},
+    'Women Help': {'EN': 'Women Help', 'KH': 'ជំនួយស្ត្រី'},
+    'Disaster': {'EN': 'Disaster', 'KH': 'គ្រោះមហន្តរាយ'},
+    'English': {'EN': 'English', 'KH': 'អង់គ្លេស'},
+    'Khmer': {'EN': 'Khmer', 'KH': 'ខ្មែរ'},
+    'e.g. A+, O-': {'EN': 'e.g. A+, O-', 'KH': 'ឧ. A+, O-'},
     'List any allergies': {
       'EN': 'List any allergies',
       'KH': 'រៀបរាប់ពីប្រតិកម្មអាឡែស៊ី',
@@ -463,10 +304,7 @@ class Translations {
       'EN': 'Please check back later for first-aid guidance.',
       'KH': 'សូមពិនិត្យមើលឡើងវិញនៅពេលក្រោយសម្រាប់ព័ត៌មានណែនាំសង្គ្រោះបឋម។',
     },
-    'CPR': {
-      'EN': 'CPR',
-      'KH': 'សង្គ្រោះបេះដូង (CPR)',
-    },
+    'CPR': {'EN': 'CPR', 'KH': 'សង្គ្រោះបេះដូង (CPR)'},
     'Keep blood flowing until help arrives.': {
       'EN': 'Keep blood flowing until help arrives.',
       'KH': 'រក្សាលំហូរឈាមរហូតដល់ជំនួយមកដល់។',
@@ -487,10 +325,7 @@ class Translations {
       'EN': 'Continue until help arrives or the person recovers.',
       'KH': 'បន្តរហូតដល់ជំនួយមកដល់ ឬអ្នកជំងឺដឹងខ្លួនឡើងវិញ។',
     },
-    'Burns': {
-      'EN': 'Burns',
-      'KH': 'រលាកភ្លើង',
-    },
+    'Burns': {'EN': 'Burns', 'KH': 'រលាកភ្លើង'},
     'Cool the burn and protect the skin.': {
       'EN': 'Cool the burn and protect the skin.',
       'KH': 'ធ្វើឱ្យកន្លែងរលាកត្រជាក់ និងការពារស្បែក។',
@@ -511,10 +346,7 @@ class Translations {
       'EN': 'Seek medical care for severe burns.',
       'KH': 'ស្វែងរកការថែទាំវេជ្ជសាស្ត្រសម្រាប់ការរលាកធ្ងន់ធ្ងរ។',
     },
-    'Bleeding': {
-      'EN': 'Bleeding',
-      'KH': 'ហូរឈាម',
-    },
+    'Bleeding': {'EN': 'Bleeding', 'KH': 'ហូរឈាម'},
     'Stop the bleeding and prevent shock.': {
       'EN': 'Stop the bleeding and prevent shock.',
       'KH': 'បញ្ឈប់ការហូរឈាម និងការពារការខ្យល់គរ។',
@@ -535,10 +367,7 @@ class Translations {
       'EN': 'Call for emergency help if bleeding is severe.',
       'KH': 'ហៅរកជំនួយសង្គ្រោះបន្ទាន់ប្រសិនបើឈាមហូរខ្លាំង។',
     },
-    'Snake Bite': {
-      'EN': 'Snake Bite',
-      'KH': 'ពស់ចឹក',
-    },
+    'Snake Bite': {'EN': 'Snake Bite', 'KH': 'ពស់ចឹក'},
     'Stay calm and reduce movement.': {
       'EN': 'Stay calm and reduce movement.',
       'KH': 'រក្សាភាពស្ងប់ស្ងាត់ និងកាត់បន្ថយការផ្លាស់ទី។',
@@ -559,10 +388,7 @@ class Translations {
       'EN': 'Seek emergency medical help immediately.',
       'KH': 'ស្វែងរកជំនួយវេជ្ជសាស្ត្របន្ទាន់ជាបន្ទាន់។',
     },
-    'Choking': {
-      'EN': 'Choking',
-      'KH': 'ស្លាក់',
-    },
+    'Choking': {'EN': 'Choking', 'KH': 'ស្លាក់'},
     'Clear the airway quickly.': {
       'EN': 'Clear the airway quickly.',
       'KH': 'សម្អាតផ្លូវដង្ហើមឱ្យបានលឿន។',
@@ -583,10 +409,7 @@ class Translations {
       'EN': 'Call emergency services if obstruction remains.',
       'KH': 'ហៅទូរស័ព្ទទៅសេវាសង្គ្រោះបន្ទាន់ប្រសិនបើនៅតែស្លាក់។',
     },
-    'SAVE CONTACT': {
-      'EN': 'SAVE CONTACT',
-      'KH': 'រក្សាទុកទំនាក់ទំនង',
-    },
+    'SAVE CONTACT': {'EN': 'SAVE CONTACT', 'KH': 'រក្សាទុកទំនាក់ទំនង'},
     'UPDATE CONTACT': {
       'EN': 'UPDATE CONTACT',
       'KH': 'ធ្វើបច្ចុប្បន្នភាពទំនាក់ទំនង',
@@ -595,30 +418,15 @@ class Translations {
       'EN': 'Name and phone are required.',
       'KH': 'ឈ្មោះ និងលេខទូរស័ព្ទគឺចាំបាច់ត្រូវបំពេញ។',
     },
-    'Contact': {
-      'EN': 'Contact',
-      'KH': 'ទំនាក់ទំនង',
-    },
-    'Emergency Map': {
-      'EN': 'Emergency Map',
-      'KH': 'ផែនទីសង្គ្រោះបន្ទាន់',
-    },
+    'Contact': {'EN': 'Contact', 'KH': 'ទំនាក់ទំនង'},
+    'Emergency Map': {'EN': 'Emergency Map', 'KH': 'ផែនទីសង្គ្រោះបន្ទាន់'},
     'Unable to load map': {
       'EN': 'Unable to load map',
       'KH': 'មិនអាចផ្ទុកផែនទីបានទេ',
     },
-    'CALL': {
-      'EN': 'CALL',
-      'KH': 'ហៅទូរស័ព្ទ',
-    },
-    'DIRECTIONS': {
-      'EN': 'DIRECTIONS',
-      'KH': 'ទិសដៅ',
-    },
-    'Fire': {
-      'EN': 'Fire',
-      'KH': 'ពន្លត់អគ្គីភ័យ',
-    },
+    'CALL': {'EN': 'CALL', 'KH': 'ហៅទូរស័ព្ទ'},
+    'DIRECTIONS': {'EN': 'DIRECTIONS', 'KH': 'ទិសដៅ'},
+    'Fire': {'EN': 'Fire', 'KH': 'ពន្លត់អគ្គីភ័យ'},
     'Calmette Hospital': {
       'EN': 'Calmette Hospital',
       'KH': 'មន្ទីរពេទ្យកាល់ម៉ែត',
@@ -719,26 +527,14 @@ class Translations {
       'EN': 'Unable to load nearby',
       'KH': 'មិនអាចផ្ទុកសេវាកម្មនៅជិតៗបានទេ',
     },
-    'Police nearby': {
-      'EN': 'Police nearby',
-      'KH': 'ប៉ូលីសនៅជិតៗ',
-    },
-    'Hospital nearby': {
-      'EN': 'Hospital nearby',
-      'KH': 'មន្ទីរពេទ្យនៅជិតៗ',
-    },
-    'Fire nearby': {
-      'EN': 'Fire nearby',
-      'KH': 'ពន្លត់អគ្គីភ័យនៅជិតៗ',
-    },
+    'Police nearby': {'EN': 'Police nearby', 'KH': 'ប៉ូលីសនៅជិតៗ'},
+    'Hospital nearby': {'EN': 'Hospital nearby', 'KH': 'មន្ទីរពេទ្យនៅជិតៗ'},
+    'Fire nearby': {'EN': 'Fire nearby', 'KH': 'ពន្លត់អគ្គីភ័យនៅជិតៗ'},
     'Ambulance nearby': {
       'EN': 'Ambulance nearby',
       'KH': 'ឡានសង្គ្រោះបន្ទាន់នៅជិតៗ',
     },
-    'Women Help nearby': {
-      'EN': 'Women Help nearby',
-      'KH': 'ជំនួយស្ត្រីនៅជិតៗ',
-    },
+    'Women Help nearby': {'EN': 'Women Help nearby', 'KH': 'ជំនួយស្ត្រីនៅជិតៗ'},
     'Disaster Relief nearby': {
       'EN': 'Disaster Relief nearby',
       'KH': 'សង្គ្រោះគ្រោះមហន្តរាយនៅជិតៗ',
@@ -783,14 +579,8 @@ class Translations {
       'EN': 'This emergency service is unavailable.',
       'KH': 'សេវាកម្មសង្គ្រោះបន្ទាន់នេះមិនអាចប្រើប្រាស់បានទេ។',
     },
-    'reviews': {
-      'EN': 'reviews',
-      'KH': 'ការវាយតម្លៃ',
-    },
-    'review': {
-      'EN': 'review',
-      'KH': 'ការវាយតម្លៃ',
-    },
+    'reviews': {'EN': 'reviews', 'KH': 'ការវាយតម្លៃ'},
+    'review': {'EN': 'review', 'KH': 'ការវាយតម្លៃ'},
     'Removed from favorites': {
       'EN': 'Removed from favorites',
       'KH': 'បានលុបចេញពីបញ្ជីសំណព្វ',
@@ -809,7 +599,8 @@ class Translations {
     },
     'Central emergency hospital with trauma and ICU services.': {
       'EN': 'Central emergency hospital with trauma and ICU services.',
-      'KH': 'មន្ទីរពេទ្យសង្គ្រោះបន្ទាន់កណ្តាលដែលមានសេវាកម្មព្យាបាលរបួសធ្ងន់ធ្ងរ និង ICU។',
+      'KH':
+          'មន្ទីរពេទ្យសង្គ្រោះបន្ទាន់កណ្តាលដែលមានសេវាកម្មព្យាបាលរបួសធ្ងន់ធ្ងរ និង ICU។',
     },
     'Major public hospital with surgery and emergency care.': {
       'EN': 'Major public hospital with surgery and emergency care.',
@@ -825,7 +616,8 @@ class Translations {
     },
     'Emergency and critical care with Japanese standards.': {
       'EN': 'Emergency and critical care with Japanese standards.',
-      'KH': 'ការថែទាំសង្គ្រោះបន្ទាន់ និងសង្គ្រោះបន្ទាន់កម្រិតធ្ងន់ស្របតាមស្តង់ដារជប៉ុន។',
+      'KH':
+          'ការថែទាំសង្គ្រោះបន្ទាន់ និងសង្គ្រោះបន្ទាន់កម្រិតធ្ងន់ស្របតាមស្តង់ដារជប៉ុន។',
     },
     'Urgent care clinic with extended hours.': {
       'EN': 'Urgent care clinic with extended hours.',
@@ -901,7 +693,8 @@ class Translations {
     },
     'Hotline with shelter referrals and legal guidance.': {
       'EN': 'Hotline with shelter referrals and legal guidance.',
-      'KH': 'ខ្សែទូរស័ព្ទជំនួយជាមួយការបញ្ជូនទៅជម្រកសុវត្ថិភាព និងការណែនាំផ្លូវច្បាប់។',
+      'KH':
+          'ខ្សែទូរស័ព្ទជំនួយជាមួយការបញ្ជូនទៅជម្រកសុវត្ថិភាព និងការណែនាំផ្លូវច្បាប់។',
     },
     'Crisis center offering counseling and shelter.': {
       'EN': 'Crisis center offering counseling and shelter.',
