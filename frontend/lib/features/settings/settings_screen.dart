@@ -36,6 +36,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.dispose();
   }
 
+  Future<void> _saveMedicalInfo() async {
+    final settings = context.read<SettingsState>();
+    final savedBloodGroup = await settings.setBloodGroup(
+      _bloodGroupController.text,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    if (!savedBloodGroup) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Use a valid blood group like A+, O-, or AB+'.tr(context))),
+      );
+      return;
+    }
+
+    await settings.setAllergies(_allergiesController.text);
+
+    if (!mounted) {
+      return;
+    }
+
+    _bloodGroupController.text = settings.bloodGroup;
+    _allergiesController.text = settings.allergies;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Medical info saved'.tr(context))),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
@@ -67,11 +97,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         value: settings.language,
                         items: [
                           DropdownMenuItem(
-                            value: 'EN',
+                            value: SettingsState.englishLanguage,
                             child: Text('English'.tr(context)),
                           ),
                           DropdownMenuItem(
-                            value: 'KH',
+                            value: SettingsState.khmerLanguage,
                             child: Text('Khmer'.tr(context)),
                           ),
                         ],
@@ -102,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: TextField(
                     controller: _bloodGroupController,
-                    onChanged: settings.setBloodGroup,
+                    textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
                       labelText: 'Blood group'.tr(context),
                       hintText: 'e.g. A+, O-'.tr(context),
@@ -121,7 +151,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: TextField(
                     controller: _allergiesController,
-                    onChanged: settings.setAllergies,
+                    minLines: 1,
+                    maxLines: 3,
                     decoration: InputDecoration(
                       labelText: 'Allergies'.tr(context),
                       hintText: 'List any allergies'.tr(context),
@@ -131,6 +162,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       fillColor: Colors.transparent,
                       filled: false,
                     ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: _saveMedicalInfo,
+                    icon: const Icon(Icons.save_outlined),
+                    label: Text('Save medical info'.tr(context)),
                   ),
                 ),
               ],

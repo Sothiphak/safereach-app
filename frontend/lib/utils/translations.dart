@@ -83,6 +83,18 @@ class Translations {
       'EN': 'Medical info',
       'KH': 'ព័ត៌មានវេជ្ជសាស្ត្រ',
     },
+    'Save medical info': {
+      'EN': 'Save medical info',
+      'KH': 'រក្សាទុកព័ត៌មានវេជ្ជសាស្ត្រ',
+    },
+    'Medical info saved': {
+      'EN': 'Medical info saved',
+      'KH': 'បានរក្សាទុកព័ត៌មានវេជ្ជសាស្ត្រ',
+    },
+    'Use a valid blood group like A+, O-, or AB+': {
+      'EN': 'Use a valid blood group like A+, O-, or AB+',
+      'KH': 'សូមប្រើក្រុមឈាមត្រឹមត្រូវដូចជា A+, O-, ឬ AB+',
+    },
     'Blood group': {
       'EN': 'Blood group',
       'KH': 'ក្រុមឈាម',

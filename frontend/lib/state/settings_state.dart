@@ -2,13 +2,26 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsState extends ChangeNotifier {
+  static const englishLanguage = 'EN';
+  static const khmerLanguage = 'KH';
+
   static const _darkModeKey = 'dark_mode';
   static const _languageKey = 'language';
   static const _bloodGroupKey = 'blood_group';
   static const _allergiesKey = 'allergies';
+  static const _validBloodGroups = {
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  };
 
   bool _darkMode = false;
-  String _language = 'EN';
+  String _language = englishLanguage;
   String _bloodGroup = '';
   String _allergies = '';
   late SharedPreferences _prefs;
@@ -21,7 +34,9 @@ class SettingsState extends ChangeNotifier {
   Future<void> load() async {
     _prefs = await SharedPreferences.getInstance();
     _darkMode = _prefs.getBool(_darkModeKey) ?? false;
-    _language = _prefs.getString(_languageKey) ?? 'EN';
+    _language = _normalizeLanguage(
+      _prefs.getString(_languageKey) ?? englishLanguage,
+    );
     _bloodGroup = _prefs.getString(_bloodGroupKey) ?? '';
     _allergies = _prefs.getString(_allergiesKey) ?? '';
     notifyListeners();
@@ -34,20 +49,32 @@ class SettingsState extends ChangeNotifier {
   }
 
   Future<void> setLanguage(String value) async {
-    _language = value;
-    await _prefs.setString(_languageKey, value);
+    _language = _normalizeLanguage(value);
+    await _prefs.setString(_languageKey, _language);
     notifyListeners();
   }
 
-  Future<void> setBloodGroup(String value) async {
-    _bloodGroup = value;
-    await _prefs.setString(_bloodGroupKey, value);
+  Future<bool> setBloodGroup(String value) async {
+    final normalizedValue = value.trim().toUpperCase();
+    if (normalizedValue.isNotEmpty &&
+        !_validBloodGroups.contains(normalizedValue)) {
+      return false;
+    }
+
+    _bloodGroup = normalizedValue;
+    await _prefs.setString(_bloodGroupKey, normalizedValue);
     notifyListeners();
+    return true;
   }
 
   Future<void> setAllergies(String value) async {
-    _allergies = value;
-    await _prefs.setString(_allergiesKey, value);
+    final trimmedValue = value.trim();
+    _allergies = trimmedValue;
+    await _prefs.setString(_allergiesKey, trimmedValue);
     notifyListeners();
+  }
+
+  static String _normalizeLanguage(String value) {
+    return value == khmerLanguage ? khmerLanguage : englishLanguage;
   }
 }
