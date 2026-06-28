@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/api_config.dart';
 import '../models/emergency_branch.dart';
 import '../models/emergency_service.dart';
 import '../models/first_aid_tip.dart';
@@ -13,7 +14,7 @@ import '../models/service_type.dart';
 class MockRepository {
   static const String _apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://safereach-app.onrender.com/api',
+    defaultValue: ApiConfig.baseUrl,
   );
   static const Duration _requestTimeout = Duration(seconds: 4);
   static const String _servicesCacheKey = 'cache_services';
