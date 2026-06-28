@@ -26,9 +26,7 @@ class ContactsState extends ChangeNotifier {
           ),
         );
     } else {
-      _contacts
-        ..clear()
-        ..addAll(_seedContacts());
+      _contacts.clear();
       await _persist();
     }
     notifyListeners();
@@ -58,28 +56,5 @@ class ContactsState extends ChangeNotifier {
   Future<void> _persist() async {
     final encoded = jsonEncode(_contacts.map((c) => c.toJson()).toList());
     await _prefs.setString(_contactsKey, encoded);
-  }
-
-  List<PersonalContact> _seedContacts() {
-    return const [
-      PersonalContact(
-        id: 'c1',
-        name: 'Mom',
-        relationship: 'Family',
-        phone: '+85512345601',
-      ),
-      PersonalContact(
-        id: 'c2',
-        name: 'Dad',
-        relationship: 'Family',
-        phone: '+85512345602',
-      ),
-      PersonalContact(
-        id: 'c3',
-        name: 'Sokha',
-        relationship: 'Neighbor',
-        phone: '+85512345603',
-      ),
-    ];
   }
 }

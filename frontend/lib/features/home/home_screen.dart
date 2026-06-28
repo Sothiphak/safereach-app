@@ -361,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const _EntranceAnimation(
                     delayMs: 100,
-                    child: _OfflineDataBadge(),
+                    child: _EmergencyDataBadge(),
                   ),
                   const SizedBox(height: 12),
 
@@ -1089,8 +1089,8 @@ class _SecondaryQuickActionsRow extends StatelessWidget {
   }
 }
 
-class _OfflineDataBadge extends StatelessWidget {
-  const _OfflineDataBadge();
+class _EmergencyDataBadge extends StatelessWidget {
+  const _EmergencyDataBadge();
 
   @override
   Widget build(BuildContext context) {
@@ -1099,7 +1099,7 @@ class _OfflineDataBadge extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Semantics(
-        label: 'Offline emergency data available',
+        label: 'Emergency data ready',
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
@@ -1113,13 +1113,13 @@ class _OfflineDataBadge extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                Icons.offline_bolt_outlined,
+                Icons.verified_outlined,
                 size: 18,
                 color: theme.colorScheme.primary,
               ),
               const SizedBox(width: 8),
               Text(
-                'Offline emergency data available.',
+                'Emergency data ready.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w900,
