@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../utils/translations.dart';
+import '../../widgets/neumorphic_container.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -9,7 +10,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
   late final Animation<double> _fadeAnimation;
@@ -37,15 +39,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
-      ),
-    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+          ),
+        );
 
     _controller.forward();
   }
@@ -60,76 +60,86 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final backgroundColor = theme.scaffoldBackgroundColor;
+    final primaryColor = theme.colorScheme.primary;
+    final softAccentColor = primaryColor.withValues(alpha: isDark ? 0.18 : 0.1);
 
     return Scaffold(
-      backgroundColor: isDark ? theme.colorScheme.surface : theme.colorScheme.primary,
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo Scale and Fade
-                Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: Transform.scale(
-                    scale: _scaleAnimation.value,
-                    child: Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 15,
-                            offset: Offset(0, 8),
+      backgroundColor: backgroundColor,
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          gradient: RadialGradient(
+            center: const Alignment(0, -0.35),
+            radius: 0.9,
+            colors: [softAccentColor, backgroundColor],
+          ),
+        ),
+        child: Center(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Opacity(
+                    opacity: _fadeAnimation.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation.value,
+                      child: NeumorphicContainer(
+                        borderRadius: 72,
+                        padding: const EdgeInsets.all(26),
+                        color: isDark
+                            ? theme.colorScheme.surface
+                            : Colors.white,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: primaryColor.withValues(alpha: 0.08),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/images/splash_logo.svg',
+                            width: 96,
+                            height: 96,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Opacity(
+                    opacity: _fadeAnimation.value,
+                    child: FractionalTranslation(
+                      translation: _slideAnimation.value,
+                      child: Column(
+                        children: [
+                          Text(
+                            'SafeReach',
+                            style: theme.textTheme.displayMedium?.copyWith(
+                              color: theme.colorScheme.onSurface,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 36,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'EMERGENCY SERVICES'.tr(context),
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 3,
+                            ),
                           ),
                         ],
                       ),
-                      child: SvgPicture.asset(
-                        'assets/images/splash_logo.svg',
-                        width: 100,
-                        height: 100,
-                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                // Text Slide and Fade
-                Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: FractionalTranslation(
-                    translation: _slideAnimation.value,
-                    child: Column(
-                      children: [
-                        Text(
-                          'SafeReach',
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 36,
-                                letterSpacing: 1.2,
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'EMERGENCY SERVICES'.tr(context),
-                          style: TextStyle(
-                            color: isDark ? Colors.red[300] : Colors.white70,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

@@ -36,15 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // SOS Countdown overlay state
   bool _showSosCountdown = false;
-  int _countdownSeconds = 3;
-  Timer? _countdownTimer;
-  bool _sosTriggered = false;
   EmergencyService? _selectedSosService;
 
   @override
   void dispose() {
     _searchController.dispose();
-    _countdownTimer?.cancel();
     super.dispose();
   }
 
@@ -206,37 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void _startSosCountdown(EmergencyService service) {
     setState(() {
       _showSosCountdown = true;
-      _countdownSeconds = 3;
-      _sosTriggered = false;
       _selectedSosService = service;
-    });
-
-    _countdownTimer?.cancel();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-
-      if (_countdownSeconds > 1) {
-        setState(() {
-          _countdownSeconds--;
-        });
-      } else {
-        timer.cancel();
-        setState(() {
-          _sosTriggered = true;
-        });
-        launchPhone(context, service.phone);
-      }
     });
   }
 
   void _cancelSosCountdown() {
-    _countdownTimer?.cancel();
     setState(() {
       _showSosCountdown = false;
-      _sosTriggered = false;
       _selectedSosService = null;
     });
   }
@@ -345,7 +317,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Semantics(
-                          label: 'Current Location ${locationState.currentAddress}',
+                          label:
+                              'Current Location ${locationState.currentAddress}',
                           child: NeumorphicContainer(
                             borderRadius: 20,
                             isPressed: true,
@@ -659,264 +632,303 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
-        // SOS Countdown / Alert Overlay
-        if (_showSosCountdown)
-          Container(
-            color: Colors.black.withValues(alpha: 0.85),
-            width: double.infinity,
-            height: double.infinity,
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (!_sosTriggered) ...[
-                      // Pulsing Red Shield Icon
-                      TweenAnimationBuilder<double>(
-                        duration: const Duration(milliseconds: 500),
-                        tween: Tween(begin: 0.8, end: 1.2),
-                        curve: Curves.easeInOut,
-                        builder: (context, scale, child) {
-                          return Transform.scale(scale: scale, child: child);
-                        },
-                        child: const Icon(
-                          Icons.warning_amber_rounded,
-                          color: Colors.red,
-                          size: 100,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Text(
-                        'TRIGGERING SOS ALARM'.tr(context),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 2,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Connecting you to emergency response and transmitting details.'
-                            .tr(context),
-                        style: TextStyle(color: Colors.grey[400], fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                      if (_selectedSosService != null) ...[
-                        const SizedBox(height: 20),
-                        _SosSelectedServiceCard(
-                          service: _selectedSosService!,
-                          isDarkOverlay: true,
-                        ),
-                      ],
-                      const SizedBox(height: 24),
-                      Text(
-                        _selectedSosService == null
-                            ? 'Calling dispatch in $_countdownSeconds seconds'
-                            : 'Calling ${_selectedSosService!.type.label.tr(context)} in $_countdownSeconds seconds',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      // Huge Countdown Number
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        transitionBuilder: (child, animation) {
-                          return ScaleTransition(
-                            scale: animation,
-                            child: child,
-                          );
-                        },
-                        child: Text(
-                          '$_countdownSeconds',
-                          key: ValueKey<int>(_countdownSeconds),
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 120,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 48),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1),
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.gps_fixed,
-                                  color: Colors.green,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'SENDING GPS COORDINATES'.tr(context),
-                                  style: const TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${locationState.currentAddress} (${locationState.currentPosition.latitude.toStringAsFixed(4)}° N, ${locationState.currentPosition.longitude.toStringAsFixed(4)}° E)',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                                fontFamily: 'monospace',
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      // Cancel Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 60,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white24,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          onPressed: _cancelSosCountdown,
-                          child: Text(
-                            'CANCEL SOS'.tr(context),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ] else ...[
-                      // Success State
-                      const Icon(
-                        Icons.check_circle_outline,
-                        color: Colors.green,
-                        size: 100,
-                      ),
-                      const SizedBox(height: 32),
-                      Text(
-                        'SOS ALARM SENT'.tr(context),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 2,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _selectedSosService == null
-                            ? 'Dialing dispatch and routing emergency response.'
-                                  .tr(context)
-                            : 'Dialing ${_selectedSosService!.name.tr(context)} (${_selectedSosService!.phone}) and routing emergency response.',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 15,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 32),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.green.withValues(alpha: 0.3),
-                          ),
-                        ),
-                        child: Text(
-                          _selectedSosService == null
-                              ? 'Dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
-                                    .tr(context)
-                              : 'Dispatch status: ${_responseUnitLabel(_selectedSosService!.type)} en-route (ETA: 4 mins). Stay where you are.',
-                          style: const TextStyle(
-                            color: Colors.greenAccent,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const Spacer(),
-                      // Call Emergency Hotline manually
-                      SizedBox(
-                        width: double.infinity,
-                        height: 60,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          onPressed: _selectedSosService == null
-                              ? null
-                              : () => launchPhone(
-                                  context,
-                                  _selectedSosService!.phone,
-                                ),
-                          icon: const Icon(Icons.phone),
-                          label: Text(
-                            'DIAL DISPATCH'.tr(context),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      // Dismiss Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 54,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.white70,
-                            side: const BorderSide(color: Colors.white30),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          onPressed: _cancelSosCountdown,
-                          child: Text('DISMISS OVERLAY'.tr(context)),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
+        if (_showSosCountdown && _selectedSosService != null)
+          _SosCountdownOverlay(
+            service: _selectedSosService!,
+            locationState: locationState,
+            responseUnitLabel: _responseUnitLabel(_selectedSosService!.type),
+            onDismiss: _cancelSosCountdown,
           ),
       ],
+    );
+  }
+}
+
+class _SosCountdownOverlay extends StatefulWidget {
+  const _SosCountdownOverlay({
+    required this.service,
+    required this.locationState,
+    required this.responseUnitLabel,
+    required this.onDismiss,
+  });
+
+  final EmergencyService service;
+  final LocationState locationState;
+  final String responseUnitLabel;
+  final VoidCallback onDismiss;
+
+  @override
+  State<_SosCountdownOverlay> createState() => _SosCountdownOverlayState();
+}
+
+class _SosCountdownOverlayState extends State<_SosCountdownOverlay> {
+  Timer? _timer;
+  int _countdownSeconds = 3;
+  bool _sosTriggered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      if (_countdownSeconds > 1) {
+        setState(() => _countdownSeconds--);
+        return;
+      }
+
+      timer.cancel();
+      setState(() => _sosTriggered = true);
+      launchPhone(context, widget.service.phone);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _dismiss() {
+    _timer?.cancel();
+    widget.onDismiss();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final position = widget.locationState.currentPosition;
+
+    return Container(
+      color: Colors.black.withValues(alpha: 0.85),
+      width: double.infinity,
+      height: double.infinity,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (!_sosTriggered) ...[
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 500),
+                  tween: Tween(begin: 0.8, end: 1.2),
+                  curve: Curves.easeInOut,
+                  builder: (context, scale, child) {
+                    return Transform.scale(scale: scale, child: child);
+                  },
+                  child: const Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.red,
+                    size: 100,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  'TRIGGERING SOS ALARM'.tr(context),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Connecting you to emergency response and transmitting details.'
+                      .tr(context),
+                  style: TextStyle(color: Colors.grey[400], fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                _SosSelectedServiceCard(
+                  service: widget.service,
+                  isDarkOverlay: true,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Calling ${widget.service.type.label.tr(context)} in $_countdownSeconds seconds',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) {
+                    return ScaleTransition(scale: animation, child: child);
+                  },
+                  child: Text(
+                    '$_countdownSeconds',
+                    key: ValueKey<int>(_countdownSeconds),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 120,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 48),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.gps_fixed,
+                            color: Colors.green,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'SENDING GPS COORDINATES'.tr(context),
+                            style: const TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${widget.locationState.currentAddress} (${position.latitude.toStringAsFixed(4)}° N, ${position.longitude.toStringAsFixed(4)}° E)',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                          fontFamily: 'monospace',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white24,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: _dismiss,
+                    child: Text(
+                      'CANCEL SOS'.tr(context),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ] else ...[
+                const Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.green,
+                  size: 100,
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  'SOS ALARM SENT'.tr(context),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Dialing ${widget.service.name.tr(context)} (${widget.service.phone}) and routing emergency response.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Text(
+                    'Dispatch status: ${widget.responseUnitLabel} en-route (ETA: 4 mins). Stay where you are.',
+                    style: const TextStyle(
+                      color: Colors.greenAccent,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: () => launchPhone(context, widget.service.phone),
+                    icon: const Icon(Icons.phone),
+                    label: Text(
+                      'DIAL DISPATCH'.tr(context),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white70,
+                      side: const BorderSide(color: Colors.white30),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: _dismiss,
+                    child: Text('DISMISS OVERLAY'.tr(context)),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
