@@ -360,6 +360,7 @@
         <p style="font-size: 0.8em; color: #64748b; margin-bottom: 30px;">Modern Mobile Security & Emergency Response Platform</p>
         
         <div class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center; border: 1px solid #cbd5e1;">
+          <p style="margin: 5px 0; font-size: 0.65em; color: #1e293b;"><strong>Presented to:</strong> <span style="color: #0ea5e9; font-weight: bold;">Lecturer HOK Tin</span></p>
           <p style="margin: 5px 0; font-size: 0.65em; color: #1e293b;"><strong>Presented by:</strong></p>
           <p style="margin: 5px 0; font-size: 0.75em; color: #4f46e5; font-weight: bold;">Sopheap Sothiphak &nbsp;|&nbsp; Sophat Odom &nbsp;|&nbsp; Samnang Alex</p>
           <div style="border-top: 1px solid rgba(15, 23, 42, 0.1); margin: 15px 0; padding-top: 10px;">
@@ -432,19 +433,25 @@
         <h2>Key Platform Features</h2>
         <div class="grid-2">
           <div class="glass-card">
-            <h3>User-Centric Capabilities (Frontend)</h3>
-            <ul style="line-height: 1.5;">
-              <li><span class="highlight-text">One-Tap SOS Trigger:</span> Instantly alerts contacts.</li>
-              <li><span class="highlight-text">Interactive GIS Map:</span> Dynamic maps showing closest assistance branches with navigation path links.</li>
-              <li><span class="highlight-text">Offline-First Resilience:</span> Continuous cache mechanisms ensure local access to databases.</li>
+            <h3>Advanced GIS & OSM Integration</h3>
+            <p>
+              Interactive maps powered by <code>flutter_map</code> and OpenStreetMap. Features local-side calculations for sorting nearest emergency units:
+            </p>
+            <ul style="margin-top: 6px; font-size: 0.44em; line-height: 1.4;">
+              <li><span class="highlight-text">Haversine Distance Sorting:</span> Computes precise geographical proximity in real time.</li>
+              <li><span class="highlight-text">Dynamic Category Filtering:</span> Instant client-side layer markers toggle (Hospitals, Police, Fire, Ambulance).</li>
+              <li><span class="highlight-text">Geocoding Logic:</span> Resolves GPS coordinates into localized street addresses using Nominatim parser.</li>
             </ul>
           </div>
           <div class="glass-card">
-            <h3>Robust API Support (Backend)</h3>
-            <ul style="line-height: 1.5;">
-              <li><span class="highlight-text">Modular API Architecture:</span> Exposes reviews, local branches, and safety guides.</li>
-              <li><span class="highlight-text">PostgreSQL Integration:</span> Secure data layer with automatic seeder script populated on deployment.</li>
-              <li><span class="highlight-text">Real-Time Sync:</span> Fetches latest ratings and facilities with local fallback mechanisms.</li>
+            <h3>Robust Offline Resilience (API Fallback)</h3>
+            <p>
+              Emergency apps must not fail during signal loss. Implements a multi-layered offline data synchronization pipeline:
+            </p>
+            <ul style="margin-top: 6px; font-size: 0.44em; line-height: 1.4;">
+              <li><span class="highlight-text">Layer 1:</span> Live NestJS REST API endpoints.</li>
+              <li><span class="highlight-text">Layer 2 (Local Cache):</span> Persistent JSON serialization stored within <code>SharedPreferences</code> database.</li>
+              <li><span class="highlight-text">Layer 3 (Asset Fallback):</span> Static JSON seeds parsed on-the-fly to guarantee the app remains functional.</li>
             </ul>
           </div>
         </div>
