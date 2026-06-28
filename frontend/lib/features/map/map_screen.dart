@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart' hide Path;
 import 'package:provider/provider.dart';
 
 import '../../data/mock_repository.dart';
+import '../../state/location_state.dart';
 import '../../models/emergency_branch.dart';
 import '../../models/service_type.dart';
 import '../../utils/launcher.dart';
@@ -53,6 +54,8 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     final repository = context.read<MockRepository>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final locationState = context.watch<LocationState>();
+    final userPosition = locationState.currentPosition;
 
     final effectiveStyle = _getEffectiveMapStyle(isDark);
     final tileUrl = effectiveStyle.urlTemplate;
@@ -97,8 +100,8 @@ class _MapScreenState extends State<MapScreen> {
             children: [
               FlutterMap(
                 mapController: _mapController,
-                options: const MapOptions(
-                  initialCenter: LatLng(11.5564, 104.9282),
+                options: MapOptions(
+                  initialCenter: userPosition,
                   initialZoom: 13,
                 ),
                 children: [
@@ -107,27 +110,36 @@ class _MapScreenState extends State<MapScreen> {
                     userAgentPackageName: 'com.safereach.app',
                   ),
                   MarkerLayer(
-                    markers: filteredBranches
-                        .map(
-                          (branch) => Marker(
-                            point: LatLng(branch.latitude, branch.longitude),
-                            width: 52,
-                            height: 58,
-                            alignment: Alignment.bottomCenter,
-                            child: GestureDetector(
-                              onTap: () {
-                                _mapController.move(LatLng(branch.latitude, branch.longitude), 14.5);
-                                _showBranchSheet(context, branch);
-                              },
-                              child: MapPin(
-                                color: branch.type.color,
-                                icon: branch.type.icon,
-                                isSelected: _selectedBranch == branch,
+                    markers: [
+                      // User position marker
+                      Marker(
+                        point: userPosition,
+                        width: 26,
+                        height: 26,
+                        child: _UserLocationIndicator(hasActualLocation: locationState.hasActualLocation),
+                      ),
+                      ...filteredBranches
+                          .map(
+                            (branch) => Marker(
+                              point: LatLng(branch.latitude, branch.longitude),
+                              width: 52,
+                              height: 58,
+                              alignment: Alignment.bottomCenter,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _mapController.move(LatLng(branch.latitude, branch.longitude), 14.5);
+                                  _showBranchSheet(context, branch);
+                                },
+                                child: MapPin(
+                                  color: branch.type.color,
+                                  icon: branch.type.icon,
+                                  isSelected: _selectedBranch == branch,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ],
                   ),
                 ],
               ),
@@ -312,7 +324,7 @@ class _MapScreenState extends State<MapScreen> {
                     NeumorphicButton(
                       borderRadius: 14,
                       onTap: () {
-                        _mapController.move(const LatLng(11.5564, 104.9282), 13.0);
+                        _mapController.move(userPosition, 13.0);
                       },
                       child: const SizedBox(
                         height: 48,
@@ -755,6 +767,92 @@ class _MapLegend extends StatelessWidget {
               .toList(),
         ),
       ),
+    );
+  }
+}
+
+class _UserLocationIndicator extends StatefulWidget {
+  final bool hasActualLocation;
+
+  const _UserLocationIndicator({required this.hasActualLocation});
+
+  @override
+  State<_UserLocationIndicator> createState() => _UserLocationIndicatorState();
+}
+
+class _UserLocationIndicatorState extends State<_UserLocationIndicator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.hasActualLocation) {
+      return Center(
+        child: Container(
+          width: 14,
+          height: 14,
+          decoration: BoxDecoration(
+            color: Colors.blue.shade600,
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 4,
+              )
+            ],
+          ),
+        ),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 12 + (14 * _controller.value),
+              height: 12 + (14 * _controller.value),
+              decoration: BoxDecoration(
+                color: Colors.blue.withValues(alpha: 0.4 * (1 - _controller.value)),
+                shape: BoxShape.circle,
+              ),
+            ),
+            Container(
+              width: 14,
+              height: 14,
+              decoration: BoxDecoration(
+                color: Colors.blue.shade600,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 4,
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

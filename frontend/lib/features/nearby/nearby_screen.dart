@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../data/mock_repository.dart';
 import '../../models/emergency_service.dart';
+import '../../state/location_state.dart';
 import '../../widgets/app_filter_chip.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -26,6 +28,8 @@ class _NearbyScreenState extends State<NearbyScreen> {
   @override
   Widget build(BuildContext context) {
     final repository = context.read<MockRepository>();
+    final locationState = context.watch<LocationState>();
+    final userPosition = locationState.currentPosition;
 
     return Scaffold(
       appBar: AppBar(
@@ -44,8 +48,21 @@ class _NearbyScreenState extends State<NearbyScreen> {
               onRetry: () => setState(() {}),
             );
           }
-          var services = (snapshot.data ?? [])
-            ..sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+          
+          final rawServices = snapshot.data ?? [];
+          var services = rawServices.map((service) {
+            final distance = const Distance().as(
+              LengthUnit.Kilometer,
+              userPosition,
+              LatLng(service.latitude, service.longitude),
+            );
+            // Parse distance to double with single decimal digit precision
+            final distanceVal = double.parse(distance.toStringAsFixed(1));
+            return service.copyWith(distanceKm: distanceVal);
+          }).toList();
+
+          services.sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+
           if (_openNow) {
             services = services.where((service) => service.openNow).toList();
           }
