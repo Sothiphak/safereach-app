@@ -80,7 +80,10 @@ class _NearbyScreenState extends State<NearbyScreen> {
 
           return Column(
             children: [
-              _NearbyHeader(resultCount: services.length),
+              _NearbyHeader(
+                resultCount: services.length,
+                currentAddress: locationState.currentAddress,
+              ),
               _FilterRow(
                 selectedType: _selectedType,
                 openNow: _openNow,
@@ -150,9 +153,13 @@ class _NearbyScreenState extends State<NearbyScreen> {
 }
 
 class _NearbyHeader extends StatelessWidget {
-  const _NearbyHeader({required this.resultCount});
+  const _NearbyHeader({
+    required this.resultCount,
+    required this.currentAddress,
+  });
 
   final int resultCount;
+  final String currentAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +177,7 @@ class _NearbyHeader extends StatelessWidget {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              'Current location: Phnom Penh, BKK1'.tr(context),
+              '${'Current location'.tr(context)}: $currentAddress',
               style: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w800,
               ),

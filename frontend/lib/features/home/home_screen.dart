@@ -1252,7 +1252,11 @@ class _EmergencyProfileCard extends StatelessWidget {
     final theme = Theme.of(context);
     final settings = context.watch<SettingsState>();
     final contacts = context.watch<ContactsState>().contacts;
+    final locationState = context.watch<LocationState>();
     final primaryContact = contacts.isNotEmpty ? contacts.first : null;
+    final currentAddress = locationState.currentAddress.trim().isEmpty
+        ? 'Location unavailable'
+        : locationState.currentAddress.trim();
     final bloodGroup = settings.bloodGroup.trim().isEmpty
         ? 'Not set'
         : settings.bloodGroup.trim();
@@ -1325,7 +1329,7 @@ class _EmergencyProfileCard extends StatelessWidget {
                 _ProfileInfoTile(
                   icon: Icons.location_on_outlined,
                   label: 'Location',
-                  value: 'Phnom Penh, BKK1',
+                  value: currentAddress,
                 ),
               ],
             ),
@@ -1337,7 +1341,12 @@ class _EmergencyProfileCard extends StatelessWidget {
               height: 56,
               child: FilledButton.icon(
                 onPressed: () =>
-                    _copyEmergencyProfile(context, settings, primaryContact),
+                    _copyEmergencyProfile(
+                      context,
+                      settings,
+                      primaryContact,
+                      currentAddress,
+                    ),
                 icon: const Icon(Icons.ios_share),
                 label: const Text(
                   'SHARE EMERGENCY INFO',
@@ -1355,6 +1364,7 @@ class _EmergencyProfileCard extends StatelessWidget {
     BuildContext context,
     SettingsState settings,
     PersonalContact? primaryContact,
+    String currentAddress,
   ) async {
     final bloodGroup = settings.bloodGroup.trim().isEmpty
         ? 'Not set'
@@ -1370,7 +1380,7 @@ class _EmergencyProfileCard extends StatelessWidget {
       ClipboardData(
         text:
             'SafeReach Emergency Profile\n'
-            'Location: Phnom Penh, BKK1\n'
+            'Location: $currentAddress\n'
             'Blood group: $bloodGroup\n'
             'Allergies: $allergies\n'
             'Emergency contact: $contactLine',

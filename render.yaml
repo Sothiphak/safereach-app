@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: safereach-api
+    env: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_TYPE
+        value: postgres
+      - key: DB_SSL
+        value: true
+      - key: DB_SYNC
+        value: true
+      - key: SEED_DATA
+        value: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
