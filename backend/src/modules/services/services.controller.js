@@ -1,8 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Dependencies } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  Dependencies,
+} from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { buildValidationPipe } from '../../common/pipes/dto-validation.pipe';
-import { CreateServiceDto, ServiceQueryDto, UpdateServiceDto } from './services.dto';
+import {
+  CreateServiceDto,
+  ServiceQueryDto,
+  UpdateServiceDto,
+} from './services.dto';
 import { ServicesService } from './services.service';
 
 @Controller('services')
@@ -30,7 +45,10 @@ export class ServicesController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id, @Body(buildValidationPipe(UpdateServiceDto)) payload) {
+  update(
+    @Param('id') id,
+    @Body(buildValidationPipe(UpdateServiceDto)) payload,
+  ) {
     return this.servicesService.update(id, payload);
   }
 

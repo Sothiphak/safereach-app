@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Dependencies } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  Dependencies,
+} from '@nestjs/common';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -25,7 +35,10 @@ export class ContactsController {
   }
 
   @Post()
-  create(@CurrentUser() user, @Body(buildValidationPipe(CreateContactDto)) payload) {
+  create(
+    @CurrentUser() user,
+    @Body(buildValidationPipe(CreateContactDto)) payload,
+  ) {
     return this.contactsService.create(user.id, payload);
   }
 

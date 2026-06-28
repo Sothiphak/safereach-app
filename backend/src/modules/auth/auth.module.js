@@ -14,12 +14,19 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (configService) => ({
-        secret: configService.get('JWT_SECRET', 'change-me'),
-        signOptions: {
-          expiresIn: configService.get('JWT_EXPIRES_IN', '7d'),
-        },
-      }),
+      useFactory: (configService) => {
+        const jwtSecret = configService.get('JWT_SECRET');
+        if (!jwtSecret && configService.get('NODE_ENV') === 'production') {
+          throw new Error('JWT_SECRET is required in production.');
+        }
+
+        return {
+          secret: jwtSecret || 'safereach-dev-secret',
+          signOptions: {
+            expiresIn: configService.get('JWT_EXPIRES_IN', '7d'),
+          },
+        };
+      },
     }),
   ],
   controllers: [AuthController],

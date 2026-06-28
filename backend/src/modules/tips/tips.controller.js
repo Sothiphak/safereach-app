@@ -1,5 +1,14 @@
-import { Body, Controller, Get, Param, Post, Dependencies } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Dependencies,
+} from '@nestjs/common';
 
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { buildValidationPipe } from '../../common/pipes/dto-validation.pipe';
 import { CreateTipDto } from './tips.dto';
 import { TipsService } from './tips.service';
@@ -22,6 +31,7 @@ export class TipsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body(buildValidationPipe(CreateTipDto)) payload) {
     return this.tipsService.create(payload);
   }

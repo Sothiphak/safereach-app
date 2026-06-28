@@ -38,22 +38,30 @@ export class SeedService {
   async seed() {
     this.logger.log('Starting database seeding...');
 
-    // 1. Seed Default User
-    const defaultEmail = 'user@safereach.com';
-    const userCount = await this.usersRepository.count();
-    if (userCount === 0) {
-      const passwordHash = await bcrypt.hash('password123', 10);
-      const defaultUser = this.usersRepository.create({
-        email: defaultEmail,
-        passwordHash,
+    const shouldSeedDefaultUser = process.env.SEED_DEFAULT_USER === 'true';
+    if (shouldSeedDefaultUser) {
+      const defaultEmail =
+        process.env.SEED_DEFAULT_EMAIL || 'user@safereach.com';
+      const defaultPassword =
+        process.env.SEED_DEFAULT_PASSWORD || 'password123';
+      const existingUser = await this.usersRepository.findOne({
+        where: { email: defaultEmail },
       });
-      await this.usersRepository.save(defaultUser);
-      this.logger.log('Default user seeded: user@safereach.com / password123');
+      if (existingUser) {
+        this.logger.log(`Default user already exists: ${defaultEmail}`);
+      } else {
+        const passwordHash = await bcrypt.hash(defaultPassword, 10);
+        const defaultUser = this.usersRepository.create({
+          email: defaultEmail,
+          passwordHash,
+        });
+        await this.usersRepository.save(defaultUser);
+        this.logger.log(`Default user seeded: ${defaultEmail}`);
+      }
     }
 
     const mockFolder = this.resolveMockFolder();
 
-    // 2. Seed Services
     try {
       const servicesData = this.readMockJson(mockFolder, 'items.json');
       for (const item of servicesData) {
@@ -65,7 +73,6 @@ export class SeedService {
       this.logger.error('Failed to seed services:', err.message);
     }
 
-    // 3. Seed Branches
     try {
       const branchesData = this.readMockJson(mockFolder, 'branches.json');
       for (const item of branchesData) {
@@ -77,7 +84,6 @@ export class SeedService {
       this.logger.error('Failed to seed branches:', err.message);
     }
 
-    // 4. Seed Reviews
     try {
       const reviewsData = this.readMockJson(mockFolder, 'reviews.json');
       let syncedReviews = 0;
@@ -99,7 +105,6 @@ export class SeedService {
       this.logger.error('Failed to seed reviews:', err.message);
     }
 
-    // 5. Seed Tips
     try {
       const tipsData = this.readMockJson(mockFolder, 'tips.json');
       for (const item of tipsData) {

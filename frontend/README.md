@@ -17,8 +17,8 @@ SafeReach is a high-contrast, accessibility-first emergency app. It helps users 
 - Service list + detail with call/directions actions
 - Favorites with swipe-to-remove (shared_preferences)
 - Personal emergency contacts (add/edit/delete)
-- Nearby filters (open now, distance, rating)
-- Flutter Map with static markers and bottom sheet details
+- Nearby filters (category, open now, distance)
+- Flutter Map with service markers and bottom sheet details
 - First-aid tips with step-by-step instructions
 - Loading shimmers, empty states, and error placeholders
 - Smooth transitions + hero animations
@@ -31,7 +31,7 @@ SafeReach is a high-contrast, accessibility-first emergency app. It helps users 
 - Local storage: shared_preferences
 - Map: flutter_map
 - Images: bundled SVG assets + cached_network_image
-- Mock data: assets/mock/*.json
+- Backend API data with local JSON fallback for offline/demo safety
 
 ## Getting Started
 

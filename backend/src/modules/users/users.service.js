@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, UnauthorizedException, Dependencies } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+  Dependencies,
+} from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';

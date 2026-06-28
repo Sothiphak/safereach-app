@@ -1,8 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Dependencies } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  Dependencies,
+} from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { buildValidationPipe } from '../../common/pipes/dto-validation.pipe';
-import { CreateBranchDto, BranchQueryDto, UpdateBranchDto } from './branches.dto';
+import {
+  CreateBranchDto,
+  BranchQueryDto,
+  UpdateBranchDto,
+} from './branches.dto';
 import { BranchesService } from './branches.service';
 
 @Controller('branches')

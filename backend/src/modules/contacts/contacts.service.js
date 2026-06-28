@@ -16,7 +16,9 @@ export class ContactsService {
   }
 
   async findOne(id, userId) {
-    const contact = await this.contactsRepository.findOne({ where: { id, userId } });
+    const contact = await this.contactsRepository.findOne({
+      where: { id, userId },
+    });
     if (!contact) {
       throw new NotFoundException('Personal contact not found.');
     }

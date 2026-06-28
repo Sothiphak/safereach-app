@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { EmergencyService } from '../services/service.entity';
 
 @Entity('reviews')
@@ -21,7 +28,9 @@ export class Review {
   @Column('text')
   comment;
 
-  @ManyToOne(() => EmergencyService, (service) => service.reviews, { onDelete: 'CASCADE' })
+  @ManyToOne(() => EmergencyService, (service) => service.reviews, {
+    onDelete: 'CASCADE',
+  })
   service;
 
   @CreateDateColumn()
