@@ -159,12 +159,36 @@ class _HomeScreenState extends State<HomeScreen> {
     final options = <EmergencyService>[];
     for (final type in ServiceType.values) {
       final matches = services.where((service) => service.type == type).toList()
-        ..sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+        ..sort(_compareSosServices);
       if (matches.isNotEmpty) {
         options.add(matches.first);
       }
     }
     return options;
+  }
+
+  int _compareSosServices(EmergencyService a, EmergencyService b) {
+    final openComparison = _boolPriority(
+      b.openNow,
+    ).compareTo(_boolPriority(a.openNow));
+    if (openComparison != 0) {
+      return openComparison;
+    }
+
+    final alwaysOpenComparison = _boolPriority(
+      _isAlwaysOpen(b),
+    ).compareTo(_boolPriority(_isAlwaysOpen(a)));
+    if (alwaysOpenComparison != 0) {
+      return alwaysOpenComparison;
+    }
+
+    return a.distanceKm.compareTo(b.distanceKm);
+  }
+
+  int _boolPriority(bool value) => value ? 1 : 0;
+
+  bool _isAlwaysOpen(EmergencyService service) {
+    return service.hours.trim().toLowerCase() == '24/7';
   }
 
   String _responseUnitLabel(ServiceType type) {

@@ -13,8 +13,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  late TextEditingController _bloodGroupController;
   late TextEditingController _allergiesController;
+  String _selectedBloodGroup = '';
   bool _initialized = false;
 
   @override
@@ -24,23 +24,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
     final settings = context.read<SettingsState>();
-    _bloodGroupController = TextEditingController(text: settings.bloodGroup);
+    _selectedBloodGroup = settings.bloodGroup;
     _allergiesController = TextEditingController(text: settings.allergies);
     _initialized = true;
   }
 
   @override
   void dispose() {
-    _bloodGroupController.dispose();
     _allergiesController.dispose();
     super.dispose();
   }
 
   Future<void> _saveMedicalInfo() async {
     final settings = context.read<SettingsState>();
-    final savedBloodGroup = await settings.setBloodGroup(
-      _bloodGroupController.text,
-    );
+    final savedBloodGroup = await settings.setBloodGroup(_selectedBloodGroup);
 
     if (!mounted) {
       return;
@@ -63,7 +60,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
 
-    _bloodGroupController.text = settings.bloodGroup;
+    setState(() {
+      _selectedBloodGroup = settings.bloodGroup;
+    });
     _allergiesController.text = settings.allergies;
     ScaffoldMessenger.of(
       context,
@@ -136,18 +135,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 NeumorphicContainer(
                   borderRadius: 16,
                   isPressed: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: TextField(
-                    controller: _bloodGroupController,
-                    textCapitalization: TextCapitalization.characters,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _selectedBloodGroup,
                     decoration: InputDecoration(
                       labelText: 'Blood group'.tr(context),
-                      hintText: 'e.g. A+, O-'.tr(context),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
-                      fillColor: Colors.transparent,
-                      filled: false,
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                        value: '',
+                        child: Text('Not set'.tr(context)),
+                      ),
+                      ...SettingsState.validBloodGroups.map(
+                        (bloodGroup) => DropdownMenuItem(
+                          value: bloodGroup,
+                          child: Text(bloodGroup),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => _selectedBloodGroup = value);
+                      }
+                    },
+                    dropdownColor: Theme.of(context).colorScheme.surface,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    isExpanded: true,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
