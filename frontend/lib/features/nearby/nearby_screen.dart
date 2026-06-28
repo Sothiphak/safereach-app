@@ -64,6 +64,11 @@ class _NearbyScreenState extends State<NearbyScreen> {
 
           services.sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
 
+          if (_selectedType != null) {
+            services = services
+                .where((service) => service.type == _selectedType)
+                .toList();
+          }
           if (_openNow) {
             services = services.where((service) => service.openNow).toList();
           }
