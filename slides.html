@@ -437,7 +437,7 @@
             <p>
               Interactive maps powered by <code>flutter_map</code> and OpenStreetMap. Features local-side calculations for sorting nearest emergency units:
             </p>
-            <ul style="margin-top: 6px; font-size: 0.44em; line-height: 1.4;">
+            <ul style="margin-top: 8px; line-height: 1.5; padding-left: 20px;">
               <li><span class="highlight-text">Haversine Distance Sorting:</span> Computes precise geographical proximity in real time.</li>
               <li><span class="highlight-text">Dynamic Category Filtering:</span> Instant client-side layer markers toggle (Hospitals, Police, Fire, Ambulance).</li>
               <li><span class="highlight-text">Geocoding Logic:</span> Resolves GPS coordinates into localized street addresses using Nominatim parser.</li>
@@ -448,7 +448,7 @@
             <p>
               Emergency apps must not fail during signal loss. Implements a multi-layered offline data synchronization pipeline:
             </p>
-            <ul style="margin-top: 6px; font-size: 0.44em; line-height: 1.4;">
+            <ul style="margin-top: 8px; line-height: 1.5; padding-left: 20px;">
               <li><span class="highlight-text">Layer 1:</span> Live NestJS REST API endpoints.</li>
               <li><span class="highlight-text">Layer 2 (Local Cache):</span> Persistent JSON serialization stored within <code>SharedPreferences</code> database.</li>
               <li><span class="highlight-text">Layer 3 (Asset Fallback):</span> Static JSON seeds parsed on-the-fly to guarantee the app remains functional.</li>
