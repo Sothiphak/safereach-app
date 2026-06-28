@@ -43,61 +43,65 @@ class AppShell extends StatelessWidget {
                 final dest = destinations[index];
                 final isSelected = navigationShell.currentIndex == index;
 
-                return GestureDetector(
-                  onTap: () => _onTap(index),
-                  behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOut,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
-                    ),
-                    decoration: isSelected
-                        ? BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF242B3D)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: isDark
-                                    ? Colors.black26
-                                    : Colors.grey.shade300,
-                                offset: const Offset(1, 2),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          )
-                        : null,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          isSelected ? dest.selectedIcon : dest.icon,
-                          color: isSelected
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurface.withValues(
-                                  alpha: 0.6,
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => _onTap(index),
+                    behavior: HitTestBehavior.opaque,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeInOut,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 10,
+                      ),
+                      decoration: isSelected
+                          ? BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF242B3D)
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: isDark
+                                      ? Colors.black26
+                                      : Colors.grey.shade300,
+                                  offset: const Offset(1, 2),
+                                  blurRadius: 4,
                                 ),
-                          size: 22,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          dest.label.tr(context),
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: isSelected
-                                ? FontWeight.w900
-                                : FontWeight.w600,
+                              ],
+                            )
+                          : null,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isSelected ? dest.selectedIcon : dest.icon,
                             color: isSelected
                                 ? theme.colorScheme.primary
                                 : theme.colorScheme.onSurface.withValues(
                                     alpha: 0.6,
                                   ),
+                            size: 22,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 4),
+                          Text(
+                            dest.label.tr(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: isSelected
+                                  ? FontWeight.w900
+                                  : FontWeight.w600,
+                              color: isSelected
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurface.withValues(
+                                      alpha: 0.6,
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

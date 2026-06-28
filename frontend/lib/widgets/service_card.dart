@@ -77,9 +77,13 @@ class ServiceCard extends StatelessWidget {
                       children: [
                         RatingStars(rating: service.rating),
                         const SizedBox(width: 6),
-                        Text(
-                          '${service.rating.toStringAsFixed(1)} • ${service.distanceKm.toStringAsFixed(1)} km',
-                          style: Theme.of(context).textTheme.bodySmall,
+                        Expanded(
+                          child: Text(
+                            '${service.rating.toStringAsFixed(1)} • ${service.distanceKm.toStringAsFixed(1)} km',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ),
                       ],
                     ),

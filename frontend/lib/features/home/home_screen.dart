@@ -313,36 +313,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Semantics(
-                          label:
-                              'Current Location ${locationState.currentAddress}',
-                          child: NeumorphicContainer(
-                            borderRadius: 20,
-                            isPressed: true,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 8,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  size: 16,
-                                  color: theme.colorScheme.primary,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  locationState.currentAddress,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Semantics(
+                            label:
+                                'Current Location ${locationState.currentAddress}',
+                            child: NeumorphicContainer(
+                              borderRadius: 20,
+                              isPressed: true,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 8,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    size: 16,
                                     color: theme.colorScheme.primary,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(
+                                      locationState.currentAddress,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+                        const SizedBox(width: 12),
                         NeumorphicButton(
                           borderRadius: 28,
                           onTap: () => context.go('/settings'),
@@ -425,6 +432,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(height: 36),
                             Container(
+                              width: double.infinity,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 8,
@@ -441,7 +449,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
                                     Icons.info_outline,
@@ -449,13 +456,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: theme.colorScheme.primary,
                                   ),
                                   const SizedBox(width: 8),
-                                  Text(
-                                    'Activates 3s confirmation window before calling'
-                                        .tr(context),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: theme.colorScheme.onSurface,
-                                      fontWeight: FontWeight.w600,
+                                  Expanded(
+                                    child: Text(
+                                      'Activates 3s confirmation window before calling'
+                                          .tr(context),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: theme.colorScheme.onSurface,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ],

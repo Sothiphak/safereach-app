@@ -169,10 +169,14 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                 children: [
                   RatingStars(rating: service.rating, size: 18),
                   const SizedBox(width: 8),
-                  Text(
-                    '${service.rating.toStringAsFixed(1)} (${service.reviewCount} ${(service.reviewCount == 1 ? "review" : "reviews").tr(context)})',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      '${service.rating.toStringAsFixed(1)} (${service.reviewCount} ${(service.reviewCount == 1 ? "review" : "reviews").tr(context)})',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -357,8 +361,10 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
                             'Reviews & Ratings'.tr(context),
@@ -387,31 +393,36 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                         borderRadius: 20,
                         padding: const EdgeInsets.all(16),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                Text(
-                                  averageRating.toStringAsFixed(1),
-                                  style: const TextStyle(
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.w900,
-                                    color: Color(0xFFD32F2F),
-                                    letterSpacing: -1.5,
+                            SizedBox(
+                              width: 78,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    averageRating.toStringAsFixed(1),
+                                    style: const TextStyle(
+                                      fontSize: 42,
+                                      fontWeight: FontWeight.w900,
+                                      color: Color(0xFFD32F2F),
+                                    ),
                                   ),
-                                ),
-                                RatingStars(rating: averageRating, size: 14),
-                                const SizedBox(height: 6),
-                                Text(
-                                  '$totalReviews ${(totalReviews == 1 ? "review" : "reviews").tr(context)}',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w600,
+                                  RatingStars(rating: averageRating, size: 13),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    '$totalReviews ${(totalReviews == 1 ? "review" : "reviews").tr(context)}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            const SizedBox(width: 24),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Column(
                                 children: [
