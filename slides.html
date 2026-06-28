@@ -118,22 +118,19 @@
     }
 
     /* Custom Codeblock Style */
-    .reveal pre {
-      width: 100% !important;
-      margin: 6px 0 !important;
+    .code-window {
+      width: 100%;
       border-radius: 12px;
       border: 1px solid #1e293b;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-      background: #0f172a !important; /* Premium Dark Slate */
-      padding-top: 38px !important;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      background: #0f172a; /* Premium Dark Slate */
+      padding-top: 38px;
       position: relative;
       overflow: hidden;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
     }
 
     /* VS Code window controls pseudo-element */
-    .reveal pre::before {
+    .code-window::before {
       content: "";
       position: absolute;
       top: 14px;
@@ -146,7 +143,7 @@
     }
 
     /* Small "DART" label in the title bar */
-    .reveal pre::after {
+    .code-window::after {
       content: "dart";
       position: absolute;
       top: 10px;
@@ -159,11 +156,20 @@
       letter-spacing: 0.1em;
     }
 
+    .reveal pre {
+      width: 100% !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+    }
+
     .reveal pre code {
       font-family: var(--r-code-font) !important;
       font-size: 0.42em !important;
       line-height: 1.4 !important;
-      padding: 0 16px 16px 16px !important;
+      padding: 12px 16px !important;
       color: #e2e8f0 !important;
       background: transparent !important;
     }
@@ -354,14 +360,19 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .reveal pre {
+      .code-window {
         background: #0f172a !important;
         border: 1px solid #1e293b !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
+      .reveal pre {
+        background: transparent !important;
+        border: none !important;
+      }
       .reveal pre code {
         color: #e2e8f0 !important;
+        background: transparent !important;
       }
       .badge {
         background: rgba(79, 70, 229, 0.08) !important;
@@ -536,7 +547,8 @@
               </p>
             </div>
           </div>
-          <pre><code class="language-dart" data-trim data-line-numbers="1-3|6-9|12-16">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-3|6-9|12-16">
 // LocationState reverse geocoding
 final url = Uri.parse(
   'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${position.latitude}&lon=${position.longitude}',
@@ -552,7 +564,8 @@ if (response.statusCode == 200) {
   final suburb = address['suburb'] ?? address['road'] ?? '';
   _currentAddress = '$city, $suburb';
 }
-          </code></pre>
+            </code></pre>
+          </div>
         </div>
       </section>
 
@@ -560,7 +573,8 @@ if (response.statusCode == 200) {
       <section data-transition="fade">
         <h2>Challenge 2: State Management</h2>
         <div class="grid-2">
-          <pre><code class="language-dart" data-trim data-line-numbers="1-2|4-12|14-20">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-2|4-12|14-20">
 // main.dart initialization
 runApp(
   MultiProvider(
@@ -582,7 +596,8 @@ await Future.wait([
   contactsState.load(),
   locationState.fetchLocation(),
 ]);
-          </code></pre>
+            </code></pre>
+          </div>
           <div class="glass-card">
             <h3>Centralized MultiProvider</h3>
             <p>
@@ -613,7 +628,8 @@ await Future.wait([
               <li>Default to static JSON seeds included in assets if cache is empty.</li>
             </ol>
           </div>
-          <pre><code class="language-dart" data-trim data-line-numbers="1-6|8-11|13-17">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-6|8-11|13-17">
 // MockRepository fallback pattern
 try {
   final apiItems = await _loadApiList(apiPath, fromJson);
@@ -628,7 +644,8 @@ if (cached != null) return _parseList(cached, fromJson);
 
 // Fallback 2: Static JSON Assets
 return _loadAssetList(assetPath, fromJson);
-          </code></pre>
+            </code></pre>
+          </div>
         </div>
       </section>
 
@@ -636,26 +653,28 @@ return _loadAssetList(assetPath, fromJson);
       <section data-transition="fade">
         <h2>Challenge 4: Contacts Persistence</h2>
         <div class="grid-2">
-          <pre><code class="language-dart" data-trim data-line-numbers="1-5|7-12|14-18">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-5|7-12|14-18">
 // ContactsState serialization
-Future&lt;void&gt; load() async {
+Future<void> load() async {
   _prefs = await SharedPreferences.getInstance();
   final stored = _prefs.getString(_contactsKey);
   if (stored != null) {
     final decoded = jsonDecode(stored) as List;
     _contacts.addAll(
-      decoded.map((item) =&gt; PersonalContact.fromJson(item)),
+      decoded.map((item) => PersonalContact.fromJson(item)),
     );
   } else {
     _contacts.addAll(_seedContacts());
   }
 }
 
-Future&lt;void&gt; _persist() async {
-  final encoded = jsonEncode(_contacts.map((c) =&gt; c.toJson()).toList());
+Future<void> _persist() async {
+  final encoded = jsonEncode(_contacts.map((c) => c.toJson()).toList());
   await _prefs.setString(_contactsKey, encoded);
 }
-          </code></pre>
+            </code></pre>
+          </div>
           <div class="glass-card">
             <h3>Dynamic JSON Persistence</h3>
             <p>
