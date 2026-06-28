@@ -11,6 +11,7 @@ import '../../models/service_type.dart';
 import '../../state/contacts_state.dart';
 import '../../state/favorites_state.dart';
 import '../../state/settings_state.dart';
+import '../../state/location_state.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -244,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final repository = context.read<MockRepository>();
     final theme = Theme.of(context);
+    final locationState = context.watch<LocationState>();
 
     return Stack(
       children: [
@@ -343,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Semantics(
-                          label: 'Current Location Phnom Penh, BKK1',
+                          label: 'Current Location ${locationState.currentAddress}',
                           child: NeumorphicContainer(
                             borderRadius: 20,
                             isPressed: true,
@@ -360,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Phnom Penh, BKK1',
+                                  locationState.currentAddress,
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
@@ -773,13 +775,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'Phnom Penh, BKK1 (11.5564° N, 104.9282° E)',
-                              style: TextStyle(
+                            Text(
+                              '${locationState.currentAddress} (${locationState.currentPosition.latitude.toStringAsFixed(4)}° N, ${locationState.currentPosition.longitude.toStringAsFixed(4)}° E)',
+                              style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 13,
                                 fontFamily: 'monospace',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
