@@ -420,6 +420,12 @@ class Translations {
     },
     'Contact': {'EN': 'Contact', 'KH': 'ទំនាក់ទំនង'},
     'Emergency Map': {'EN': 'Emergency Map', 'KH': 'ផែនទីសង្គ្រោះបន្ទាន់'},
+    'Map Style': {'EN': 'Map Style', 'KH': 'របៀបផែនទី'},
+    'Vibrant': {'EN': 'Vibrant', 'KH': 'ពណ៌ស្រស់'},
+    'Classic': {'EN': 'Classic', 'KH': 'បុរាណ'},
+    'Dark Sleek': {'EN': 'Dark Sleek', 'KH': 'ងងឹត'},
+    'Satellite': {'EN': 'Satellite', 'KH': 'រណប'},
+    'Minimal Light': {'EN': 'Minimal Light', 'KH': 'ភ្លឺស្រាល'},
     'Unable to load map': {
       'EN': 'Unable to load map',
       'KH': 'មិនអាចផ្ទុកផែនទីបានទេ',
