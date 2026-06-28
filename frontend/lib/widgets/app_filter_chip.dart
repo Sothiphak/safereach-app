@@ -9,17 +9,20 @@ class AppFilterChip extends StatelessWidget {
     required this.selected,
     required this.onSelected,
     this.icon,
+    this.selectedColor,
   });
 
   final String label;
   final bool selected;
   final ValueChanged<bool> onSelected;
   final IconData? icon;
+  final Color? selectedColor;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final activeColor = theme.colorScheme.primary;
+    final activeColor = selectedColor ?? theme.colorScheme.primary;
+    final inactiveColor = theme.colorScheme.onSurface;
 
     final childWidget = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -30,7 +33,9 @@ class AppFilterChip extends StatelessWidget {
             Icon(
               icon,
               size: 16,
-              color: selected ? activeColor : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              color: selected
+                  ? activeColor
+                  : inactiveColor.withValues(alpha: 0.6),
             ),
             const SizedBox(width: 6),
           ],
@@ -39,7 +44,7 @@ class AppFilterChip extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: selected ? activeColor : theme.colorScheme.onSurface,
+              color: selected ? activeColor : inactiveColor,
             ),
           ),
         ],
@@ -52,6 +57,11 @@ class AppFilterChip extends StatelessWidget {
         child: NeumorphicContainer(
           borderRadius: 14,
           isPressed: true,
+          color: activeColor.withValues(alpha: 0.08),
+          border: Border.all(
+            color: activeColor.withValues(alpha: 0.45),
+            width: 1.2,
+          ),
           child: childWidget,
         ),
       );

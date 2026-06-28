@@ -203,6 +203,7 @@ class _MapScreenState extends State<MapScreen> {
                                   _selectedCategory = type;
                                 }),
                                 icon: type.icon,
+                                selectedColor: type.color,
                               ),
                             );
                           }),

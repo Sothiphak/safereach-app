@@ -204,6 +204,7 @@ class _FilterRow extends StatelessWidget {
           selected: selectedType == type,
           onSelected: (_) => onTypeChanged(type),
           icon: type.icon,
+          selectedColor: type.color,
         ),
       ],
     ];
