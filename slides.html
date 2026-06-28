@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/simple.min.css">
 
   <!-- Code syntax highlighting theme -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
   <!-- Print/PDF stylesheet -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/print/pdf.min.css" type="text/css" media="print">
@@ -121,20 +121,51 @@
     .reveal pre {
       width: 100% !important;
       margin: 6px 0 !important;
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
-      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.05) !important;
-      background: #f8fafc !important;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+      background: #0f172a !important; /* Premium Dark Slate */
+      padding-top: 38px !important;
+      position: relative;
+      overflow: hidden;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+    }
+
+    /* VS Code window controls pseudo-element */
+    .reveal pre::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff5f56; /* Red dot */
+      box-shadow: 18px 0 0 #ffbd2e, 36px 0 0 #27c93f; /* Yellow and Green dots */
+    }
+
+    /* Small "DART" label in the title bar */
+    .reveal pre::after {
+      content: "dart";
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-family: var(--r-code-font);
+      font-size: 0.35em;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
 
     .reveal pre code {
       font-family: var(--r-code-font) !important;
       font-size: 0.42em !important;
-      line-height: 1.35 !important;
-      padding: 14px !important;
-      color: #0f172a !important;
+      line-height: 1.4 !important;
+      padding: 0 16px 16px 16px !important;
+      color: #e2e8f0 !important;
+      background: transparent !important;
     }
 
     /* Links and badges */
@@ -324,13 +355,13 @@
         print-color-adjust: exact !important;
       }
       .reveal pre {
-        background: #f8fafc !important;
-        border: 1px solid #cbd5e1 !important;
+        background: #0f172a !important;
+        border: 1px solid #1e293b !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
       .reveal pre code {
-        color: #0f172a !important;
+        color: #e2e8f0 !important;
       }
       .badge {
         background: rgba(79, 70, 229, 0.08) !important;
