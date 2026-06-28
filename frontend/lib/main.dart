@@ -17,16 +17,7 @@ Future<void> main() async {
   final settingsState = SettingsState();
   final repository = MockRepository();
 
-  appState.load();
-
-  await Future.wait([
-    favoritesState.load(),
-    contactsState.load(),
-    settingsState.load(),
-    repository.preload(),
-  ]);
-
-  runApp(
+    runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: appState),
@@ -38,4 +29,14 @@ Future<void> main() async {
       child: const EmergencyApp(),
     ),
   );
+
+  appState.load();
+
+  await Future.wait([
+    favoritesState.load(),
+    contactsState.load(),
+    settingsState.load(),
+    repository.preload(),
+  ]);
+
 }
