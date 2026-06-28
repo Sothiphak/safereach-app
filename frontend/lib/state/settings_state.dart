@@ -9,7 +9,7 @@ class SettingsState extends ChangeNotifier {
   static const _languageKey = 'language';
   static const _bloodGroupKey = 'blood_group';
   static const _allergiesKey = 'allergies';
-  static const _validBloodGroups = {
+  static const validBloodGroups = [
     'A+',
     'A-',
     'B+',
@@ -18,7 +18,7 @@ class SettingsState extends ChangeNotifier {
     'AB-',
     'O+',
     'O-',
-  };
+  ];
 
   bool _darkMode = false;
   String _language = englishLanguage;
@@ -57,7 +57,7 @@ class SettingsState extends ChangeNotifier {
   Future<bool> setBloodGroup(String value) async {
     final normalizedValue = value.trim().toUpperCase();
     if (normalizedValue.isNotEmpty &&
-        !_validBloodGroups.contains(normalizedValue)) {
+        !validBloodGroups.contains(normalizedValue)) {
       return false;
     }
 

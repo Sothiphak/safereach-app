@@ -11,6 +11,7 @@ import '../../models/service_type.dart';
 import '../../state/contacts_state.dart';
 import '../../state/favorites_state.dart';
 import '../../state/settings_state.dart';
+import '../../state/location_state.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -159,12 +160,36 @@ class _HomeScreenState extends State<HomeScreen> {
     final options = <EmergencyService>[];
     for (final type in ServiceType.values) {
       final matches = services.where((service) => service.type == type).toList()
-        ..sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+        ..sort(_compareSosServices);
       if (matches.isNotEmpty) {
         options.add(matches.first);
       }
     }
     return options;
+  }
+
+  int _compareSosServices(EmergencyService a, EmergencyService b) {
+    final openComparison = _boolPriority(
+      b.openNow,
+    ).compareTo(_boolPriority(a.openNow));
+    if (openComparison != 0) {
+      return openComparison;
+    }
+
+    final alwaysOpenComparison = _boolPriority(
+      _isAlwaysOpen(b),
+    ).compareTo(_boolPriority(_isAlwaysOpen(a)));
+    if (alwaysOpenComparison != 0) {
+      return alwaysOpenComparison;
+    }
+
+    return a.distanceKm.compareTo(b.distanceKm);
+  }
+
+  int _boolPriority(bool value) => value ? 1 : 0;
+
+  bool _isAlwaysOpen(EmergencyService service) {
+    return service.hours.trim().toLowerCase() == '24/7';
   }
 
   String _responseUnitLabel(ServiceType type) {
@@ -220,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final repository = context.read<MockRepository>();
     final theme = Theme.of(context);
+    final locationState = context.watch<LocationState>();
 
     return Stack(
       children: [
@@ -319,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Semantics(
-                          label: 'Current Location Phnom Penh, BKK1',
+                          label: 'Current Location ${locationState.currentAddress}',
                           child: NeumorphicContainer(
                             borderRadius: 20,
                             isPressed: true,
@@ -336,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Phnom Penh, BKK1',
+                                  locationState.currentAddress,
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
@@ -685,7 +711,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           isDarkOverlay: true,
                         ),
                       ],
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 24),
+                      Text(
+                        _selectedSosService == null
+                            ? 'Calling dispatch in $_countdownSeconds seconds'
+                            : 'Calling ${_selectedSosService!.type.label.tr(context)} in $_countdownSeconds seconds',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
                       // Huge Countdown Number
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
@@ -737,13 +775,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'Phnom Penh, BKK1 (11.5564° N, 104.9282° E)',
-                              style: TextStyle(
+                            Text(
+                              '${locationState.currentAddress} (${locationState.currentPosition.latitude.toStringAsFixed(4)}° N, ${locationState.currentPosition.longitude.toStringAsFixed(4)}° E)',
+                              style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 13,
                                 fontFamily: 'monospace',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -814,9 +853,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Text(
                           _selectedSosService == null
-                              ? 'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
+                              ? 'Dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.'
                                     .tr(context)
-                              : 'Mock dispatch status: ${_responseUnitLabel(_selectedSosService!.type)} en-route (ETA: 4 mins). Stay where you are.',
+                              : 'Dispatch status: ${_responseUnitLabel(_selectedSosService!.type)} en-route (ETA: 4 mins). Stay where you are.',
                           style: const TextStyle(
                             color: Colors.greenAccent,
                             fontSize: 14,

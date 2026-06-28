@@ -54,4 +54,40 @@ class EmergencyService {
       description: json['description'] as String,
     );
   }
+
+  EmergencyService copyWith({
+    String? id,
+    String? name,
+    ServiceType? type,
+    String? phone,
+    String? address,
+    String? hours,
+    List<String>? services,
+    double? rating,
+    int? reviewCount,
+    double? distanceKm,
+    bool? openNow,
+    double? latitude,
+    double? longitude,
+    String? imageUrl,
+    String? description,
+  }) {
+    return EmergencyService(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      phone: phone ?? this.phone,
+      address: address ?? this.address,
+      hours: hours ?? this.hours,
+      services: services ?? this.services,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      distanceKm: distanceKm ?? this.distanceKm,
+      openNow: openNow ?? this.openNow,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      imageUrl: imageUrl ?? this.imageUrl,
+      description: description ?? this.description,
+    );
+  }
 }

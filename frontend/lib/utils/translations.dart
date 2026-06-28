@@ -83,6 +83,10 @@ class Translations {
     },
     'Dark mode': {'EN': 'Dark mode', 'KH': 'របៀបងងឹត'},
     'Language': {'EN': 'Language', 'KH': 'ភាសា'},
+    'Current setup': {'EN': 'Current setup', 'KH': 'ការកំណត់បច្ចុប្បន្ន'},
+    'On': {'EN': 'On', 'KH': 'បើក'},
+    'Off': {'EN': 'Off', 'KH': 'បិទ'},
+    'Not set': {'EN': 'Not set', 'KH': 'មិនទាន់កំណត់'},
     'Medical info': {'EN': 'Medical info', 'KH': 'ព័ត៌មានវេជ្ជសាស្ត្រ'},
     'Save medical info': {
       'EN': 'Save medical info',
