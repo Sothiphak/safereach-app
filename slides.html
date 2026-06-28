@@ -11,7 +11,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/simple.min.css">
 
   <!-- Code syntax highlighting theme -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+  <!-- Print/PDF stylesheet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/print/pdf.min.css" type="text/css" media="print">
 
   <!-- Custom premium styling -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -115,23 +118,60 @@
     }
 
     /* Custom Codeblock Style */
+    .code-window {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      background: #0f172a; /* Premium Dark Slate */
+      padding-top: 38px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* VS Code window controls pseudo-element */
+    .code-window::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff5f56; /* Red dot */
+      box-shadow: 18px 0 0 #ffbd2e, 36px 0 0 #27c93f; /* Yellow and Green dots */
+    }
+
+    /* Small "DART" label in the title bar */
+    .code-window::after {
+      content: "dart";
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-family: var(--r-code-font);
+      font-size: 0.35em;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
     .reveal pre {
       width: 100% !important;
-      margin: 6px 0 !important;
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
-      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.05) !important;
-      background: #f8fafc !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      overflow: visible !important;
     }
 
     .reveal pre code {
       font-family: var(--r-code-font) !important;
       font-size: 0.42em !important;
-      line-height: 1.35 !important;
-      padding: 14px !important;
-      color: #0f172a !important;
+      line-height: 1.4 !important;
+      padding: 12px 16px !important;
+      color: #e2e8f0 !important;
+      background: transparent !important;
     }
 
     /* Links and badges */
@@ -271,6 +311,34 @@
       color: #334155;
     }
 
+    .profile-photo-frame {
+      width: 150px;
+      height: 150px;
+      border-radius: 8px;
+      border: 3px solid rgba(79, 70, 229, 0.45);
+      margin: 0 auto 12px auto;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+      background: #f8fafc;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .profile-photo-frame.blue {
+      border-color: rgba(14, 165, 233, 0.55);
+    }
+
+    .profile-photo {
+      width: 100%;
+      height: 100%;
+      max-width: none !important;
+      max-height: none !important;
+      margin: 0 !important;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
     /* Print styling overrides */
     @media print {
       body, .reveal, .reveal .slides {
@@ -292,14 +360,19 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .reveal pre {
-        background: #f8fafc !important;
-        border: 1px solid #cbd5e1 !important;
+      .code-window {
+        background: #0f172a !important;
+        border: 1px solid #1e293b !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
+      .reveal pre {
+        background: transparent !important;
+        border: none !important;
+      }
       .reveal pre code {
-        color: #0f172a !important;
+        color: #e2e8f0 !important;
+        background: transparent !important;
       }
       .badge {
         background: rgba(79, 70, 229, 0.08) !important;
@@ -332,6 +405,7 @@
         <p style="font-size: 0.8em; color: #64748b; margin-bottom: 30px;">Modern Mobile Security & Emergency Response Platform</p>
         
         <div class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center; border: 1px solid #cbd5e1;">
+          <p style="margin: 5px 0; font-size: 0.65em; color: #1e293b;"><strong>Presented to:</strong> <span style="color: #0ea5e9; font-weight: bold;">Lecturer HOK Tin</span></p>
           <p style="margin: 5px 0; font-size: 0.65em; color: #1e293b;"><strong>Presented by:</strong></p>
           <p style="margin: 5px 0; font-size: 0.75em; color: #4f46e5; font-weight: bold;">Sopheap Sothiphak &nbsp;|&nbsp; Sophat Odom &nbsp;|&nbsp; Samnang Alex</p>
           <div style="border-top: 1px solid rgba(15, 23, 42, 0.1); margin: 15px 0; padding-top: 10px;">
@@ -349,23 +423,80 @@
 
       <!-- Slide 2: Introduction -->
       <section data-transition="slide">
-        <h2>Introduction</h2>
+        <h2>Project Introduction</h2>
         <div class="grid-2">
           <div class="glass-card">
-            <h3>Project Overview</h3>
+            <h3>Personal Security Challenge</h3>
             <p>
-              SafeReach is designed to solve real-world personal security and emergency delays. It functions as a resilient mobile panic button and responsive resource directory.
+              Emergency response delays cost lives. In critical situations, finding emergency services (Hospitals, Police, Fire, Ambulance) is often slow due to fragmented directories, chaotic navigation interfaces, and unreliable networks.
             </p>
             <p style="margin-top: 10px;">
-              By combining geolocation tracking, category-based service lookups (Hospitals, Police, Fire, Ambulance), and local contact emergency channels, SafeReach acts as an all-in-one personal safety shield.
+              SafeReach bridges the gap by offering a cohesive emergency dashboard that locates aid immediately.
             </p>
           </div>
           <div class="glass-card">
-            <h3>Purpose & Objectives</h3>
-            <ul>
-              <li><span class="highlight-text">Minimize Response Time:</span> Allow one-tap SOS trigger directly from the home screen.</li>
-              <li><span class="highlight-text">Resilient Operations:</span> Implement robust offline-first fallback capabilities for remote data.</li>
-              <li><span class="highlight-text">Interactive Discovery:</span> Leverage dynamic mapping and geo-filtering to guide users directly to closest services.</li>
+            <h3>The SafeReach Solution</h3>
+            <p>
+              SafeReach is a personal security and safety-monitoring mobile platform. It empowers users with one-tap instant SOS alerts, proximity geolocated rescue centers, and fallback resilience when offline.
+            </p>
+            <p style="margin-top: 10px;">
+              By combining stateful geolocation, category-based service lookups, and local contact channels, SafeReach acts as a personal safety shield.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Project Objectives -->
+      <section data-transition="slide">
+        <h2>Project Objectives</h2>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>Minimize Delay to Help</h3>
+            <p>
+              Decrease the time it takes to trigger alarms and contact help. Eliminate typing numbers or searching directories during panic events.
+            </p>
+            <ul style="margin-top: 10px;">
+              <li><span class="highlight-text">Instant SOS:</span> Tap and hold panic trigger on the main view.</li>
+              <li><span class="highlight-text">Auto-Geolocate:</span> Immediate real-time reverse-geocoding of coordinates.</li>
+            </ul>
+          </div>
+          <div class="glass-card">
+            <h3>Resilience & GIS Discovery</h3>
+            <p>
+              Deliver location-based discovery widgets that work offline and online. Enable dynamic GIS category filters.
+            </p>
+            <ul style="margin-top: 10px;">
+              <li><span class="highlight-text">Category Filters:</span> Multi-marker toggling (Hospitals, Police, Fire, Ambulance).</li>
+              <li><span class="highlight-text">Continuous Utility:</span> State caching and offline fallbacks.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Key Platform Features -->
+      <section data-transition="slide">
+        <h2>Key Platform Features</h2>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>Advanced GIS & OSM Integration</h3>
+            <p>
+              Interactive maps powered by <code>flutter_map</code> and OpenStreetMap. Features local-side calculations for sorting nearest emergency units:
+            </p>
+            <ul style="margin-top: 8px; line-height: 1.5; padding-left: 20px;">
+              <li><span class="highlight-text">Haversine Distance Sorting:</span> Computes precise geographical proximity in real time.</li>
+              <li><span class="highlight-text">Dynamic Category Filtering:</span> Instant client-side layer markers toggle (Hospitals, Police, Fire, Ambulance).</li>
+              <li><span class="highlight-text">Geocoding Logic:</span> Resolves GPS coordinates into localized street addresses using Nominatim parser.</li>
+            </ul>
+          </div>
+          <div class="glass-card">
+            <h3>Robust Offline Resilience (API Fallback)</h3>
+            <p>
+              Emergency apps must not fail during signal loss. Implements a multi-layered offline data synchronization pipeline:
+            </p>
+            <ul style="margin-top: 8px; line-height: 1.5; padding-left: 20px;">
+              <li><span class="highlight-text">Layer 1:</span> Live NestJS REST API endpoints.</li>
+              <li><span class="highlight-text">Layer 2 (Local Cache):</span> Persistent JSON serialization stored within <code>SharedPreferences</code> database.</li>
+              <li><span class="highlight-text">Layer 3 (Asset Fallback):</span> Static JSON seeds parsed on-the-fly to guarantee the app remains functional.</li>
             </ul>
           </div>
         </div>
@@ -416,7 +547,8 @@
               </p>
             </div>
           </div>
-          <pre><code class="language-dart" data-trim data-line-numbers="1-3|6-9|12-16">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-3|6-9|12-16">
 // LocationState reverse geocoding
 final url = Uri.parse(
   'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${position.latitude}&lon=${position.longitude}',
@@ -432,7 +564,8 @@ if (response.statusCode == 200) {
   final suburb = address['suburb'] ?? address['road'] ?? '';
   _currentAddress = '$city, $suburb';
 }
-          </code></pre>
+            </code></pre>
+          </div>
         </div>
       </section>
 
@@ -440,7 +573,8 @@ if (response.statusCode == 200) {
       <section data-transition="fade">
         <h2>Challenge 2: State Management</h2>
         <div class="grid-2">
-          <pre><code class="language-dart" data-trim data-line-numbers="1-2|4-12|14-20">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-2|4-12|14-20">
 // main.dart initialization
 runApp(
   MultiProvider(
@@ -462,7 +596,8 @@ await Future.wait([
   contactsState.load(),
   locationState.fetchLocation(),
 ]);
-          </code></pre>
+            </code></pre>
+          </div>
           <div class="glass-card">
             <h3>Centralized MultiProvider</h3>
             <p>
@@ -493,7 +628,8 @@ await Future.wait([
               <li>Default to static JSON seeds included in assets if cache is empty.</li>
             </ol>
           </div>
-          <pre><code class="language-dart" data-trim data-line-numbers="1-6|8-11|13-17">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-6|8-11|13-17">
 // MockRepository fallback pattern
 try {
   final apiItems = await _loadApiList(apiPath, fromJson);
@@ -508,7 +644,8 @@ if (cached != null) return _parseList(cached, fromJson);
 
 // Fallback 2: Static JSON Assets
 return _loadAssetList(assetPath, fromJson);
-          </code></pre>
+            </code></pre>
+          </div>
         </div>
       </section>
 
@@ -516,26 +653,28 @@ return _loadAssetList(assetPath, fromJson);
       <section data-transition="fade">
         <h2>Challenge 4: Contacts Persistence</h2>
         <div class="grid-2">
-          <pre><code class="language-dart" data-trim data-line-numbers="1-5|7-12|14-18">
+          <div class="code-window">
+            <pre><code class="language-dart" data-trim data-line-numbers="1-5|7-12|14-18">
 // ContactsState serialization
-Future&lt;void&gt; load() async {
+Future<void> load() async {
   _prefs = await SharedPreferences.getInstance();
   final stored = _prefs.getString(_contactsKey);
   if (stored != null) {
     final decoded = jsonDecode(stored) as List;
     _contacts.addAll(
-      decoded.map((item) =&gt; PersonalContact.fromJson(item)),
+      decoded.map((item) => PersonalContact.fromJson(item)),
     );
   } else {
     _contacts.addAll(_seedContacts());
   }
 }
 
-Future&lt;void&gt; _persist() async {
-  final encoded = jsonEncode(_contacts.map((c) =&gt; c.toJson()).toList());
+Future<void> _persist() async {
+  final encoded = jsonEncode(_contacts.map((c) => c.toJson()).toList());
   await _prefs.setString(_contactsKey, encoded);
 }
-          </code></pre>
+            </code></pre>
+          </div>
           <div class="glass-card">
             <h3>Dynamic JSON Persistence</h3>
             <p>
@@ -614,7 +753,39 @@ Future&lt;void&gt; _persist() async {
         </div>
       </section>
 
-      <!-- Slide 9: Conclusion -->
+      <!-- Slide 9: Live Demo -->
+      <section data-transition="zoom">
+        <h2>Live Demonstration</h2>
+        <div class="glass-card" style="max-width: 800px; margin: 0 auto; padding: 30px; text-align: center; border: 1px solid #cbd5e1;">
+          <h3 style="color: #4f46e5; margin-bottom: 20px;">SafeReach App in Action 📱</h3>
+          <p style="font-size: 0.8em; margin-bottom: 25px;">
+            We will now demonstrate the real-time capabilities of the SafeReach application, showing how we connect the Flutter client with our active NestJS backend.
+          </p>
+          
+          <div class="grid-3" style="font-size: 0.6em; text-align: left; gap: 15px;">
+            <div class="glass-card" style="margin: 0; background: rgba(79, 70, 229, 0.04); border-color: rgba(79, 70, 229, 0.2);">
+              <h4 style="color: #4f46e5; font-size: 1.1em; margin-bottom: 8px;">1. Onboarding & SOS</h4>
+              <p style="font-size: 0.85em; color: #475569;">
+                Completing configuration paths, registering emergency contacts, and triggering a long-press SOS alarm with location sharing.
+              </p>
+            </div>
+            <div class="glass-card" style="margin: 0; background: rgba(14, 165, 233, 0.04); border-color: rgba(14, 165, 233, 0.2);">
+              <h4 style="color: #0ea5e9; font-size: 1.1em; margin-bottom: 8px;">2. GIS Map Search</h4>
+              <p style="font-size: 0.85em; color: #475569;">
+                Filtering safety branches (Hospitals, Police) on our interactive OSM map, searching, and calculating distance metrics.
+              </p>
+            </div>
+            <div class="glass-card" style="margin: 0; background: rgba(6, 182, 212, 0.04); border-color: rgba(6, 182, 212, 0.2);">
+              <h4 style="color: #06b6d4; font-size: 1.1em; margin-bottom: 8px;">3. Backend & Sync</h4>
+              <p style="font-size: 0.85em; color: #475569;">
+                Simulating network offline mode to trigger our local cache fallbacks and fetching live NestJS updates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Conclusion -->
       <section data-transition="slide">
         <h2>Conclusion</h2>
         <div class="grid-2">
@@ -657,22 +828,18 @@ Future&lt;void&gt; _persist() async {
         <div class="grid-3">
           <!-- Member 1: Sothiphak -->
           <div class="glass-card" style="text-align: center;">
-            <div style="width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; border: 2px dashed #7e22ce; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
-              <!-- To add a photo, replace the src path below with your image file path -->
-              <img src="" alt="Sothiphak" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: block;" onerror="this.style.display='none';">
-              <span style="font-size: 0.35em; color: #64748b; font-weight: 600;">Add Photo</span>
+            <div class="profile-photo-frame">
+              <img class="profile-photo" src="slide-assets/team/sothiphak.jpg" alt="Sothiphak profile photo">
             </div>
-            <h3 style="text-align: center; margin-bottom: 4px;">Sothiphak</h3>
+            <h3 style="text-align: center; margin-bottom: 4px;">Sopheap Sothiphak</h3>
             <p style="text-align: center; font-weight: 600; color: #1d4ed8; font-size: 0.45em; margin: 0 0 8px 0;">Lead Mobile Developer</p>
             <p style="font-size: 0.4em; line-height: 1.3;">Responsible for location tracking systems, reverse address geocoding, and central state bindings using MultiProvider.</p>
           </div>
 
           <!-- Member 2: Sophat Odom -->
           <div class="glass-card" style="text-align: center;">
-            <div style="width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; border: 2px dashed #1d4ed8; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
-              <!-- To add a photo, replace the src path below with your image file path -->
-              <img src="" alt="Sophat Odom" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: block;" onerror="this.style.display='none';">
-              <span style="font-size: 0.35em; color: #64748b; font-weight: 600;">Add Photo</span>
+            <div class="profile-photo-frame blue">
+              <img class="profile-photo" src="slide-assets/team/sophat-odom.jpg" alt="Sophat Odom profile photo">
             </div>
             <h3 style="text-align: center; margin-bottom: 4px;">Sophat Odom</h3>
             <p style="text-align: center; font-weight: 600; color: #1d4ed8; font-size: 0.45em; margin: 0 0 8px 0;">Backend Developer</p>
@@ -681,10 +848,8 @@ Future&lt;void&gt; _persist() async {
 
           <!-- Member 3: Samnang Alex -->
           <div class="glass-card" style="text-align: center;">
-            <div style="width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; border: 2px dashed #7e22ce; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
-              <!-- To add a photo, replace the src path below with your image file path -->
-              <img src="" alt="Samnang Alex" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: block;" onerror="this.style.display='none';">
-              <span style="font-size: 0.35em; color: #64748b; font-weight: 600;">Add Photo</span>
+            <div class="profile-photo-frame">
+              <img class="profile-photo" src="slide-assets/team/samnang-alex.jpg" alt="Samnang Alex profile photo">
             </div>
             <h3 style="text-align: center; margin-bottom: 4px;">Samnang Alex</h3>
             <p style="text-align: center; font-weight: 600; color: #1d4ed8; font-size: 0.45em; margin: 0 0 8px 0;">UI/UX & Tester</p>
