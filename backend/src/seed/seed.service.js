@@ -51,84 +51,82 @@ export class SeedService {
       this.logger.log('Default user seeded: user@safereach.com / password123');
     }
 
-    const mockFolder = path.join(process.cwd(), '../frontend/assets/mock');
+    const mockFolder = this.resolveMockFolder();
 
     // 2. Seed Services
-    const serviceCount = await this.servicesRepository.count();
-    if (serviceCount === 0) {
-      try {
-        const servicesData = JSON.parse(
-          fs.readFileSync(path.join(mockFolder, 'items.json'), 'utf8'),
-        );
-        for (const item of servicesData) {
-          const service = this.servicesRepository.create(item);
-          await this.servicesRepository.save(service);
-        }
-        this.logger.log(`Seeded ${servicesData.length} services.`);
-      } catch (err) {
-        this.logger.error('Failed to seed services:', err.message);
+    try {
+      const servicesData = this.readMockJson(mockFolder, 'items.json');
+      for (const item of servicesData) {
+        const service = this.servicesRepository.create(item);
+        await this.servicesRepository.save(service);
       }
+      this.logger.log(`Synced ${servicesData.length} services.`);
+    } catch (err) {
+      this.logger.error('Failed to seed services:', err.message);
     }
 
     // 3. Seed Branches
-    const branchCount = await this.branchesRepository.count();
-    if (branchCount === 0) {
-      try {
-        const branchesData = JSON.parse(
-          fs.readFileSync(path.join(mockFolder, 'branches.json'), 'utf8'),
-        );
-        for (const item of branchesData) {
-          const branch = this.branchesRepository.create(item);
-          await this.branchesRepository.save(branch);
-        }
-        this.logger.log(`Seeded ${branchesData.length} branches.`);
-      } catch (err) {
-        this.logger.error('Failed to seed branches:', err.message);
+    try {
+      const branchesData = this.readMockJson(mockFolder, 'branches.json');
+      for (const item of branchesData) {
+        const branch = this.branchesRepository.create(item);
+        await this.branchesRepository.save(branch);
       }
+      this.logger.log(`Synced ${branchesData.length} branches.`);
+    } catch (err) {
+      this.logger.error('Failed to seed branches:', err.message);
     }
 
     // 4. Seed Reviews
-    const reviewCount = await this.reviewsRepository.count();
-    if (reviewCount === 0) {
-      try {
-        const reviewsData = JSON.parse(
-          fs.readFileSync(path.join(mockFolder, 'reviews.json'), 'utf8'),
-        );
-        for (const item of reviewsData) {
-          const service = await this.servicesRepository.findOne({
-            where: { id: item.serviceId },
+    try {
+      const reviewsData = this.readMockJson(mockFolder, 'reviews.json');
+      let syncedReviews = 0;
+      for (const item of reviewsData) {
+        const service = await this.servicesRepository.findOne({
+          where: { id: item.serviceId },
+        });
+        if (service) {
+          const review = this.reviewsRepository.create({
+            ...item,
+            service,
           });
-          if (service) {
-            const review = this.reviewsRepository.create({
-              ...item,
-              service,
-            });
-            await this.reviewsRepository.save(review);
-          }
+          await this.reviewsRepository.save(review);
+          syncedReviews++;
         }
-        this.logger.log(`Seeded ${reviewsData.length} reviews.`);
-      } catch (err) {
-        this.logger.error('Failed to seed reviews:', err.message);
       }
+      this.logger.log(`Synced ${syncedReviews}/${reviewsData.length} reviews.`);
+    } catch (err) {
+      this.logger.error('Failed to seed reviews:', err.message);
     }
 
     // 5. Seed Tips
-    const tipCount = await this.tipsRepository.count();
-    if (tipCount === 0) {
-      try {
-        const tipsData = JSON.parse(
-          fs.readFileSync(path.join(mockFolder, 'tips.json'), 'utf8'),
-        );
-        for (const item of tipsData) {
-          const tip = this.tipsRepository.create(item);
-          await this.tipsRepository.save(tip);
-        }
-        this.logger.log(`Seeded ${tipsData.length} tips.`);
-      } catch (err) {
-        this.logger.error('Failed to seed tips:', err.message);
+    try {
+      const tipsData = this.readMockJson(mockFolder, 'tips.json');
+      for (const item of tipsData) {
+        const tip = this.tipsRepository.create(item);
+        await this.tipsRepository.save(tip);
       }
+      this.logger.log(`Synced ${tipsData.length} tips.`);
+    } catch (err) {
+      this.logger.error('Failed to seed tips:', err.message);
     }
 
     this.logger.log('Database seeding completed successfully.');
+  }
+
+  resolveMockFolder() {
+    const candidates = [
+      path.resolve(process.cwd(), '../frontend/assets/mock'),
+      path.resolve(process.cwd(), 'frontend/assets/mock'),
+    ];
+    const mockFolder = candidates.find((candidate) => fs.existsSync(candidate));
+    if (!mockFolder) {
+      throw new Error('Could not find frontend/assets/mock folder.');
+    }
+    return mockFolder;
+  }
+
+  readMockJson(mockFolder, fileName) {
+    return JSON.parse(fs.readFileSync(path.join(mockFolder, fileName), 'utf8'));
   }
 }
