@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../data/mock_repository.dart';
 import '../../state/location_state.dart';
-import '../../models/emergency_branch.dart';
+import '../../models/emergency_service.dart';
 import '../../models/service_type.dart';
 import '../../utils/launcher.dart';
 import '../../widgets/error_state.dart';
@@ -29,7 +29,7 @@ class _MapScreenState extends State<MapScreen> {
   ServiceType? _selectedCategory;
   bool _showSuggestions = false;
   MapStyle? _customMapStyle;
-  EmergencyBranch? _selectedBranch;
+  EmergencyService? _selectedService;
 
   MapStyle _getEffectiveMapStyle(bool isDark) {
     if (_customMapStyle != null) return _customMapStyle!;
@@ -61,11 +61,9 @@ class _MapScreenState extends State<MapScreen> {
     final tileUrl = effectiveStyle.urlTemplate;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Emergency Map'.tr(context)),
-      ),
-      body: FutureBuilder<List<EmergencyBranch>>(
-        future: repository.getBranches(),
+      appBar: AppBar(title: Text('Emergency Map'.tr(context))),
+      body: FutureBuilder<List<EmergencyService>>(
+        future: repository.getServices(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -77,22 +75,34 @@ class _MapScreenState extends State<MapScreen> {
               onRetry: () => setState(() {}),
             );
           }
-          final branches = snapshot.data ?? [];
+          final services = snapshot.data ?? [];
 
-          // 1. Filter branches based on selected category & search query
-          final filteredBranches = branches.where((branch) {
-            final categoryMatches = _selectedCategory == null || branch.type == _selectedCategory;
+          final filteredServices = services.where((service) {
+            final categoryMatches =
+                _selectedCategory == null || service.type == _selectedCategory;
             if (_searchQuery.isEmpty) return categoryMatches;
-            final nameMatches = branch.name.tr(context).toLowerCase().contains(_searchQuery.toLowerCase());
-            final addressMatches = branch.address.tr(context).toLowerCase().contains(_searchQuery.toLowerCase());
+            final nameMatches = service.name
+                .tr(context)
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
+            final addressMatches = service.address
+                .tr(context)
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
             return (nameMatches || addressMatches) && categoryMatches;
           }).toList();
 
-          // 2. Filter suggestion list based on category & search query
-          final suggestionBranches = branches.where((branch) {
-            final categoryMatches = _selectedCategory == null || branch.type == _selectedCategory;
-            final nameMatches = branch.name.tr(context).toLowerCase().contains(_searchQuery.toLowerCase());
-            final addressMatches = branch.address.tr(context).toLowerCase().contains(_searchQuery.toLowerCase());
+          final suggestionServices = services.where((service) {
+            final categoryMatches =
+                _selectedCategory == null || service.type == _selectedCategory;
+            final nameMatches = service.name
+                .tr(context)
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
+            final addressMatches = service.address
+                .tr(context)
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
             return (nameMatches || addressMatches) && categoryMatches;
           }).toList();
 
@@ -116,29 +126,32 @@ class _MapScreenState extends State<MapScreen> {
                         point: userPosition,
                         width: 26,
                         height: 26,
-                        child: _UserLocationIndicator(hasActualLocation: locationState.hasActualLocation),
+                        child: _UserLocationIndicator(
+                          hasActualLocation: locationState.hasActualLocation,
+                        ),
                       ),
-                      ...filteredBranches
-                          .map(
-                            (branch) => Marker(
-                              point: LatLng(branch.latitude, branch.longitude),
-                              width: 52,
-                              height: 58,
-                              alignment: Alignment.bottomCenter,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _mapController.move(LatLng(branch.latitude, branch.longitude), 14.5);
-                                  _showBranchSheet(context, branch);
-                                },
-                                child: MapPin(
-                                  color: branch.type.color,
-                                  icon: branch.type.icon,
-                                  isSelected: _selectedBranch == branch,
-                                ),
-                              ),
+                      ...filteredServices.map(
+                        (service) => Marker(
+                          point: LatLng(service.latitude, service.longitude),
+                          width: 52,
+                          height: 58,
+                          alignment: Alignment.bottomCenter,
+                          child: GestureDetector(
+                            onTap: () {
+                              _mapController.move(
+                                LatLng(service.latitude, service.longitude),
+                                14.5,
+                              );
+                              _showServiceSheet(context, service);
+                            },
+                            child: MapPin(
+                              color: service.type.color,
+                              icon: service.type.icon,
+                              isSelected: _selectedService == service,
                             ),
-                          )
-                          .toList(),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -155,14 +168,20 @@ class _MapScreenState extends State<MapScreen> {
                     // Search Input field
                     NeumorphicContainer(
                       borderRadius: 16,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
                       child: TextField(
                         controller: _searchController,
                         focusNode: _focusNode,
                         decoration: InputDecoration(
                           hintText: 'Search map...'.tr(context),
                           border: InputBorder.none,
-                          icon: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
+                          icon: Icon(
+                            Icons.search,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                           suffixIcon: _searchQuery.isNotEmpty
                               ? IconButton(
                                   icon: const Icon(Icons.clear),
@@ -234,34 +253,49 @@ class _MapScreenState extends State<MapScreen> {
                           child: ListView.separated(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: suggestionBranches.isEmpty ? 1 : suggestionBranches.length,
-                            separatorBuilder: (context, index) => const Divider(height: 1),
+                            itemCount: suggestionServices.isEmpty
+                                ? 1
+                                : suggestionServices.length,
+                            separatorBuilder: (context, index) =>
+                                const Divider(height: 1),
                             itemBuilder: (context, index) {
-                              if (suggestionBranches.isEmpty) {
+                              if (suggestionServices.isEmpty) {
                                 return ListTile(
                                   title: Text(
                                     'No results found'.tr(context),
-                                    style: const TextStyle(fontStyle: FontStyle.italic),
+                                    style: const TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                    ),
                                   ),
                                 );
                               }
-                              final branch = suggestionBranches[index];
+                              final service = suggestionServices[index];
                               return ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: branch.type.color.withValues(alpha: 0.1),
-                                  child: Icon(branch.type.icon, color: branch.type.color, size: 18),
+                                  backgroundColor: service.type.color
+                                      .withValues(alpha: 0.1),
+                                  child: Icon(
+                                    service.type.icon,
+                                    color: service.type.color,
+                                    size: 18,
+                                  ),
                                 ),
-                                title: Text(branch.name.tr(context)),
-                                subtitle: Text(branch.address.tr(context)),
+                                title: Text(service.name.tr(context)),
+                                subtitle: Text(service.address.tr(context)),
                                 onTap: () {
                                   setState(() {
-                                    _searchController.text = branch.name.tr(context);
-                                    _searchQuery = branch.name.tr(context);
+                                    _searchController.text = service.name.tr(
+                                      context,
+                                    );
+                                    _searchQuery = service.name.tr(context);
                                     _showSuggestions = false;
                                     _focusNode.unfocus();
                                   });
-                                  _mapController.move(LatLng(branch.latitude, branch.longitude), 14.5);
-                                  _showBranchSheet(context, branch);
+                                  _mapController.move(
+                                    LatLng(service.latitude, service.longitude),
+                                    14.5,
+                                  );
+                                  _showServiceSheet(context, service);
                                 },
                               );
                             },
@@ -273,11 +307,7 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
               // Map Legend relocated to bottom left
-              Positioned(
-                bottom: 24,
-                left: 16,
-                child: const _MapLegend(),
-              ),
+              Positioned(bottom: 24, left: 16, child: const _MapLegend()),
               // Zoom, style, and my location buttons
               Positioned(
                 bottom: 24,
@@ -300,7 +330,10 @@ class _MapScreenState extends State<MapScreen> {
                       borderRadius: 14,
                       onTap: () {
                         final currentZoom = _mapController.camera.zoom;
-                        _mapController.move(_mapController.camera.center, currentZoom + 1);
+                        _mapController.move(
+                          _mapController.camera.center,
+                          currentZoom + 1,
+                        );
                       },
                       child: const SizedBox(
                         height: 48,
@@ -313,7 +346,10 @@ class _MapScreenState extends State<MapScreen> {
                       borderRadius: 14,
                       onTap: () {
                         final currentZoom = _mapController.camera.zoom;
-                        _mapController.move(_mapController.camera.center, currentZoom - 1);
+                        _mapController.move(
+                          _mapController.camera.center,
+                          currentZoom - 1,
+                        );
                       },
                       child: const SizedBox(
                         height: 48,
@@ -343,9 +379,9 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void _showBranchSheet(BuildContext context, EmergencyBranch branch) {
+  void _showServiceSheet(BuildContext context, EmergencyService service) {
     setState(() {
-      _selectedBranch = branch;
+      _selectedService = service;
     });
     showModalBottomSheet(
       context: context,
@@ -353,7 +389,12 @@ class _MapScreenState extends State<MapScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 24, top: 8),
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 24,
+            top: 8,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,10 +404,14 @@ class _MapScreenState extends State<MapScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: branch.type.color.withValues(alpha: 0.15),
+                      color: service.type.color.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(branch.type.icon, color: branch.type.color, size: 24),
+                    child: Icon(
+                      service.type.icon,
+                      color: service.type.color,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -374,16 +419,15 @@ class _MapScreenState extends State<MapScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          branch.name.tr(context),
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          service.name.tr(context),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          branch.type.label.tr(context).toUpperCase(),
+                          service.type.label.tr(context).toUpperCase(),
                           style: TextStyle(
                             fontSize: 11,
-                            color: branch.type.color,
+                            color: service.type.color,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.2,
                           ),
@@ -396,11 +440,15 @@ class _MapScreenState extends State<MapScreen> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  const Icon(Icons.location_on_outlined, size: 18, color: Colors.grey),
+                  const Icon(
+                    Icons.location_on_outlined,
+                    size: 18,
+                    color: Colors.grey,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      branch.address.tr(context),
+                      service.address.tr(context),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -409,13 +457,17 @@ class _MapScreenState extends State<MapScreen> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  const Icon(Icons.phone_outlined, size: 18, color: Colors.grey),
+                  const Icon(
+                    Icons.phone_outlined,
+                    size: 18,
+                    color: Colors.grey,
+                  ),
                   const SizedBox(width: 8),
                   Text(
-                    branch.phone,
+                    service.phone,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -425,19 +477,23 @@ class _MapScreenState extends State<MapScreen> {
                   Expanded(
                     child: NeumorphicButton(
                       borderRadius: 16,
-                      onTap: () => launchPhone(context, branch.phone),
+                      onTap: () => launchPhone(context, service.phone),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.call, color: branch.type.color, size: 20),
+                            Icon(
+                              Icons.call,
+                              color: service.type.color,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'CALL'.tr(context),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: branch.type.color,
+                                color: service.type.color,
                               ),
                             ),
                           ],
@@ -451,8 +507,8 @@ class _MapScreenState extends State<MapScreen> {
                       borderRadius: 16,
                       onTap: () => launchDirections(
                         context,
-                        latitude: branch.latitude,
-                        longitude: branch.longitude,
+                        latitude: service.latitude,
+                        longitude: service.longitude,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -463,7 +519,9 @@ class _MapScreenState extends State<MapScreen> {
                             const SizedBox(width: 8),
                             Text(
                               'DIRECTIONS'.tr(context),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -478,7 +536,7 @@ class _MapScreenState extends State<MapScreen> {
       },
     ).whenComplete(() {
       setState(() {
-        _selectedBranch = null;
+        _selectedService = null;
       });
     });
   }
@@ -493,16 +551,21 @@ class _MapScreenState extends State<MapScreen> {
         final currentStyle = _getEffectiveMapStyle(isDark);
 
         return Container(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 32, top: 8),
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 32,
+            top: 8,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Map Style'.tr(context),
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -542,14 +605,18 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                               if (isSelected)
                                 Container(
-                                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.15),
                                 ),
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
                                   width: double.infinity,
                                   color: Colors.black.withValues(alpha: 0.6),
-                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                  ),
                                   child: Text(
                                     style.label.tr(context),
                                     textAlign: TextAlign.center,
@@ -635,11 +702,23 @@ class _MapScreenState extends State<MapScreen> {
 }
 
 enum MapStyle {
-  vibrant('Vibrant', 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'),
+  vibrant(
+    'Vibrant',
+    'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+  ),
   classic('Classic', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
-  dark('Dark Sleek', 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'),
-  satellite('Satellite', 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
-  minimal('Minimal Light', 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png');
+  dark(
+    'Dark Sleek',
+    'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+  ),
+  satellite(
+    'Satellite',
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  ),
+  minimal(
+    'Minimal Light',
+    'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png',
+  );
 
   const MapStyle(this.label, this.urlTemplate);
   final String label;
@@ -681,11 +760,7 @@ class MapPin extends StatelessWidget {
               ],
             ),
             padding: const EdgeInsets.all(8),
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 20,
-            ),
+            child: Icon(icon, color: Colors.white, size: 20),
           ),
           CustomPaint(
             size: const Size(12, 6),
@@ -759,8 +834,8 @@ class _MapLegend extends StatelessWidget {
                     Text(
                       item.label,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ],
                 ),
@@ -815,7 +890,7 @@ class _UserLocationIndicatorState extends State<_UserLocationIndicator>
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 4,
-              )
+              ),
             ],
           ),
         ),
@@ -832,7 +907,9 @@ class _UserLocationIndicatorState extends State<_UserLocationIndicator>
               width: 12 + (14 * _controller.value),
               height: 12 + (14 * _controller.value),
               decoration: BoxDecoration(
-                color: Colors.blue.withValues(alpha: 0.4 * (1 - _controller.value)),
+                color: Colors.blue.withValues(
+                  alpha: 0.4 * (1 - _controller.value),
+                ),
                 shape: BoxShape.circle,
               ),
             ),
@@ -847,7 +924,7 @@ class _UserLocationIndicatorState extends State<_UserLocationIndicator>
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 4,
-                  )
+                  ),
                 ],
               ),
             ),
