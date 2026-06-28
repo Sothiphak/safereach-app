@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../models/emergency_service.dart';
 import '../../models/review.dart';
 import '../../models/service_type.dart';
@@ -35,7 +35,10 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
     super.dispose();
   }
 
-  Future<void> _openWriteReviewModal(BuildContext context, MockRepository repository) async {
+  Future<void> _openWriteReviewModal(
+    BuildContext context,
+    EmergencyRepository repository,
+  ) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -45,7 +48,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
           serviceId: widget.serviceId,
           repository: repository,
           onSubmitted: () {
-            setState(() {}); // Trigger refresh on details screen
+            setState(() {});
           },
         );
       },
@@ -54,13 +57,11 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Service Details'.tr(context)),
-      ),
+      appBar: AppBar(title: Text('Service Details'.tr(context))),
       body: FutureBuilder<EmergencyService?>(
         future: repository.getServiceById(widget.serviceId),
         builder: (context, snapshot) {
@@ -85,37 +86,37 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // Swipeable Image Gallery
               SizedBox(
                 height: 240,
                 child: Stack(
                   children: [
                     PageView(
                       controller: _pageController,
-                      children: List.generate(
-                        3,
-                        (index) {
-                          final image = ClipRRect(
-                            borderRadius: BorderRadius.circular(24),
-                            child: CachedNetworkImage(
-                              imageUrl: service.imageUrl,
+                      children: List.generate(3, (index) {
+                        final image = ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: CachedNetworkImage(
+                            imageUrl: service.imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => SvgPicture.asset(
+                              'assets/images/placeholder.svg',
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => SvgPicture.asset(
-                                'assets/images/placeholder.svg',
-                                fit: BoxFit.cover,
-                              ),
-                              errorWidget: (context, url, error) => SvgPicture.asset(
-                                'assets/images/placeholder.svg',
-                                fit: BoxFit.cover,
-                              ),
                             ),
+                            errorWidget: (context, url, error) =>
+                                SvgPicture.asset(
+                                  'assets/images/placeholder.svg',
+                                  fit: BoxFit.cover,
+                                ),
+                          ),
+                        );
+                        if (index == 0) {
+                          return Hero(
+                            tag: 'service-${service.id}',
+                            child: image,
                           );
-                          if (index == 0) {
-                            return Hero(tag: 'service-${service.id}', child: image);
-                          }
-                          return image;
-                        },
-                      ),
+                        }
+                        return image;
+                      }),
                     ),
                     Positioned(
                       bottom: 12,
@@ -125,17 +126,23 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                         child: AnimatedBuilder(
                           animation: _pageController,
                           builder: (context, child) {
-                            final page = _pageController.hasClients ? _pageController.page ?? 0 : 0;
+                            final page = _pageController.hasClients
+                                ? _pageController.page ?? 0
+                                : 0;
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: List.generate(3, (dotIndex) {
                                 final diff = (page - dotIndex).abs();
                                 return Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                  ),
                                   height: 8,
                                   width: diff < 0.5 ? 24 : 8,
                                   decoration: BoxDecoration(
-                                    color: diff < 0.5 ? Colors.white : Colors.white54,
+                                    color: diff < 0.5
+                                        ? Colors.white
+                                        : Colors.white54,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 );
@@ -150,13 +157,12 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Title and Core Details
               Text(
                 service.name.tr(context),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 24,
-                    ),
+                  fontWeight: FontWeight.w900,
+                  fontSize: 24,
+                ),
               ),
               const SizedBox(height: 8),
               Row(
@@ -166,14 +172,13 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                   Text(
                     '${service.rating.toStringAsFixed(1)} (${service.reviewCount} ${(service.reviewCount == 1 ? "review" : "reviews").tr(context)})',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
 
-              // Description Card
               NeumorphicContainer(
                 borderRadius: 20,
                 padding: const EdgeInsets.all(16),
@@ -183,28 +188,29 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                     Text(
                       'About Service'.tr(context),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       service.description.tr(context),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            height: 1.4,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(height: 1.4),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 12),
 
-              // Info rows
-              _InfoRow(icon: Icons.location_on, label: service.address.tr(context)),
+              _InfoRow(
+                icon: Icons.location_on,
+                label: service.address.tr(context),
+              ),
               _InfoRow(icon: Icons.schedule, label: service.hours),
               _InfoRow(icon: Icons.call, label: service.phone),
               const SizedBox(height: 16),
 
-              // Emergency capability / equipment tags
               NeumorphicContainer(
                 borderRadius: 20,
                 padding: const EdgeInsets.all(16),
@@ -214,8 +220,8 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                     Text(
                       'Emergency capabilities',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Wrap(
@@ -236,28 +242,31 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Service Tags / Chips
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: service.services
-                    .map((serviceName) => NeumorphicContainer(
-                          borderRadius: 12,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          child: Text(
-                            serviceName.tr(context),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                              color: isDark ? Colors.white70 : Colors.black87,
-                            ),
+                    .map(
+                      (serviceName) => NeumorphicContainer(
+                        borderRadius: 12,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          serviceName.tr(context),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: isDark ? Colors.white70 : Colors.black87,
                           ),
-                        ))
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
               const SizedBox(height: 24),
 
-              // CTA buttons
               Consumer<FavoritesState>(
                 builder: (context, favorites, child) {
                   final isFavorite = favorites.isFavorite(service.id);
@@ -270,7 +279,8 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                             label: 'CALL NOW'.tr(context),
                             icon: Icons.call,
                             isFullWidth: true,
-                            onPressed: () => launchPhone(context, service.phone),
+                            onPressed: () =>
+                                launchPhone(context, service.phone),
                           ),
                         ),
                       ),
@@ -282,7 +292,10 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                (isFavorite ? 'Removed from favorites' : 'Saved to favorites').tr(context),
+                                (isFavorite
+                                        ? 'Removed from favorites'
+                                        : 'Saved to favorites')
+                                    .tr(context),
                               ),
                               duration: const Duration(seconds: 1),
                             ),
@@ -309,7 +322,6 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Reviews Header & Star Rating Summary + Distribution Bars
               FutureBuilder<List<Review>>(
                 future: repository.getReviewsForService(service.id),
                 builder: (context, snapshot) {
@@ -318,7 +330,6 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                   }
                   final reviews = snapshot.data ?? [];
 
-                  // Calculate rating distribution
                   final totalReviews = reviews.length;
                   double averageRating = service.rating;
                   int r5 = 0, r4 = 0, r3 = 0, r2 = 0, r1 = 0;
@@ -351,29 +362,32 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                         children: [
                           Text(
                             'Reviews & Ratings'.tr(context),
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           TextButton.icon(
-                            onPressed: () => _openWriteReviewModal(context, repository),
-                            icon: const Icon(Icons.rate_review_outlined, size: 18),
+                            onPressed: () =>
+                                _openWriteReviewModal(context, repository),
+                            icon: const Icon(
+                              Icons.rate_review_outlined,
+                              size: 18,
+                            ),
                             label: Text(
                               'Write a review'.tr(context),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
 
-                      // Ratings Summary & Distribution Card
                       NeumorphicContainer(
                         borderRadius: 20,
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
-                            // Left: Average Stars Column
                             Column(
                               children: [
                                 Text(
@@ -398,29 +412,38 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                               ],
                             ),
                             const SizedBox(width: 24),
-                            // Right: Distribution Bars
                             Expanded(
                               child: Column(
                                 children: [
                                   _DistributionRow(
                                     star: 5,
-                                    percentage: totalReviews == 0 ? 0.7 : r5 / totalReviews,
+                                    percentage: totalReviews == 0
+                                        ? 0.7
+                                        : r5 / totalReviews,
                                   ),
                                   _DistributionRow(
                                     star: 4,
-                                    percentage: totalReviews == 0 ? 0.2 : r4 / totalReviews,
+                                    percentage: totalReviews == 0
+                                        ? 0.2
+                                        : r4 / totalReviews,
                                   ),
                                   _DistributionRow(
                                     star: 3,
-                                    percentage: totalReviews == 0 ? 0.1 : r3 / totalReviews,
+                                    percentage: totalReviews == 0
+                                        ? 0.1
+                                        : r3 / totalReviews,
                                   ),
                                   _DistributionRow(
                                     star: 2,
-                                    percentage: totalReviews == 0 ? 0.0 : r2 / totalReviews,
+                                    percentage: totalReviews == 0
+                                        ? 0.0
+                                        : r2 / totalReviews,
                                   ),
                                   _DistributionRow(
                                     star: 1,
-                                    percentage: totalReviews == 0 ? 0.0 : r1 / totalReviews,
+                                    percentage: totalReviews == 0
+                                        ? 0.0
+                                        : r1 / totalReviews,
                                   ),
                                 ],
                               ),
@@ -430,15 +453,17 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Individual Review Cards
                       if (reviews.isEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Center(
                             child: Text(
-                              'No reviews posted yet. Be the first to share your experience!'.tr(context),
+                              'No reviews posted yet. Be the first to share your experience!'
+                                  .tr(context),
                               textAlign: TextAlign.center,
-                              style: const TextStyle(fontStyle: FontStyle.italic),
+                              style: const TextStyle(
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ),
                         )
@@ -459,7 +484,8 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           review.author,
@@ -470,18 +496,27 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                                         ),
                                         Text(
                                           review.date,
-                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
                                                 color: Colors.grey[500],
                                               ),
                                         ),
                                       ],
                                     ),
                                     const SizedBox(height: 6),
-                                    RatingStars(rating: review.rating, size: 14),
+                                    RatingStars(
+                                      rating: review.rating,
+                                      size: 14,
+                                    ),
                                     const SizedBox(height: 8),
                                     Text(
                                       review.comment,
-                                      style: const TextStyle(fontSize: 13, height: 1.3),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        height: 1.3,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -519,9 +554,9 @@ class _InfoRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -788,11 +823,12 @@ class _WriteReviewBottomSheet extends StatefulWidget {
   });
 
   final String serviceId;
-  final MockRepository repository;
+  final EmergencyRepository repository;
   final VoidCallback onSubmitted;
 
   @override
-  State<_WriteReviewBottomSheet> createState() => _WriteReviewBottomSheetState();
+  State<_WriteReviewBottomSheet> createState() =>
+      _WriteReviewBottomSheetState();
 }
 
 class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
@@ -823,14 +859,13 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
             Center(
               child: Text(
                 'Submit Emergency Review'.tr(context),
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 18),
 
-            // Star selector
             Text(
               'Rate your experience'.tr(context),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
@@ -852,7 +887,6 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
             ),
             const SizedBox(height: 16),
 
-            // Author Name Field
             NeumorphicContainer(
               borderRadius: 16,
               isPressed: true,
@@ -878,7 +912,6 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
             ),
             const SizedBox(height: 16),
 
-            // Comment Field
             NeumorphicContainer(
               borderRadius: 16,
               isPressed: true,
@@ -906,7 +939,6 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
             ),
             const SizedBox(height: 24),
 
-            // Submit Button
             AppButton.primary(
               label: 'SUBMIT REVIEW'.tr(context),
               isFullWidth: true,
@@ -931,7 +963,9 @@ class _WriteReviewBottomSheetState extends State<_WriteReviewBottomSheet> {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Review submitted successfully! Thank you.'.tr(context)),
+                      content: Text(
+                        'Review submitted successfully! Thank you.'.tr(context),
+                      ),
                       backgroundColor: Colors.green,
                     ),
                   );

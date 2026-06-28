@@ -24,9 +24,12 @@ class NeumorphicContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
-    final baseColor = color ?? (isDark ? AppColors.darkBackground : AppColors.background);
-    final shadowLight = isDark ? AppColors.darkLightShadow : AppColors.lightShadow;
+
+    final baseColor =
+        color ?? (isDark ? AppColors.darkBackground : AppColors.background);
+    final shadowLight = isDark
+        ? AppColors.darkLightShadow
+        : AppColors.lightShadow;
     final shadowDark = isDark ? AppColors.darkDarkShadow : AppColors.darkShadow;
 
     return Container(
@@ -36,7 +39,12 @@ class NeumorphicContainer extends StatelessWidget {
           ? BoxDecoration(
               color: baseColor,
               borderRadius: BorderRadius.circular(borderRadius),
-              border: border ?? Border.all(color: isDark ? Colors.black38 : Colors.grey.shade300, width: 0.8),
+              border:
+                  border ??
+                  Border.all(
+                    color: isDark ? Colors.black38 : Colors.grey.shade300,
+                    width: 0.8,
+                  ),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

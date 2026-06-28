@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
-import 'data/mock_repository.dart';
+import 'data/emergency_repository.dart';
 import 'state/app_state.dart';
 import 'state/contacts_state.dart';
 import 'state/favorites_state.dart';
@@ -17,9 +17,9 @@ Future<void> main() async {
   final contactsState = ContactsState();
   final settingsState = SettingsState();
   final locationState = LocationState();
-  final repository = MockRepository();
+  final repository = EmergencyRepository();
 
-    runApp(
+  runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: appState),
@@ -42,5 +42,4 @@ Future<void> main() async {
     locationState.fetchLocation(),
     repository.preload(),
   ]);
-
 }

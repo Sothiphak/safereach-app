@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../models/emergency_service.dart';
 import '../../models/service_type.dart';
 import '../../utils/launcher.dart';
@@ -30,7 +30,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
     final locationState = context.watch<LocationState>();
     final userPosition = locationState.currentPosition;
 
@@ -49,7 +49,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
               onRetry: () => setState(() {}),
             );
           }
-          
+
           final rawServices = snapshot.data ?? [];
           var services = rawServices.map((service) {
             final distance = const Distance().as(
@@ -57,7 +57,6 @@ class _NearbyScreenState extends State<NearbyScreen> {
               userPosition,
               LatLng(service.latitude, service.longitude),
             );
-            // Parse distance to double with single decimal digit precision
             final distanceVal = double.parse(distance.toStringAsFixed(1));
             return service.copyWith(distanceKm: distanceVal);
           }).toList();
@@ -89,8 +88,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                 openNow: _openNow,
                 shortDistance: _shortDistance,
                 onTypeChanged: (type) => setState(() => _selectedType = type),
-                onOpenNowChanged: (value) =>
-                    setState(() => _openNow = value),
+                onOpenNowChanged: (value) => setState(() => _openNow = value),
                 onShortDistanceChanged: (value) =>
                     setState(() => _shortDistance = value),
               ),
@@ -134,9 +132,8 @@ class _NearbyScreenState extends State<NearbyScreen> {
                               padding: const EdgeInsets.only(bottom: 12),
                               child: ServiceCard(
                                 service: service,
-                                onTap: () => context.go(
-                                  '/home/service/${service.id}',
-                                ),
+                                onTap: () =>
+                                    context.go('/home/service/${service.id}'),
                                 trailing: _NearbyActions(service: service),
                               ),
                             ),

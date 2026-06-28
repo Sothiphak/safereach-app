@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../models/emergency_service.dart';
 import '../../state/favorites_state.dart';
 import '../../widgets/empty_state.dart';
@@ -20,13 +20,11 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
     final favoritesState = context.watch<FavoritesState>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Favorites'.tr(context)),
-      ),
+      appBar: AppBar(title: Text('Favorites'.tr(context))),
       body: FutureBuilder<List<EmergencyService>>(
         future: repository.getServices(),
         builder: (context, snapshot) {
@@ -48,7 +46,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           if (favorites.isEmpty) {
             return EmptyState(
               title: 'No favorites saved'.tr(context),
-              message: 'Tap the heart icon to save emergency services.'.tr(context),
+              message: 'Tap the heart icon to save emergency services.'.tr(
+                context,
+              ),
               icon: Icons.favorite_border,
             );
           }

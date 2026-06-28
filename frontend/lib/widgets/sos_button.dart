@@ -54,7 +54,6 @@ class _SosButtonState extends State<SosButton>
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
                 children: [
-                  // Ripple Ring 3 (Outer Pulsing Ring)
                   AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
@@ -77,7 +76,6 @@ class _SosButtonState extends State<SosButton>
                       );
                     },
                   ),
-                  // Ripple Ring 2 (Middle Pulsing Ring)
                   AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
@@ -100,7 +98,6 @@ class _SosButtonState extends State<SosButton>
                       );
                     },
                   ),
-                  // Ripple Ring 1 (Inner Pulsing Ring)
                   AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
@@ -123,7 +120,6 @@ class _SosButtonState extends State<SosButton>
                       );
                     },
                   ),
-                  // Inner Core Button Shadow/Glow (Pulsing Glow Size)
                   AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
@@ -147,14 +143,12 @@ class _SosButtonState extends State<SosButton>
                       );
                     },
                   ),
-                  // Main Electric Indigo/Cyan Button Core with Breathing Scale
                   AnimatedBuilder(
                     animation: _controller,
                     builder: (context, child) {
                       final scale =
                           1.0 +
-                          0.04 *
-                              math.sin(_controller.value * 2 * math.pi);
+                          0.04 * math.sin(_controller.value * 2 * math.pi);
                       return Transform.scale(
                         scale: scale,
                         child: Container(

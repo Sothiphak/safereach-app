@@ -27,8 +27,7 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
-    // For primary, we can use a soft tint of the primary color, but styled as a Neumorphic slab
+
     final buttonColor = _isPrimary ? theme.colorScheme.primary : null;
     final textColor = _isPrimary ? Colors.white : theme.colorScheme.primary;
 

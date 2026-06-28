@@ -49,14 +49,21 @@ class AppShell extends StatelessWidget {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeInOut,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     decoration: isSelected
                         ? BoxDecoration(
-                            color: isDark ? const Color(0xFF242B3D) : Colors.white,
+                            color: isDark
+                                ? const Color(0xFF242B3D)
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: isDark ? Colors.black26 : Colors.grey.shade300,
+                                color: isDark
+                                    ? Colors.black26
+                                    : Colors.grey.shade300,
                                 offset: const Offset(1, 2),
                                 blurRadius: 4,
                               ),
@@ -70,7 +77,9 @@ class AppShell extends StatelessWidget {
                           isSelected ? dest.selectedIcon : dest.icon,
                           color: isSelected
                               ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                              : theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.6,
+                                ),
                           size: 22,
                         ),
                         const SizedBox(height: 4),
@@ -78,10 +87,14 @@ class AppShell extends StatelessWidget {
                           dest.label.tr(context),
                           style: TextStyle(
                             fontSize: 10,
-                            fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                            fontWeight: isSelected
+                                ? FontWeight.w900
+                                : FontWeight.w600,
                             color: isSelected
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                : theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
                           ),
                         ),
                       ],

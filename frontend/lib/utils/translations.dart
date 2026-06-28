@@ -206,12 +206,6 @@ class Translations {
       'KH':
           'កំពុងហៅទូរស័ព្ទទៅផ្នែកសង្គ្រោះបន្ទាន់កាល់ម៉ែត (+៨៥៥ ២៣ ២១៨ ៨៧៨) និងបញ្ជូនឡានសង្គ្រោះ។',
     },
-    'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.': {
-      'EN':
-          'Mock dispatch status: Ambulance en-route (ETA: 4 mins). Stay where you are.',
-      'KH':
-          'ស្ថានភាពសង្គ្រោះសាកល្បង៖ ឡានពេទ្យកំពុងធ្វើដំណើរ (រង់ចាំ ៤ នាទី)។ សូមស្នាក់នៅកន្លែងដដែល។',
-    },
     'DIAL DISPATCH': {'EN': 'DIAL DISPATCH', 'KH': 'ហៅទៅផ្នែកសង្គ្រោះ'},
     'DISMISS OVERLAY': {'EN': 'DISMISS OVERLAY', 'KH': 'បិទផ្ទាំងនេះ'},
     'Get started': {'EN': 'Get started', 'KH': 'ចាប់ផ្តើម'},

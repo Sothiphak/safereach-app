@@ -62,9 +62,24 @@ class ContactsState extends ChangeNotifier {
 
   List<PersonalContact> _seedContacts() {
     return const [
-      PersonalContact(id: 'c1', name: 'Mom', relationship: 'Family', phone: '+85512345601'),
-      PersonalContact(id: 'c2', name: 'Dad', relationship: 'Family', phone: '+85512345602'),
-      PersonalContact(id: 'c3', name: 'Sokha', relationship: 'Neighbor', phone: '+85512345603'),
+      PersonalContact(
+        id: 'c1',
+        name: 'Mom',
+        relationship: 'Family',
+        phone: '+85512345601',
+      ),
+      PersonalContact(
+        id: 'c2',
+        name: 'Dad',
+        relationship: 'Family',
+        phone: '+85512345602',
+      ),
+      PersonalContact(
+        id: 'c3',
+        name: 'Sokha',
+        relationship: 'Neighbor',
+        phone: '+85512345603',
+      ),
     ];
   }
 }

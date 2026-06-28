@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' hide Path;
 import 'package:provider/provider.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../state/location_state.dart';
 import '../../models/emergency_service.dart';
 import '../../models/service_type.dart';
@@ -52,7 +52,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final locationState = context.watch<LocationState>();
     final userPosition = locationState.currentPosition;
@@ -121,7 +121,6 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   MarkerLayer(
                     markers: [
-                      // User position marker
                       Marker(
                         point: userPosition,
                         width: 26,
@@ -156,7 +155,6 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ],
               ),
-              // Search & Filter Category overlay at top
               Positioned(
                 top: 16,
                 left: 16,
@@ -165,7 +163,6 @@ class _MapScreenState extends State<MapScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Search Input field
                     NeumorphicContainer(
                       borderRadius: 16,
                       padding: const EdgeInsets.symmetric(
@@ -211,7 +208,6 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // Category list chips
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -241,7 +237,6 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                       ),
                     ),
-                    // Suggestions popup dropdown
                     if (_showSuggestions && _searchQuery.isNotEmpty) ...[
                       const SizedBox(height: 8),
                       ConstrainedBox(
@@ -306,9 +301,7 @@ class _MapScreenState extends State<MapScreen> {
                   ],
                 ),
               ),
-              // Map Legend relocated to bottom left
               Positioned(bottom: 24, left: 16, child: const _MapLegend()),
-              // Zoom, style, and my location buttons
               Positioned(
                 bottom: 24,
                 right: 16,

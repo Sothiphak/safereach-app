@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../models/emergency_service.dart';
 import '../../models/personal_contact.dart';
 import '../../models/service_type.dart';
@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
-  // SOS Countdown overlay state
   bool _showSosCountdown = false;
   EmergencyService? _selectedSosService;
 
@@ -215,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
     final theme = Theme.of(context);
     final locationState = context.watch<LocationState>();
 
@@ -279,7 +278,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
 
-              // Search filtering
               final filtered = services
                   .where(
                     (service) =>
@@ -310,7 +308,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   vertical: 8,
                 ),
                 children: [
-                  // Top Row with location chip and Settings shortcut
                   _EntranceAnimation(
                     delayMs: 0,
                     child: Row(
@@ -374,7 +371,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Giant SOS Section (Big pulsing button)
                   _EntranceAnimation(
                     child: Semantics(
                       label: 'Emergency SOS trigger section',
@@ -423,7 +419,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 36),
-                            // Pulsing SOS Button
                             SosButton(
                               size: 160,
                               onPressed: () => _chooseSosService(services),
@@ -473,7 +468,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Search Bar
                   _EntranceAnimation(
                     delayMs: 200,
                     child: NeumorphicContainer(
@@ -512,7 +506,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // 4 Quick-Action Tiles Section
                   _EntranceAnimation(
                     delayMs: 300,
                     child: Column(
@@ -531,7 +524,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Other Categories Section
                   _EntranceAnimation(
                     delayMs: 400,
                     child: Column(
@@ -550,14 +542,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Emergency profile card
                   const _EntranceAnimation(
                     delayMs: 500,
                     child: _EmergencyProfileCard(),
                   ),
                   const SizedBox(height: 24),
 
-                  // Featured Nearby list
                   _EntranceAnimation(
                     delayMs: 600,
                     child: Column(
@@ -590,7 +580,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Favorites Section
                   _EntranceAnimation(
                     delayMs: 700,
                     child: Column(
@@ -1008,7 +997,6 @@ class _PrimaryQuickActionsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.width >= 720;
-    // Limit to the 4 primary emergency services
     final primaryServices = [
       ServiceType.hospital,
       ServiceType.police,
@@ -1058,7 +1046,6 @@ class _SecondaryQuickActionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Other categories: Women help, Disaster Relief
     final secondaryServices = [ServiceType.women, ServiceType.disaster];
 
     return Row(
@@ -1340,13 +1327,12 @@ class _EmergencyProfileCard extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: FilledButton.icon(
-                onPressed: () =>
-                    _copyEmergencyProfile(
-                      context,
-                      settings,
-                      primaryContact,
-                      currentAddress,
-                    ),
+                onPressed: () => _copyEmergencyProfile(
+                  context,
+                  settings,
+                  primaryContact,
+                  currentAddress,
+                ),
                 icon: const Icon(Icons.ios_share),
                 label: const Text(
                   'SHARE EMERGENCY INFO',

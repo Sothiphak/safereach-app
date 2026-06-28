@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../models/emergency_service.dart';
 import '../../models/service_type.dart';
 import '../../utils/launcher.dart';
@@ -25,13 +25,11 @@ class ServiceListScreen extends StatefulWidget {
 class _ServiceListScreenState extends State<ServiceListScreen> {
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
     final serviceType = ServiceType.fromJson(widget.type);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('${serviceType.label} nearby'.tr(context)),
-      ),
+      appBar: AppBar(title: Text('${serviceType.label} nearby'.tr(context))),
       body: FutureBuilder<List<EmergencyService>>(
         future: repository.getServicesByType(serviceType),
         builder: (context, snapshot) {

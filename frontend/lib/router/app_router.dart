@@ -36,7 +36,8 @@ class AppRouter {
         return '/onboarding';
       }
 
-      if (isOnboardingComplete && (location == '/onboarding' || location == '/splash')) {
+      if (isOnboardingComplete &&
+          (location == '/onboarding' || location == '/splash')) {
         return '/home';
       }
 
@@ -49,17 +50,12 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/splash',
-        pageBuilder: (context, state) => _fadePage(
-          state,
-          const SplashScreen(),
-        ),
+        pageBuilder: (context, state) => _fadePage(state, const SplashScreen()),
       ),
       GoRoute(
         path: '/onboarding',
-        pageBuilder: (context, state) => _fadePage(
-          state,
-          const OnboardingScreen(),
-        ),
+        pageBuilder: (context, state) =>
+            _fadePage(state, const OnboardingScreen()),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -70,24 +66,18 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/home',
-                pageBuilder: (context, state) => _fadePage(
-                  state,
-                  const HomeScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    _fadePage(state, const HomeScreen()),
                 routes: [
                   GoRoute(
                     path: 'favorites',
-                    pageBuilder: (context, state) => _slidePage(
-                      state,
-                      const FavoritesScreen(),
-                    ),
+                    pageBuilder: (context, state) =>
+                        _slidePage(state, const FavoritesScreen()),
                   ),
                   GoRoute(
                     path: 'first-aid',
-                    pageBuilder: (context, state) => _slidePage(
-                      state,
-                      const FirstAidScreen(),
-                    ),
+                    pageBuilder: (context, state) =>
+                        _slidePage(state, const FirstAidScreen()),
                   ),
                   GoRoute(
                     path: 'services/:type',
@@ -115,10 +105,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/nearby',
-                pageBuilder: (context, state) => _fadePage(
-                  state,
-                  const NearbyScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    _fadePage(state, const NearbyScreen()),
               ),
             ],
           ),
@@ -126,10 +114,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/map',
-                pageBuilder: (context, state) => _fadePage(
-                  state,
-                  const MapScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    _fadePage(state, const MapScreen()),
               ),
             ],
           ),
@@ -137,10 +123,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/contacts',
-                pageBuilder: (context, state) => _fadePage(
-                  state,
-                  const ContactsScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    _fadePage(state, const ContactsScreen()),
               ),
             ],
           ),
@@ -148,10 +132,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/settings',
-                pageBuilder: (context, state) => _fadePage(
-                  state,
-                  const SettingsScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    _fadePage(state, const SettingsScreen()),
               ),
             ],
           ),
@@ -160,20 +142,23 @@ class AppRouter {
     ],
   );
 
-  static CustomTransitionPage<void> _fadePage(GoRouterState state, Widget child) {
+  static CustomTransitionPage<void> _fadePage(
+    GoRouterState state,
+    Widget child,
+  ) {
     return CustomTransitionPage<void>(
       key: state.pageKey,
       child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
+        return FadeTransition(opacity: animation, child: child);
       },
     );
   }
 
-  static CustomTransitionPage<void> _slidePage(GoRouterState state, Widget child) {
+  static CustomTransitionPage<void> _slidePage(
+    GoRouterState state,
+    Widget child,
+  ) {
     return CustomTransitionPage<void>(
       key: state.pageKey,
       child: child,
@@ -184,10 +169,7 @@ class AppRouter {
         ).chain(CurveTween(curve: Curves.easeOut));
         return SlideTransition(
           position: animation.drive(tween),
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
+          child: FadeTransition(opacity: animation, child: child),
         );
       },
     );

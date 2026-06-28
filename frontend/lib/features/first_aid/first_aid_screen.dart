@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/mock_repository.dart';
+import '../../data/emergency_repository.dart';
 import '../../models/first_aid_tip.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -19,12 +19,10 @@ class FirstAidScreen extends StatefulWidget {
 class _FirstAidScreenState extends State<FirstAidScreen> {
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<MockRepository>();
+    final repository = context.read<EmergencyRepository>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('First-aid tips'.tr(context)),
-      ),
+      appBar: AppBar(title: Text('First-aid tips'.tr(context))),
       body: FutureBuilder<List<FirstAidTip>>(
         future: repository.getTips(),
         builder: (context, snapshot) {
@@ -42,7 +40,9 @@ class _FirstAidScreenState extends State<FirstAidScreen> {
           if (tips.isEmpty) {
             return EmptyState(
               title: 'No tips available'.tr(context),
-              message: 'Please check back later for first-aid guidance.'.tr(context),
+              message: 'Please check back later for first-aid guidance.'.tr(
+                context,
+              ),
             );
           }
           return ListView.separated(
@@ -106,7 +106,9 @@ class _FirstAidScreenState extends State<FirstAidScreen> {
                                         style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
                                       ),
                                     ),

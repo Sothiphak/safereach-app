@@ -11,7 +11,7 @@ import '../models/first_aid_tip.dart';
 import '../models/review.dart';
 import '../models/service_type.dart';
 
-class MockRepository {
+class EmergencyRepository {
   static const String _apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue: ApiConfig.baseUrl,
@@ -123,7 +123,7 @@ class MockRepository {
         getTips(),
       ]);
     } catch (e) {
-      debugPrint('Error preloading local mock data: $e');
+      debugPrint('Error preloading emergency data: $e');
     }
   }
 

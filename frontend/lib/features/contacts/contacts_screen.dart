@@ -19,9 +19,7 @@ class ContactsScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal Contacts'.tr(context)),
-      ),
+      appBar: AppBar(title: Text('Personal Contacts'.tr(context))),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 16, right: 8),
         child: SizedBox(
@@ -69,8 +67,12 @@ class ContactsScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
-                            child: Icon(Icons.person, color: theme.colorScheme.primary),
+                            backgroundColor: theme.colorScheme.primary
+                                .withValues(alpha: 0.1),
+                            child: Icon(
+                              Icons.person,
+                              color: theme.colorScheme.primary,
+                            ),
                           ),
                           const SizedBox(width: 14),
                           Expanded(
@@ -94,7 +96,8 @@ class ContactsScreen extends StatelessWidget {
                           ),
                           NeumorphicButton(
                             borderRadius: 12,
-                            onTap: () => _openContactForm(context, contact: contact),
+                            onTap: () =>
+                                _openContactForm(context, contact: contact),
                             child: const Padding(
                               padding: EdgeInsets.all(8),
                               child: Icon(Icons.edit_outlined, size: 20),
@@ -123,7 +126,10 @@ class ContactsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _openContactForm(BuildContext context, {PersonalContact? contact}) async {
+  Future<void> _openContactForm(
+    BuildContext context, {
+    PersonalContact? contact,
+  }) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -151,8 +157,9 @@ class _ContactFormState extends State<_ContactForm> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.contact?.name ?? '');
-    _relationshipController =
-        TextEditingController(text: widget.contact?.relationship ?? '');
+    _relationshipController = TextEditingController(
+      text: widget.contact?.relationship ?? '',
+    );
     _phoneController = TextEditingController(text: widget.contact?.phone ?? '');
   }
 
@@ -178,7 +185,9 @@ class _ContactFormState extends State<_ContactForm> {
         children: [
           Center(
             child: Text(
-              (widget.contact == null ? 'Add Contact' : 'Edit Contact').tr(context),
+              (widget.contact == null ? 'Add Contact' : 'Edit Contact').tr(
+                context,
+              ),
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -238,7 +247,8 @@ class _ContactFormState extends State<_ContactForm> {
           ),
           const SizedBox(height: 24),
           AppButton.primary(
-            label: (widget.contact == null ? 'SAVE CONTACT' : 'UPDATE CONTACT').tr(context),
+            label: (widget.contact == null ? 'SAVE CONTACT' : 'UPDATE CONTACT')
+                .tr(context),
             isFullWidth: true,
             onPressed: () async {
               final name = _nameController.text.trim();
@@ -246,7 +256,9 @@ class _ContactFormState extends State<_ContactForm> {
               final phone = _phoneController.text.trim();
               if (name.isEmpty || phone.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Name and phone are required.'.tr(context))),
+                  SnackBar(
+                    content: Text('Name and phone are required.'.tr(context)),
+                  ),
                 );
                 return;
               }
@@ -255,7 +267,9 @@ class _ContactFormState extends State<_ContactForm> {
                   PersonalContact(
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
                     name: name,
-                    relationship: relationship.isEmpty ? 'Contact' : relationship,
+                    relationship: relationship.isEmpty
+                        ? 'Contact'
+                        : relationship,
                     phone: phone,
                   ),
                 );
@@ -263,7 +277,9 @@ class _ContactFormState extends State<_ContactForm> {
                 await contactsState.updateContact(
                   widget.contact!.copyWith(
                     name: name,
-                    relationship: relationship.isEmpty ? 'Contact' : relationship,
+                    relationship: relationship.isEmpty
+                        ? 'Contact'
+                        : relationship,
                     phone: phone,
                   ),
                 );

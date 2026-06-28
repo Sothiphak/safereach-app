@@ -52,8 +52,10 @@ class LocationState extends ChangeNotifier {
       }
 
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium,
-        timeLimit: const Duration(seconds: 5),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.medium,
+          timeLimit: Duration(seconds: 5),
+        ),
       );
 
       _currentPosition = LatLng(position.latitude, position.longitude);
@@ -72,8 +74,19 @@ class LocationState extends ChangeNotifier {
           final data = json.decode(response.body) as Map<String, dynamic>;
           final address = data['address'] as Map<String, dynamic>?;
           if (address != null) {
-            final city = address['city'] ?? address['town'] ?? address['village'] ?? address['county'] ?? address['state'] ?? '';
-            final suburb = address['suburb'] ?? address['neighbourhood'] ?? address['road'] ?? address['quarter'] ?? '';
+            final city =
+                address['city'] ??
+                address['town'] ??
+                address['village'] ??
+                address['county'] ??
+                address['state'] ??
+                '';
+            final suburb =
+                address['suburb'] ??
+                address['neighbourhood'] ??
+                address['road'] ??
+                address['quarter'] ??
+                '';
             if (city.isNotEmpty && suburb.isNotEmpty) {
               _currentAddress = '$city, $suburb';
             } else if (data['display_name'] != null) {
@@ -87,7 +100,8 @@ class LocationState extends ChangeNotifier {
           }
         }
       } catch (_) {
-        _currentAddress = '${position.latitude.toStringAsFixed(4)}° N, ${position.longitude.toStringAsFixed(4)}° E';
+        _currentAddress =
+            '${position.latitude.toStringAsFixed(4)}° N, ${position.longitude.toStringAsFixed(4)}° E';
       }
     } catch (e) {
       _errorMessage = e.toString();
