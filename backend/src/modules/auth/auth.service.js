@@ -17,7 +17,10 @@ export class AuthService {
   }
 
   async login(payload) {
-    const user = await this.usersService.validateUser(payload.email, payload.password);
+    const user = await this.usersService.validateUser(
+      payload.email,
+      payload.password,
+    );
     return this.buildAuthResponse(user);
   }
 
