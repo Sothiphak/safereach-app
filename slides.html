@@ -258,6 +258,25 @@
       print-color-adjust: exact !important;
     }
 
+    .phone-mockup.screenshot-frame {
+      width: 158px;
+      height: 350px;
+      border: 0;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .phone-screenshot {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      border-radius: 0;
+      transform: scale(1.045);
+    }
+
     .phone-screen {
       padding: 8px;
       flex: 1;
@@ -692,51 +711,14 @@ Future<void> _persist() async {
         <h2>Interactive UI Showcase</h2>
         <div class="grid-3">
           
-          <!-- Mock Phone 1: Dashboard -->
-          <div class="phone-mockup">
-            <div class="phone-screen">
-              <div class="phone-header">
-                <span>SafeReach 🛡️</span>
-                <span>📶 100%</span>
-              </div>
-              <div class="phone-card" style="background: rgba(79, 70, 229, 0.08); border-color: rgba(79, 70, 229, 0.2);">
-                <div style="font-weight: bold; color: #4f46e5;">Current Location</div>
-                <div style="font-size: 8px; color: #1e293b;">Phnom Penh, Boeung Keng Kang I</div>
-              </div>
-              <div class="sos-button">SOS</div>
-              <div style="text-align: center; font-size: 7px; color: #64748b; margin-top: -10px;">TAP & HOLD TO TRIGGER</div>
-              
-              <div style="margin-top: 15px; font-weight: bold; font-size: 8px; color: #1e293b;">QUICK SERVICES</div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 5px;">
-                <div class="phone-card" style="margin:0; font-size: 7px; text-align: center; border: 1px solid #cbd5e1; background: #ffffff;">🏥 Hospital</div>
-                <div class="phone-card" style="margin:0; font-size: 7px; text-align: center; border: 1px solid #cbd5e1; background: #ffffff;">🚓 Police</div>
-              </div>
-            </div>
+          <!-- Screenshot 1: Dashboard -->
+          <div class="phone-mockup screenshot-frame">
+            <img class="phone-screenshot" src="slide-assets/screenshots/home-sos.jpg" alt="SafeReach home screen with SOS button">
           </div>
 
-          <!-- Mock Phone 2: Maps -->
-          <div class="phone-mockup">
-            <div class="phone-screen" style="padding: 0; background: #e0e8f6; position: relative;">
-              <!-- Map Simulator Background -->
-              <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #f1f5f9, #cbd5e1);"></div>
-              
-              <!-- Map Pins Mock -->
-              <div style="position: absolute; left: 50%; top: 45%; color: #ef4444; font-size: 14px; transform: translate(-50%, -50%);">📍</div>
-              <div style="position: absolute; left: 30%; top: 30%; color: #0ea5e9; font-size: 14px;">🏥</div>
-              <div style="position: absolute; left: 70%; top: 60%; color: #ef4444; font-size: 14px;">🚓</div>
-
-              <!-- Top floating search -->
-              <div class="phone-card" style="position: absolute; top: 10px; left: 10px; right: 10px; background: rgba(255,255,255,0.9); margin: 0; font-size: 8px; border: 1px solid #cbd5e1; color: #1e293b;">
-                🔍 Search emergency centers...
-              </div>
-
-              <!-- Bottom facility details -->
-              <div class="phone-card" style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(255,255,255,0.95); margin: 0; border: 1px solid #cbd5e1;">
-                <div style="font-weight: bold; color: #4f46e5;">Calmette Hospital</div>
-                <div style="font-size: 7px; color: #64748b;">📍 800m away • Open 24/7</div>
-                <div style="background: #4f46e5; color: white; border-radius: 4px; padding: 2px 4px; display: inline-block; font-size: 6px; margin-top: 4px;">Get Directions</div>
-              </div>
-            </div>
+          <!-- Screenshot 2: Maps -->
+          <div class="phone-mockup screenshot-frame">
+            <img class="phone-screenshot" src="slide-assets/screenshots/emergency-map.jpg" alt="SafeReach emergency map screen">
           </div>
 
           <!-- Tech Highlight Card -->
