@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>SafeReach Presentation</title>
+
+  <!-- Reveal.js styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/simple.min.css">
+
+  <!-- Code syntax highlighting theme -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/github.min.css">
+
+  <!-- Custom premium styling -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --r-main-font: 'Plus Jakarta Sans', sans-serif;
+      --r-heading-font: 'Plus Jakarta Sans', sans-serif;
+      --r-code-font: 'JetBrains Mono', monospace;
+      --accent-color: #4f46e5; /* SafeReach Royal Indigo */
+      --secondary-color: #0ea5e9; /* SafeReach Sky Blue */
+      --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e0e8f6 100%);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: #cbd5e1;
+      --glass-blur: blur(8px);
+    }
+
+    body {
+      background: var(--bg-gradient) !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .reveal {
+      font-family: var(--r-main-font);
+      color: #1e293b;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+      font-family: var(--r-heading-font);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      text-shadow: none;
+      background: linear-gradient(135deg, #1e293b 30%, #4f46e5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .reveal h1 {
+      font-size: 2.0em;
+      margin-bottom: 0.1em;
+    }
+
+    .reveal h2 {
+      font-size: 1.3em;
+      margin-bottom: 0.3em;
+      border-bottom: 2px solid rgba(79, 70, 229, 0.2);
+      padding-bottom: 0.15em;
+      display: inline-block;
+    }
+
+    /* Premium Glassmorphic Cards */
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      backdrop-filter: var(--glass-blur);
+      box-shadow: 0 8px 32px 0 rgba(79, 70, 229, 0.05);
+      margin: 6px 0;
+      text-align: left;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .glass-card h3 {
+      font-size: 0.85em;
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: var(--accent-color) !important;
+      -webkit-text-fill-color: initial;
+      background: none;
+    }
+
+    .glass-card p, .glass-card li {
+      font-size: 0.48em;
+      line-height: 1.4;
+      color: #334155;
+    }
+
+    .highlight-text {
+      color: #4f46e5;
+      font-weight: 600;
+    }
+
+    /* Grid layout utils */
+    .grid-2 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .grid-3 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Custom Codeblock Style */
+    .reveal pre {
+      width: 100% !important;
+      margin: 6px 0 !important;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.05) !important;
+      background: #f8fafc !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .reveal pre code {
+      font-family: var(--r-code-font) !important;
+      font-size: 0.42em !important;
+      line-height: 1.35 !important;
+      padding: 14px !important;
+      color: #0f172a !important;
+    }
+
+    /* Links and badges */
+    .reveal a {
+      color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .reveal a:hover {
+      color: var(--accent-color);
+      text-shadow: 0 0 10px rgba(79, 70, 229, 0.2);
+    }
+
+    .badge-container {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .badge {
+      font-size: 0.35em !important;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.25);
+      color: #4f46e5 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .badge.blue {
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      color: #0ea5e9 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Table styling */
+    .responsibility-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.42em;
+      margin-top: 8px;
+    }
+
+    .responsibility-table th, .responsibility-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      color: #334155;
+    }
+
+    .responsibility-table th {
+      background: rgba(79, 70, 229, 0.06);
+      color: #4f46e5;
+      font-weight: 600;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .responsibility-table tr:hover {
+      background: rgba(15, 23, 42, 0.01);
+    }
+
+    /* App Preview CSS Mockup */
+    .phone-mockup {
+      width: 190px;
+      height: 350px;
+      border: 6px solid #cbd5e1;
+      border-radius: 28px;
+      background: #e0e8f6;
+      margin: 0 auto;
+      box-shadow: 0 15px 35px rgba(79, 70, 229, 0.08);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .phone-screen {
+      padding: 8px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      font-size: 8px;
+      color: #1e293b;
+    }
+
+    .phone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      color: #64748b;
+    }
+
+    .sos-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ef4444 0%, #b91c1c 100%);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px auto;
+      color: white;
+      font-weight: bold;
+      font-size: 10px;
+      animation: pulse 2s infinite;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .phone-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px;
+      margin-bottom: 6px;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+    }
+
+    /* Print styling overrides */
+    @media print {
+      body, .reveal, .reveal .slides {
+        background: var(--bg-gradient) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+        background: none !important;
+        color: #1e293b !important;
+        -webkit-text-fill-color: #1e293b !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .reveal pre {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .reveal pre code {
+        color: #0f172a !important;
+      }
+      .badge {
+        background: rgba(79, 70, 229, 0.08) !important;
+        border: 1px solid rgba(79, 70, 229, 0.25) !important;
+        color: #4f46e5 !important;
+      }
+      .badge.blue {
+        background: rgba(14, 165, 233, 0.08) !important;
+        border: 1px solid rgba(14, 165, 233, 0.25) !important;
+        color: #0ea5e9 !important;
+      }
+      .phone-mockup {
+        background: #e0e8f6 !important;
+        border: 6px solid #cbd5e1 !important;
+      }
+      .phone-card {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Slide 1: Title Slide -->
+      <section data-transition="zoom">
+        <h1 style="font-size: 2.5em; background: linear-gradient(135deg, #1e293b 30%, #4f46e5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SafeReach 🛡️</h1>
+        <p style="font-size: 0.8em; color: #64748b; margin-bottom: 30px;">Modern Mobile Security & Emergency Response Platform</p>
+        
+        <div class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center; border: 1px solid #cbd5e1;">
+          <p style="margin: 5px 0; font-size: 0.65em; color: #1e293b;"><strong>Presented by:</strong></p>
+          <p style="margin: 5px 0; font-size: 0.75em; color: #4f46e5; font-weight: bold;">Sopheap Sothiphak &nbsp;|&nbsp; Sophat Odom &nbsp;|&nbsp; Samnang Alex</p>
+          <div style="border-top: 1px solid rgba(15, 23, 42, 0.1); margin: 15px 0; padding-top: 10px;">
+            <p style="margin: 3px 0; font-size: 0.55em; color: #334155;">🖥️ <strong>Repository:</strong> <a href="https://github.com/Sothiphak/safereach-app" target="_blank">github.com/Sothiphak/safereach-app</a></p>
+            <p style="margin: 3px 0; font-size: 0.55em; color: #334155;">🎥 <strong>Demo Video:</strong> <a href="https://youtu.be/safereach-demo-placeholder" target="_blank">youtube.com/watch?v=safereach-demo</a></p>
+          </div>
+        </div>
+
+        <div class="badge-container">
+          <span class="badge">Flutter</span>
+          <span class="badge blue">NestJS</span>
+          <span class="badge">SQLite</span>
+        </div>
+      </section>
+
+      <!-- Slide 2: Introduction -->
+      <section data-transition="slide">
+        <h2>Introduction</h2>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>Project Overview</h3>
+            <p>
+              SafeReach is designed to solve real-world personal security and emergency delays. It functions as a resilient mobile panic button and responsive resource directory.
+            </p>
+            <p style="margin-top: 10px;">
+              By combining geolocation tracking, category-based service lookups (Hospitals, Police, Fire, Ambulance), and local contact emergency channels, SafeReach acts as an all-in-one personal safety shield.
+            </p>
+          </div>
+          <div class="glass-card">
+            <h3>Purpose & Objectives</h3>
+            <ul>
+              <li><span class="highlight-text">Minimize Response Time:</span> Allow one-tap SOS trigger directly from the home screen.</li>
+              <li><span class="highlight-text">Resilient Operations:</span> Implement robust offline-first fallback capabilities for remote data.</li>
+              <li><span class="highlight-text">Interactive Discovery:</span> Leverage dynamic mapping and geo-filtering to guide users directly to closest services.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Architecture Overview -->
+      <section data-transition="slide">
+        <h2>Architecture Monorepo</h2>
+        <div class="glass-card" style="margin-bottom: 20px;">
+          <p style="font-size: 0.8em; text-align: center;">
+            A unified <span class="highlight-text">Monorepo Structure</span> separating the backend service and frontend client.
+          </p>
+        </div>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>Backend NestJS Module</h3>
+            <p>Provides robust APIs for services, reviews, branches, and tips.</p>
+            <div class="badge-container" style="justify-content: flex-start;">
+              <span class="badge blue">NestJS</span>
+              <span class="badge blue">TypeORM</span>
+              <span class="badge blue">PostgreSQL/SQLite</span>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h3>Frontend Flutter SDK</h3>
+            <p>State-driven UI powered by Provider, Geolocator, and FlutterMap.</p>
+            <div class="badge-container" style="justify-content: flex-start;">
+              <span class="badge">Provider</span>
+              <span class="badge">GoRouter</span>
+              <span class="badge">Shared Prefs</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Challenge 1 - Nominatim Address Geocoding -->
+      <section data-transition="fade">
+        <h2>Challenge 1: Address Geocoding</h2>
+        <div class="grid-2">
+          <div style="font-size: 0.9em;">
+            <div class="glass-card">
+              <h3>Dynamic Address Resolution</h3>
+              <p>
+                Converting raw coordinates into human-readable locations dynamically via <span class="highlight-text">Nominatim Reverse Geocoding API</span>.
+              </p>
+              <p style="margin-top: 10px;">
+                Using <code>http</code> client requests with custom <code>User-Agent</code> parameters as required by OpenStreetMap policy, parsing city, suburb, or fallback formatting.
+              </p>
+            </div>
+          </div>
+          <pre><code class="language-dart" data-trim data-line-numbers="1-3|6-9|12-16">
+// LocationState reverse geocoding
+final url = Uri.parse(
+  'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${position.latitude}&lon=${position.longitude}',
+);
+final response = await http.get(
+  url,
+  headers: {'User-Agent': 'SafeReachEmergencyApp/1.0'},
+);
+if (response.statusCode == 200) {
+  final data = json.decode(response.body);
+  final address = data['address'];
+  final city = address['city'] ?? address['town'] ?? '';
+  final suburb = address['suburb'] ?? address['road'] ?? '';
+  _currentAddress = '$city, $suburb';
+}
+          </code></pre>
+        </div>
+      </section>
+
+      <!-- Slide 5: Challenge 2 - MultiProvider State management -->
+      <section data-transition="fade">
+        <h2>Challenge 2: State Management</h2>
+        <div class="grid-2">
+          <pre><code class="language-dart" data-trim data-line-numbers="1-2|4-12|14-20">
+// main.dart initialization
+runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: appState),
+      ChangeNotifierProvider.value(value: favoritesState),
+      ChangeNotifierProvider.value(value: contactsState),
+      ChangeNotifierProvider.value(value: settingsState),
+      ChangeNotifierProvider.value(value: locationState),
+      Provider.value(value: repository),
+    ],
+    child: const EmergencyApp(),
+  ),
+);
+
+// Concurrently preloading states
+await Future.wait([
+  favoritesState.load(),
+  contactsState.load(),
+  locationState.fetchLocation(),
+]);
+          </code></pre>
+          <div class="glass-card">
+            <h3>Centralized MultiProvider</h3>
+            <p>
+              Ensures reactive updates and decoupled UI rendering.
+            </p>
+            <ul>
+              <li><span class="highlight-text">LocationState:</span> Listens to Geolocator changes.</li>
+              <li><span class="highlight-text">ContactsState:</span> Updates user emergency phone logs.</li>
+              <li><span class="highlight-text">FavoritesState:</span> Manages saved emergency centers.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Challenge 3 - Persistent Cache Fallback -->
+      <section data-transition="fade">
+        <h2>Challenge 3: Offline Resiliency</h2>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>API Cache with Local Fallback</h3>
+            <p>
+              In safety applications, offline resilience is crucial. SafeReach guarantees functionality even without active internet:
+            </p>
+            <ol style="font-size: 0.6em; line-height: 1.4; margin-top: 10px;">
+              <li>Try hitting NestJS server endpoint.</li>
+              <li>Save successful response to SharedPreferences local cache.</li>
+              <li>Fallback to local cache if network times out.</li>
+              <li>Default to static JSON seeds included in assets if cache is empty.</li>
+            </ol>
+          </div>
+          <pre><code class="language-dart" data-trim data-line-numbers="1-6|8-11|13-17">
+// MockRepository fallback pattern
+try {
+  final apiItems = await _loadApiList(apiPath, fromJson);
+  if (apiItems.isNotEmpty) return apiItems;
+} catch (error) {
+  debugPrint('API unavailable; using fallback.');
+}
+
+// Fallback 1: Local Cache
+final cached = await _readCache(cacheKey);
+if (cached != null) return _parseList(cached, fromJson);
+
+// Fallback 2: Static JSON Assets
+return _loadAssetList(assetPath, fromJson);
+          </code></pre>
+        </div>
+      </section>
+
+      <!-- Slide 7: Challenge 4 - Personal Contacts Storage -->
+      <section data-transition="fade">
+        <h2>Challenge 4: Contacts Persistence</h2>
+        <div class="grid-2">
+          <pre><code class="language-dart" data-trim data-line-numbers="1-5|7-12|14-18">
+// ContactsState serialization
+Future&lt;void&gt; load() async {
+  _prefs = await SharedPreferences.getInstance();
+  final stored = _prefs.getString(_contactsKey);
+  if (stored != null) {
+    final decoded = jsonDecode(stored) as List;
+    _contacts.addAll(
+      decoded.map((item) =&gt; PersonalContact.fromJson(item)),
+    );
+  } else {
+    _contacts.addAll(_seedContacts());
+  }
+}
+
+Future&lt;void&gt; _persist() async {
+  final encoded = jsonEncode(_contacts.map((c) =&gt; c.toJson()).toList());
+  await _prefs.setString(_contactsKey, encoded);
+}
+          </code></pre>
+          <div class="glass-card">
+            <h3>Dynamic JSON Persistence</h3>
+            <p>
+              Safeguards customizable details (e.g. emergency phone numbers, labels like Family or Neighbor).
+            </p>
+            <p style="margin-top: 10px;">
+              Serializes models to JSON lists, writing dynamically to local <code>SharedPreferences</code> blocks whenever contacts are added, modified, or deleted.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: UI Layout Showcase -->
+      <section data-transition="slide">
+        <h2>Interactive UI Showcase</h2>
+        <div class="grid-3">
+          
+          <!-- Mock Phone 1: Dashboard -->
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="phone-header">
+                <span>SafeReach 🛡️</span>
+                <span>📶 100%</span>
+              </div>
+              <div class="phone-card" style="background: rgba(79, 70, 229, 0.08); border-color: rgba(79, 70, 229, 0.2);">
+                <div style="font-weight: bold; color: #4f46e5;">Current Location</div>
+                <div style="font-size: 8px; color: #1e293b;">Phnom Penh, Boeung Keng Kang I</div>
+              </div>
+              <div class="sos-button">SOS</div>
+              <div style="text-align: center; font-size: 7px; color: #64748b; margin-top: -10px;">TAP & HOLD TO TRIGGER</div>
+              
+              <div style="margin-top: 15px; font-weight: bold; font-size: 8px; color: #1e293b;">QUICK SERVICES</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 5px;">
+                <div class="phone-card" style="margin:0; font-size: 7px; text-align: center; border: 1px solid #cbd5e1; background: #ffffff;">🏥 Hospital</div>
+                <div class="phone-card" style="margin:0; font-size: 7px; text-align: center; border: 1px solid #cbd5e1; background: #ffffff;">🚓 Police</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mock Phone 2: Maps -->
+          <div class="phone-mockup">
+            <div class="phone-screen" style="padding: 0; background: #e0e8f6; position: relative;">
+              <!-- Map Simulator Background -->
+              <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #f1f5f9, #cbd5e1);"></div>
+              
+              <!-- Map Pins Mock -->
+              <div style="position: absolute; left: 50%; top: 45%; color: #ef4444; font-size: 14px; transform: translate(-50%, -50%);">📍</div>
+              <div style="position: absolute; left: 30%; top: 30%; color: #0ea5e9; font-size: 14px;">🏥</div>
+              <div style="position: absolute; left: 70%; top: 60%; color: #ef4444; font-size: 14px;">🚓</div>
+
+              <!-- Top floating search -->
+              <div class="phone-card" style="position: absolute; top: 10px; left: 10px; right: 10px; background: rgba(255,255,255,0.9); margin: 0; font-size: 8px; border: 1px solid #cbd5e1; color: #1e293b;">
+                🔍 Search emergency centers...
+              </div>
+
+              <!-- Bottom facility details -->
+              <div class="phone-card" style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(255,255,255,0.95); margin: 0; border: 1px solid #cbd5e1;">
+                <div style="font-weight: bold; color: #4f46e5;">Calmette Hospital</div>
+                <div style="font-size: 7px; color: #64748b;">📍 800m away • Open 24/7</div>
+                <div style="background: #4f46e5; color: white; border-radius: 4px; padding: 2px 4px; display: inline-block; font-size: 6px; margin-top: 4px;">Get Directions</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tech Highlight Card -->
+          <div class="glass-card" style="height: 350px; display: flex; flex-direction: column; justify-content: center; border: 1px solid #cbd5e1;">
+            <h3>App UI & Polish</h3>
+            <p>
+              Our screens implement custom neumorphic controls (<code>neumorphic_button.dart</code>) to guarantee tactile readability.
+            </p>
+            <p style="margin-top: 15px;">
+              Dynamic category chips filter markers on the map viewport. The camera centers dynamically on the active selection.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Slide 9: Conclusion -->
+      <section data-transition="slide">
+        <h2>Conclusion</h2>
+        <div class="grid-2">
+          <div class="glass-card" style="border: 1px solid #cbd5e1;">
+            <h3>Summary of Achievements</h3>
+            <p>
+              SafeReach successfully brings emergency resources to user fingertips. The NestJS backend handles robust modular resource distribution, while the Flutter app guarantees continuous utility through cache systems.
+            </p>
+            <p style="margin-top: 10px;">
+              The platform implements key enterprise practices: modular monorepo separation, responsive state layers, geocoding logic, and interactive GIS widgets.
+            </p>
+          </div>
+          <div class="glass-card" style="border: 1px solid #cbd5e1;">
+            <h3>Frameworks & SDKs</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2); padding: 8px; border-radius: 8px; font-size: 0.6em; text-align: center; color: #4f46e5;">
+                <strong>Flutter SDK</strong>
+                <div style="font-size: 0.8em; color: #64748b; margin-top: 4px;">Dart Language</div>
+              </div>
+              <div style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.2); padding: 8px; border-radius: 8px; font-size: 0.6em; text-align: center; color: #0ea5e9;">
+                <strong>NestJS Server</strong>
+                <div style="font-size: 0.8em; color: #64748b; margin-top: 4px;">Express & Babel</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.04); border: 1px solid rgba(15, 23, 42, 0.15); padding: 8px; border-radius: 8px; font-size: 0.6em; text-align: center; color: #1e293b;">
+                <strong>SQLite / PG</strong>
+                <div style="font-size: 0.8em; color: #64748b; margin-top: 4px;">Relational DBs</div>
+              </div>
+              <div style="background: rgba(79, 70, 229, 0.08); border: 1px solid rgba(79, 70, 229, 0.2); padding: 8px; border-radius: 8px; font-size: 0.6em; text-align: center; color: #4f46e5;">
+                <strong>Nominatim API</strong>
+                <div style="font-size: 0.8em; color: #64748b; margin-top: 4px;">OpenStreetMap</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Meet the Team -->
+      <section data-transition="slide">
+        <h2>Meet the Team</h2>
+        <div class="grid-3">
+          <!-- Member 1: Sothiphak -->
+          <div class="glass-card" style="text-align: center;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; border: 2px dashed #7e22ce; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+              <!-- To add a photo, replace the src path below with your image file path -->
+              <img src="" alt="Sothiphak" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: block;" onerror="this.style.display='none';">
+              <span style="font-size: 0.35em; color: #64748b; font-weight: 600;">Add Photo</span>
+            </div>
+            <h3 style="text-align: center; margin-bottom: 4px;">Sothiphak</h3>
+            <p style="text-align: center; font-weight: 600; color: #1d4ed8; font-size: 0.45em; margin: 0 0 8px 0;">Lead Mobile Developer</p>
+            <p style="font-size: 0.4em; line-height: 1.3;">Responsible for location tracking systems, reverse address geocoding, and central state bindings using MultiProvider.</p>
+          </div>
+
+          <!-- Member 2: Sophat Odom -->
+          <div class="glass-card" style="text-align: center;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; border: 2px dashed #1d4ed8; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+              <!-- To add a photo, replace the src path below with your image file path -->
+              <img src="" alt="Sophat Odom" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: block;" onerror="this.style.display='none';">
+              <span style="font-size: 0.35em; color: #64748b; font-weight: 600;">Add Photo</span>
+            </div>
+            <h3 style="text-align: center; margin-bottom: 4px;">Sophat Odom</h3>
+            <p style="text-align: center; font-weight: 600; color: #1d4ed8; font-size: 0.45em; margin: 0 0 8px 0;">Backend Developer</p>
+            <p style="font-size: 0.4em; line-height: 1.3;">Architected backend modules (services, reviews, seeding module) in NestJS server, mapping schemas and Postgres controllers.</p>
+          </div>
+
+          <!-- Member 3: Samnang Alex -->
+          <div class="glass-card" style="text-align: center;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; border: 2px dashed #7e22ce; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+              <!-- To add a photo, replace the src path below with your image file path -->
+              <img src="" alt="Samnang Alex" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: block;" onerror="this.style.display='none';">
+              <span style="font-size: 0.35em; color: #64748b; font-weight: 600;">Add Photo</span>
+            </div>
+            <h3 style="text-align: center; margin-bottom: 4px;">Samnang Alex</h3>
+            <p style="text-align: center; font-weight: 600; color: #1d4ed8; font-size: 0.45em; margin: 0 0 8px 0;">UI/UX & Tester</p>
+            <p style="font-size: 0.4em; line-height: 1.3;">Crafted interactive screen widgets, setup theme parameters, onboarding routes, and resilient cache interfaces.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 11: Responsibility Matrix -->
+      <section data-transition="zoom">
+        <h2>Task Responsibility Matrix</h2>
+        <div class="glass-card">
+          <table class="responsibility-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Team Member</th>
+                <th style="width: 30%;">Core Role</th>
+                <th style="width: 45%;">Key Contributions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 600; color: #4f46e5;">Sopheap Sothiphak</td>
+                <td style="font-weight: 600; color: #1e293b;">Lead Mobile Dev</td>
+                <td>Location services management, Reverse geocoding (Nominatim API), Map Integration & markers system.</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; color: #0ea5e9;">Sophat Odom</td>
+                <td style="font-weight: 600; color: #1e293b;">Backend Developer</td>
+                <td>NestJS API routes design, database setup, local seed scripts, Express configuration & routes logic.</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; color: #06b6d4;">Samnang Alex</td>
+                <td style="font-weight: 600; color: #1e293b;">UI/UX & Tester</td>
+                <td>Onboarding flow, light theme, favorites/contacts screens design, local mock cache fallback setup.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js script dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+
+  <script>
+    Reveal.initialize({
+      width: 1200,
+      height: 700,
+      margin: 0.05,
+      minScale: 0.2,
+      maxScale: 2.0,
+      hash: true,
+      slideNumber: 'c/t',
+      transition: 'slide',
+      controls: true,
+      progress: true,
+      center: true,
+      plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>
