@@ -92,9 +92,17 @@ class Translations {
       'EN': 'Save medical info',
       'KH': 'រក្សាទុកព័ត៌មានវេជ្ជសាស្ត្រ',
     },
+    'Clear medical info': {
+      'EN': 'Clear medical info',
+      'KH': 'លុបព័ត៌មានវេជ្ជសាស្ត្រ',
+    },
     'Medical info saved': {
       'EN': 'Medical info saved',
       'KH': 'បានរក្សាទុកព័ត៌មានវេជ្ជសាស្ត្រ',
+    },
+    'Medical info cleared': {
+      'EN': 'Medical info cleared',
+      'KH': 'បានលុបព័ត៌មានវេជ្ជសាស្ត្រ',
     },
     'Use a valid blood group like A+, O-, or AB+': {
       'EN': 'Use a valid blood group like A+, O-, or AB+',

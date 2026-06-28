@@ -69,6 +69,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ).showSnackBar(SnackBar(content: Text('Medical info saved'.tr(context))));
   }
 
+  Future<void> _clearMedicalInfo() async {
+    final settings = context.read<SettingsState>();
+    await settings.clearMedicalInfo();
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _selectedBloodGroup = '';
+    });
+    _allergiesController.clear();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Medical info cleared'.tr(context))));
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
@@ -196,6 +213,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: _saveMedicalInfo,
                     icon: const Icon(Icons.save_outlined),
                     label: Text('Save medical info'.tr(context)),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: _clearMedicalInfo,
+                    icon: const Icon(Icons.delete_outline),
+                    label: Text('Clear medical info'.tr(context)),
                   ),
                 ),
               ],

@@ -58,6 +58,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final isDark = theme.brightness == Brightness.dark;
     final backgroundColor = theme.scaffoldBackgroundColor;
     final primaryColor = theme.colorScheme.primary;
+    final screenSize = MediaQuery.sizeOf(context);
+    final isCompact = screenSize.shortestSide < 380 || screenSize.height < 720;
+    final pagePadding = isCompact ? 16.0 : 24.0;
+    final cardHorizontalPadding = isCompact ? 18.0 : 22.0;
+    final cardVerticalPadding = isCompact ? 26.0 : 36.0;
+    final iconSize = isCompact ? 50.0 : 60.0;
+    final iconOuterPadding = isCompact ? 20.0 : 24.0;
+    final titleSize = isCompact ? 21.0 : 24.0;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -75,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(pagePadding),
             child: Column(
               children: [
                 Expanded(
@@ -88,12 +96,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       return Center(
                         child: SingleChildScrollView(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                              vertical: isCompact ? 8 : 16,
+                            ),
                             child: NeumorphicContainer(
                               borderRadius: 28,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 22,
-                                vertical: 36,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: cardHorizontalPadding,
+                                vertical: cardVerticalPadding,
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     label: slide.title.tr(context),
                                     child: NeumorphicContainer(
                                       borderRadius: 64,
-                                      padding: const EdgeInsets.all(24),
+                                      padding: EdgeInsets.all(iconOuterPadding),
                                       color: isDark
                                           ? theme.colorScheme.surface
                                           : Colors.white,
@@ -116,18 +126,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                         ),
                                         child: Icon(
                                           slide.icon,
-                                          size: 60,
+                                          size: iconSize,
                                           color: primaryColor,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 28),
+                                  SizedBox(height: isCompact ? 20 : 28),
                                   Text(
                                     slide.title.tr(context),
                                     style: theme.textTheme.titleLarge?.copyWith(
                                       fontWeight: FontWeight.w900,
-                                      fontSize: 24,
+                                      fontSize: titleSize,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),

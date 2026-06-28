@@ -74,6 +74,16 @@ class SettingsState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clearMedicalInfo() async {
+    _bloodGroup = '';
+    _allergies = '';
+    await Future.wait([
+      _prefs.remove(_bloodGroupKey),
+      _prefs.remove(_allergiesKey),
+    ]);
+    notifyListeners();
+  }
+
   static String _normalizeLanguage(String value) {
     return value == khmerLanguage ? khmerLanguage : englishLanguage;
   }

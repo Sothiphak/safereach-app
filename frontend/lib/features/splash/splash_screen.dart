@@ -63,6 +63,11 @@ class _SplashScreenState extends State<SplashScreen>
     final backgroundColor = theme.scaffoldBackgroundColor;
     final primaryColor = theme.colorScheme.primary;
     final softAccentColor = primaryColor.withValues(alpha: isDark ? 0.18 : 0.1);
+    final screenSize = MediaQuery.sizeOf(context);
+    final isCompact = screenSize.shortestSide < 380 || screenSize.height < 700;
+    final logoSize = isCompact ? 78.0 : 96.0;
+    final logoPadding = isCompact ? 20.0 : 26.0;
+    final titleSize = isCompact ? 32.0 : 36.0;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -88,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
                       scale: _scaleAnimation.value,
                       child: NeumorphicContainer(
                         borderRadius: 72,
-                        padding: const EdgeInsets.all(26),
+                        padding: EdgeInsets.all(logoPadding),
                         color: isDark
                             ? theme.colorScheme.surface
                             : Colors.white,
@@ -100,8 +105,8 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                           child: SvgPicture.asset(
                             'assets/images/splash_logo.svg',
-                            width: 96,
-                            height: 96,
+                            width: logoSize,
+                            height: logoSize,
                           ),
                         ),
                       ),
@@ -119,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen>
                             style: theme.textTheme.displayMedium?.copyWith(
                               color: theme.colorScheme.onSurface,
                               fontWeight: FontWeight.w900,
-                              fontSize: 36,
+                              fontSize: titleSize,
                             ),
                           ),
                           const SizedBox(height: 8),
