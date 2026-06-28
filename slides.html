@@ -377,23 +377,74 @@
 
       <!-- Slide 2: Introduction -->
       <section data-transition="slide">
-        <h2>Introduction</h2>
+        <h2>Project Introduction</h2>
         <div class="grid-2">
           <div class="glass-card">
-            <h3>Project Overview</h3>
+            <h3>Personal Security Challenge</h3>
             <p>
-              SafeReach is designed to solve real-world personal security and emergency delays. It functions as a resilient mobile panic button and responsive resource directory.
+              Emergency response delays cost lives. In critical situations, finding emergency services (Hospitals, Police, Fire, Ambulance) is often slow due to fragmented directories, chaotic navigation interfaces, and unreliable networks.
             </p>
             <p style="margin-top: 10px;">
-              By combining geolocation tracking, category-based service lookups (Hospitals, Police, Fire, Ambulance), and local contact emergency channels, SafeReach acts as an all-in-one personal safety shield.
+              SafeReach bridges the gap by offering a cohesive emergency dashboard that locates aid immediately.
             </p>
           </div>
           <div class="glass-card">
-            <h3>Purpose & Objectives</h3>
-            <ul>
-              <li><span class="highlight-text">Minimize Response Time:</span> Allow one-tap SOS trigger directly from the home screen.</li>
-              <li><span class="highlight-text">Resilient Operations:</span> Implement robust offline-first fallback capabilities for remote data.</li>
-              <li><span class="highlight-text">Interactive Discovery:</span> Leverage dynamic mapping and geo-filtering to guide users directly to closest services.</li>
+            <h3>The SafeReach Solution</h3>
+            <p>
+              SafeReach is a personal security and safety-monitoring mobile platform. It empowers users with one-tap instant SOS alerts, proximity geolocated rescue centers, and fallback resilience when offline.
+            </p>
+            <p style="margin-top: 10px;">
+              By combining stateful geolocation, category-based service lookups, and local contact channels, SafeReach acts as a personal safety shield.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Project Objectives -->
+      <section data-transition="slide">
+        <h2>Project Objectives</h2>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>Minimize Delay to Help</h3>
+            <p>
+              Decrease the time it takes to trigger alarms and contact help. Eliminate typing numbers or searching directories during panic events.
+            </p>
+            <ul style="margin-top: 10px;">
+              <li><span class="highlight-text">Instant SOS:</span> Tap and hold panic trigger on the main view.</li>
+              <li><span class="highlight-text">Auto-Geolocate:</span> Immediate real-time reverse-geocoding of coordinates.</li>
+            </ul>
+          </div>
+          <div class="glass-card">
+            <h3>Resilience & GIS Discovery</h3>
+            <p>
+              Deliver location-based discovery widgets that work offline and online. Enable dynamic GIS category filters.
+            </p>
+            <ul style="margin-top: 10px;">
+              <li><span class="highlight-text">Category Filters:</span> Multi-marker toggling (Hospitals, Police, Fire, Ambulance).</li>
+              <li><span class="highlight-text">Continuous Utility:</span> State caching and offline fallbacks.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Key Platform Features -->
+      <section data-transition="slide">
+        <h2>Key Platform Features</h2>
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>User-Centric Capabilities (Frontend)</h3>
+            <ul style="line-height: 1.5;">
+              <li><span class="highlight-text">One-Tap SOS Trigger:</span> Instantly alerts contacts.</li>
+              <li><span class="highlight-text">Interactive GIS Map:</span> Dynamic maps showing closest assistance branches with navigation path links.</li>
+              <li><span class="highlight-text">Offline-First Resilience:</span> Continuous cache mechanisms ensure local access to databases.</li>
+            </ul>
+          </div>
+          <div class="glass-card">
+            <h3>Robust API Support (Backend)</h3>
+            <ul style="line-height: 1.5;">
+              <li><span class="highlight-text">Modular API Architecture:</span> Exposes reviews, local branches, and safety guides.</li>
+              <li><span class="highlight-text">PostgreSQL Integration:</span> Secure data layer with automatic seeder script populated on deployment.</li>
+              <li><span class="highlight-text">Real-Time Sync:</span> Fetches latest ratings and facilities with local fallback mechanisms.</li>
             </ul>
           </div>
         </div>
